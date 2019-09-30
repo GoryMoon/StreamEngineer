@@ -1,0 +1,12 @@
++Meteorites
+Increase accuracy with more bits
+
+Jetpack fuel removed
+Random ore below feet
+Fill power
+Reset build planner
+Warhead aboev player, 100m+ up
+Drop inventory on ground
+Spawn spider?
+Random message, "Fuel Critical", "No Oxygen"
+Random teleport, ~5km
