@@ -3,12 +3,9 @@ using System.IO;
 using System.Text;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
-using Sandbox;
-using Sandbox.Engine.Multiplayer;
 using Sandbox.Game;
-using Sandbox.Game.World;
+using Sandbox.Game.Multiplayer;
 using Sandbox.Graphics.GUI;
-using VRage.Collections;
 using VRage.Plugins;
 
 namespace GoryMoon.StreamEngineer
@@ -18,7 +15,7 @@ namespace GoryMoon.StreamEngineer
         private DataHandler _dataHandler;
         private StreamlabsData _streamlabsData;
 
-        public static Plugin Static { get; private set; }
+        private static Plugin _static;
 
         public void Dispose()
         {
@@ -27,7 +24,7 @@ namespace GoryMoon.StreamEngineer
 
         public void Init(object gameInstance)
         {
-            Static = this;
+            _static = this;
             Configuration.Init(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(typeof(Plugin).Assembly.CodeBase).Path)));
 
             _dataHandler = new DataHandler();
@@ -38,16 +35,18 @@ namespace GoryMoon.StreamEngineer
 
         public static void StartService()
         {
+            if (!Sync.IsServer) return;
+            
             var token = Configuration.Config.Get(c => c.Streamlabs.Token).Trim();
             if (token.Length > 0)
             {
-                Static._streamlabsData.Init(token);
+                _static._streamlabsData.Init(token);
             }
         }
         
         public static void StopService()
         {
-            Static._streamlabsData.Dispose();
+            if (Sync.IsServer) _static._streamlabsData.Dispose();
         }
 
         public void Update()

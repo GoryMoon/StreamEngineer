@@ -48,7 +48,6 @@ namespace GoryMoon.StreamEngineer.Data
                 try
                 {
                     Logger.WriteLine("Message: " + args.Text);
-                    //MyMultiplayer.RaiseStaticEvent(x => OnSocketMessageEvent, args.Text);
                     Static.OnSocketMessage(args.Text);
                 }
                 catch (Exception e)
@@ -83,30 +82,6 @@ namespace GoryMoon.StreamEngineer.Data
                 Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
             }
             _running = false;
-        }
-
-        /*[Event(null, 452)]
-        [Reliable]
-        [Server]*/
-        private static void OnSocketMessageEvent(string args)
-        {
-            try
-            {
-                /*if (Sync.IsValidEventOnServer && (!MyEventContext.Current.IsLocallyInvoked && !MySession.Static.IsUserSpaceMaster(MyEventContext.Current.Sender.Value)))
-                {
-                    (MyMultiplayer.Static as MyMultiplayerServerBase)?.ValidationFailed(MyEventContext.Current.Sender.Value);
-                    MyEventContext.ValidationFailed();
-                    Logger.WriteLine("Invalid message: " + args);
-                }
-                else
-                {*/
-                    Static.OnSocketMessage(args);
-                //}
-            }
-            catch (Exception e)
-            {
-                Logger.WriteLine(e);
-            }
         }
 
         private void OnSocketMessage(string args)
