@@ -12,14 +12,12 @@ namespace GoryMoon.StreamEngineer
 {
     public class Plugin : IPlugin
     {
+        private static Plugin _static;
         private DataHandler _dataHandler;
         private StreamlabsData _streamlabsData;
 
-        private static Plugin _static;
-
         public void Dispose()
         {
-            
         }
 
         public void Init(object gameInstance)
@@ -35,40 +33,32 @@ namespace GoryMoon.StreamEngineer
             //MyScreenManager.ScreenAdded += ScreenAdded;
         }
 
+        public void Update()
+        {
+        }
+
         public static void StartService()
         {
             if (!Sync.IsServer) return;
-            
+
             var token = Configuration.Token.Get(c => c.StreamlabsToken).Trim();
-            if (token.Length > 0)
-            {
-                _static._streamlabsData.Init(token);
-            }
+            if (token.Length > 0) _static._streamlabsData.Init(token);
         }
-        
+
         public static void StopService()
         {
             if (Sync.IsServer) _static._streamlabsData.Dispose();
         }
 
-        public void Update()
-        {
-
-        }
-
         public void ScreenAdded(MyGuiScreenBase screenBase)
         {
             if (screenBase.GetType() == MyPerGameSettings.GUI.MainMenu && Configuration.Plugin.Get(c => c.ShowMenuPopup))
-            {
                 //Configuration.Config.Set(c => c.ShowMenuPopup, false);
                 MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(MyMessageBoxStyleEnum.Info,
                     MyMessageBoxButtonsType.OK,
                     new StringBuilder(
                         "Welcome to StreamEngineer\nTo get started you need to do some changes to the 'settings.toml' in the plugin folder.\nYou need to restart after changing any service settings,\nyou don't need to restart for settings related to events."),
                     new StringBuilder("StreamEngineer")));
-                
-            }
         }
-
     }
 }

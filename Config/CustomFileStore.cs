@@ -17,16 +17,6 @@ namespace GoryMoon.StreamEngineer.Config
             _filePath = filePath;
         }
 
-        public static CustomFileStore Create(string path)
-        {
-            return new CustomFileStore(TomlSettings.Create(), path);
-        }
-        
-        public static CustomFileStore Create(string path, TomlSettings settings)
-        {
-            return new CustomFileStore(settings, path);
-        }
-
         public bool EnsureExists(TomlTable content)
         {
             if (File.Exists(_filePath))
@@ -61,6 +51,16 @@ namespace GoryMoon.StreamEngineer.Config
             _latestFileHash = ComputeHash(_filePath);
         }
 
+        public static CustomFileStore Create(string path)
+        {
+            return new CustomFileStore(TomlSettings.Create(), path);
+        }
+
+        public static CustomFileStore Create(string path, TomlSettings settings)
+        {
+            return new CustomFileStore(settings, path);
+        }
+
         private static byte[] ComputeHash(string filePath)
         {
             using (var fileStream = File.OpenRead(filePath))
@@ -68,7 +68,7 @@ namespace GoryMoon.StreamEngineer.Config
                 return SHA1.Create().ComputeHash(fileStream);
             }
         }
-        
+
         private static bool HashEquals(byte[] x, byte[] y)
         {
             if (x == y)

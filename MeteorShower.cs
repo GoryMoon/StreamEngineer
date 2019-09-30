@@ -152,7 +152,7 @@ namespace GoryMoon.StreamEngineer
                 var entity = MyMeteor.SpawnRandom(position, Vector3.Normalize(vector3D2 - position));
                 MeteorList.Add(entity);
             }
-            
+
             _mRightVector = Vector3.Zero;
         }
 

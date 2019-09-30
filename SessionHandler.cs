@@ -7,7 +7,7 @@ using VRage.Game.Components;
 namespace GoryMoon.StreamEngineer
 {
     [MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation)]
-    public class SessionHandler: MySessionComponentBase
+    public class SessionHandler : MySessionComponentBase
     {
         private static readonly MyConcurrentQueue<Action> ActionQueue = new MyConcurrentQueue<Action>(32);
         private int _mUpdateCounter;
@@ -45,7 +45,7 @@ namespace GoryMoon.StreamEngineer
         {
             MySandboxGame.Static.Invoke(action, "SessionHandler.RunOnMainThread");
         }
-        
+
         public static void EnqueueMeteors()
         {
             EnqueueAction(() => MeteorShower.MeteorWave());

@@ -3,17 +3,14 @@ using Nett.Coma;
 
 namespace GoryMoon.StreamEngineer.Config
 {
-
     public class Configuration
     {
         public static Config<TokenConfig> Token;
         public static Config<PluginConfig> Plugin;
 
-        
+
         public class TokenConfig
         {
-            
-
             [TomlComment("Login to Streamlabs and go to this link: https://streamlabs.com/dashboard#/settings/api-settings")]
             [TomlComment("Click on 'API Tokens' and copy the 'Your Socket API Token' here")]
             public string StreamlabsToken { get; set; } = "";
@@ -47,8 +44,10 @@ namespace GoryMoon.StreamEngineer.Config
 
             [TomlComment("Here you can setup what actions are triggered by what event, each action can have multiple events, separate with a ','")]
             [TomlComment("For the following types you can replace '?' with a value of your choice")]
-            [TomlComment("Donation: Don-?\nTwitch Subscription: TSub-?\nTwitch Follow: TFollow\nTwitch Bits: TBits-?\nTwitch Host(value is lowest viewer count): THost-?")]
-            [TomlComment("Twitch Raid(value is lowest viewer count): TRaid-?\nYouTube Subscription: YSub\nYouTube Sponsor: YSponsor-?\nYouTube Superchat: YSuper-?")]
+            [TomlComment(
+                "Donation: Don-?\nTwitch Subscription: TSub-?\nTwitch Follow: TFollow\nTwitch Bits: TBits-?\nTwitch Host(value is lowest viewer count): THost-?")]
+            [TomlComment(
+                "Twitch Raid(value is lowest viewer count): TRaid-?\nYouTube Subscription: YSub\nYouTube Sponsor: YSponsor-?\nYouTube Superchat: YSuper-?")]
             [TomlComment("Mixer Subscription: MSub-?\nMixer Follow: MFollow\nMixer Host(value is lowest viewer count): MHost-?")]
             public ActionSettings Actions { get; set; } = new ActionSettings();
 
@@ -66,7 +65,6 @@ namespace GoryMoon.StreamEngineer.Config
             public class ActionSettings
             {
                 public Action MeteorShower { get; set; } = new Action(new[] {"Don-20"}, "Let it RAIN!");
-
             }
 
             public class Action
@@ -88,10 +86,8 @@ namespace GoryMoon.StreamEngineer.Config
             }
 
 
-
             public class EventMessages
             {
-
                 [TomlComment("0:Name of donor, 1:Formatted amount donated")]
                 public SingleMessageEvent Donation { get; set; } = new SingleMessageEvent("{0} donated {1}!", true);
 
@@ -100,8 +96,7 @@ namespace GoryMoon.StreamEngineer.Config
                 [TomlComment("0:Name of cheerer, 1:Amount cheered")]
                 public SingleMessageEvent TwitchBits { get; set; } = new SingleMessageEvent("{0} cheer with {1} bits!", true);
 
-                [TomlComment("0:Name of follower")]
-                public SingleMessageEvent TwitchFollowed { get; set; } = new SingleMessageEvent("{0} followed!");
+                [TomlComment("0:Name of follower")] public SingleMessageEvent TwitchFollowed { get; set; } = new SingleMessageEvent("{0} followed!");
 
                 [TomlComment("0:Name of user hosting, 1:Amount of viewers")]
                 public SingleMessageEvent TwitchHost { get; set; } = new SingleMessageEvent("{0} hosted with {1} viewers!");
@@ -128,7 +123,9 @@ namespace GoryMoon.StreamEngineer.Config
 
             public class SingleMessageEvent
             {
-                public SingleMessageEvent() {}
+                public SingleMessageEvent()
+                {
+                }
 
                 public SingleMessageEvent(string message, bool alwaysSendMessage = false)
                 {
@@ -160,8 +157,7 @@ namespace GoryMoon.StreamEngineer.Config
 
             public class YoutubeSponsorEvent
             {
-                [TomlComment("0:Name of sponsor")]
-                public string NewMessage { get; set; } = "{0} sponsored the channel!";
+                [TomlComment("0:Name of sponsor")] public string NewMessage { get; set; } = "{0} sponsored the channel!";
 
                 [TomlComment("0:Name of sponsor, 1:Amount of months")]
                 public string ResubMessage { get; set; } = "{0} sponsored the channel for {1} months!";
@@ -172,8 +168,7 @@ namespace GoryMoon.StreamEngineer.Config
 
             public class MixerSponsorEvent
             {
-                [TomlComment("0:Name of subscriber")]
-                public string NewMessage { get; set; } = "{0} subscribed to the channel!";
+                [TomlComment("0:Name of subscriber")] public string NewMessage { get; set; } = "{0} subscribed to the channel!";
 
                 [TomlComment("0:Name of subscriber, 1:Amount of months")]
                 public string ResubMessage { get; set; } = "{0} subscribed for {1} months!";

@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using Sandbox.Engine.Multiplayer;
 using SocketIOClient;
-using VRage.Network;
 
 namespace GoryMoon.StreamEngineer.Data
 {
     public class StreamlabsData
     {
-        private SocketIO _socketIo;
         private readonly DataHandler _dataHandler;
 
-        private bool _running = false;
-        
-        private static StreamlabsData Static { get; set; }
+        private bool _running;
+        private SocketIO _socketIo;
+
         public StreamlabsData(DataHandler dataHandler)
         {
             Static = this;
             _dataHandler = dataHandler;
         }
+
+        private static StreamlabsData Static { get; set; }
 
         public void Dispose()
         {
@@ -66,7 +65,6 @@ namespace GoryMoon.StreamEngineer.Data
             {
                 Logger.WriteLine("Reconnecting Streamlabs");
                 for (var i = 0; i < 3; i++)
-                {
                     try
                     {
                         await _socketIo.ConnectAsync();
@@ -77,10 +75,10 @@ namespace GoryMoon.StreamEngineer.Data
                         Logger.WriteLine(ex.Message);
                         await Task.Delay(2000);
                     }
-                }
-                
+
                 Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
             }
+
             _running = false;
         }
 
@@ -170,6 +168,7 @@ namespace GoryMoon.StreamEngineer.Data
                                 _dataHandler.OnMixerHost(name, viewers);
                                 break;
                         }
+
                         break;
                     }
                     case "bits":
@@ -194,6 +193,5 @@ namespace GoryMoon.StreamEngineer.Data
                 }
             }
         }
-        
     }
 }

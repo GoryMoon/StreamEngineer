@@ -9,7 +9,7 @@ namespace GoryMoon.StreamEngineer
         {
             MySandboxGame.Log.WriteLineAndConsole($"[StreamEngineer]: {msg}");
         }
-        
+
         public static void WriteLine(Exception e)
         {
             WriteLine("Exception: ");
