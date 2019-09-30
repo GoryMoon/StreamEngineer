@@ -25,7 +25,9 @@ namespace GoryMoon.StreamEngineer
         public void Init(object gameInstance)
         {
             _static = this;
-            Configuration.Init(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(typeof(Plugin).Assembly.CodeBase).Path)));
+            var path = Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(typeof(Plugin).Assembly.CodeBase).Path));
+            Configuration.TokenConfig.Init(path);
+            Configuration.PluginConfig.Init(path);
 
             _dataHandler = new DataHandler();
             _streamlabsData = new StreamlabsData(_dataHandler);
@@ -37,7 +39,7 @@ namespace GoryMoon.StreamEngineer
         {
             if (!Sync.IsServer) return;
             
-            var token = Configuration.Config.Get(c => c.Streamlabs.Token).Trim();
+            var token = Configuration.Token.Get(c => c.StreamlabsToken).Trim();
             if (token.Length > 0)
             {
                 _static._streamlabsData.Init(token);
@@ -56,7 +58,7 @@ namespace GoryMoon.StreamEngineer
 
         public void ScreenAdded(MyGuiScreenBase screenBase)
         {
-            if (screenBase.GetType() == MyPerGameSettings.GUI.MainMenu && Configuration.Config.Get(c => c.ShowMenuPopup))
+            if (screenBase.GetType() == MyPerGameSettings.GUI.MainMenu && Configuration.Plugin.Get(c => c.ShowMenuPopup))
             {
                 //Configuration.Config.Set(c => c.ShowMenuPopup, false);
                 MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(MyMessageBoxStyleEnum.Info,

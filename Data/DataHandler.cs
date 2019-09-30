@@ -39,13 +39,13 @@ namespace GoryMoon.StreamEngineer.Data
 
         private void UpdateCache()
         {
-            var actionSettings = Configuration.Config.Get(c => c.Actions);
+            var actionSettings = Configuration.Plugin.Get(c => c.Actions);
             if (!Equals(_lastActionSettingsHash, actionSettings.GetHashCode()))
             {
                 _lastActionSettingsHash = actionSettings.GetHashCode();
-                _fuzzyDonations = Configuration.Config.Get(c => c.FuzzyDonations);
-                _fuzzyBits = Configuration.Config.Get(c => c.FuzzyBits);
-                _fuzzySubs = Configuration.Config.Get(c => c.FuzzySubs);
+                _fuzzyDonations = Configuration.Plugin.Get(c => c.FuzzyDonations);
+                _fuzzyBits = Configuration.Plugin.Get(c => c.FuzzyBits);
+                _fuzzySubs = Configuration.Plugin.Get(c => c.FuzzySubs);
                 _donationActions.Clear();
                 _bitsActions.Clear();
                 _twitchSubActions.Clear();
@@ -60,7 +60,7 @@ namespace GoryMoon.StreamEngineer.Data
             }
         }
 
-        private void SetAction(IAction action, Configuration.Action config)
+        private void SetAction(IAction action, Configuration.PluginConfig.Action config)
         {
             action.Message = config.Message;
             foreach (var configEvent in config.Events)
@@ -183,7 +183,7 @@ namespace GoryMoon.StreamEngineer.Data
             var action = GetDonationAction($"Don-{amount}");
             action?.Execute();
             
-            var messageEvent = Configuration.Config.Get(c => c.Events.Donation);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.Donation);
             SendMessage(string.Format(messageEvent.Message, name, formattedAmount) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
         }
         
@@ -191,7 +191,7 @@ namespace GoryMoon.StreamEngineer.Data
         {
             var action = GetTwitchSubAction($"TSub-{months}");
             action?.Execute();
-            var messages = Configuration.Config.Get(c => c.Events.TwitchSubscription);
+            var messages = Configuration.Plugin.Get(c => c.Events.TwitchSubscription);
 
             var msg = months == 1 ? messages.NewMessage : messages.ResubMessage;
             string tierMsg;
@@ -215,7 +215,7 @@ namespace GoryMoon.StreamEngineer.Data
             var action = GetBitsAction($"TBits-{amount}");
             action?.Execute();
             
-            var messageEvent = Configuration.Config.Get(c => c.Events.TwitchBits);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchBits);
             SendMessage(string.Format(messageEvent.Message, name, amount) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
         }
 
@@ -224,19 +224,19 @@ namespace GoryMoon.StreamEngineer.Data
             var action = GetAction("TFollow");
             action?.Execute();
             
-            var messageEvent = Configuration.Config.Get(c => c.Events.TwitchFollowed);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchFollowed);
             SendMessage(string.Format(messageEvent.Message, name) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
         }
         
         public void OnTwitchHost(string name, int viewers)
         {
-            var messageEvent = Configuration.Config.Get(c => c.Events.TwitchHost);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchHost);
             SendMessage(string.Format(messageEvent.Message, name, viewers) + GetMessage(null), messageEvent.AlwaysSendMessage, null);
         }
         
         public void OnTwitchRaid(string name, int viewers)
         {
-            var messageEvent = Configuration.Config.Get(c => c.Events.TwitchRaid);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchRaid);
             SendMessage(string.Format(messageEvent.Message, name, viewers) + GetMessage(null), messageEvent.AlwaysSendMessage, null);
         }
 
@@ -245,7 +245,7 @@ namespace GoryMoon.StreamEngineer.Data
             var action = GetAction("YSub");
             action?.Execute();
             
-            var messageEvent = Configuration.Config.Get(c => c.Events.YoutubeSubscription);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.YoutubeSubscription);
             SendMessage(string.Format(messageEvent.Message, name) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
         }
         
@@ -254,14 +254,14 @@ namespace GoryMoon.StreamEngineer.Data
             var action = GetYoutubeSubAction($"YSponsor-{months}");
             action?.Execute();
             
-            var messages = Configuration.Config.Get(c => c.Events.YoutubeSponsor);
+            var messages = Configuration.Plugin.Get(c => c.Events.YoutubeSponsor);
             var msg = months == 1 ? messages.NewMessage : messages.ResubMessage;
             SendMessage(string.Format(msg, name, months) + GetMessage(action), messages.AlwaysSendMessage, action);
         }
         
         public void OnYoutubeSuperchat(string name, int amount, string formatted)
         {
-            var messageEvent = Configuration.Config.Get(c => c.Events.YoutubeSuperchat);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.YoutubeSuperchat);
             SendMessage("Not implemented yet!", messageEvent.AlwaysSendMessage, null);
         }
 
@@ -270,7 +270,7 @@ namespace GoryMoon.StreamEngineer.Data
             var action = GetMixerSubAction($"MSub-{months}");
             action?.Execute();
             
-            var messages = Configuration.Config.Get(c => c.Events.MixerSubscription);
+            var messages = Configuration.Plugin.Get(c => c.Events.MixerSubscription);
             var msg = months == 1 ? messages.NewMessage : messages.ResubMessage;
             SendMessage(string.Format(msg, name, months) + GetMessage(action), messages.AlwaysSendMessage, action);
         }
@@ -280,13 +280,13 @@ namespace GoryMoon.StreamEngineer.Data
             var action = GetAction("MFollow");
             action?.Execute();
             
-            var messageEvent = Configuration.Config.Get(c => c.Events.MixerFollowMessage);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.MixerFollowMessage);
             SendMessage(string.Format(messageEvent.Message, name) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
         }
         
         public void OnMixerHost(string name, int viewers)
         {
-            var messageEvent = Configuration.Config.Get(c => c.Events.MixerHostMessage);
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.MixerHostMessage);
             SendMessage("Not implemented yet!", messageEvent.AlwaysSendMessage, null);
         }
     }

@@ -245,7 +245,7 @@ namespace GoryMoon.StreamEngineer
 
         private static void GetTargets()
         {
-            var player = MySession.Static.Players.GetPlayerByName(Configuration.Config.Get(c => c.SteamName));
+            var player = MySession.Static.Players.GetPlayerByName(Configuration.Plugin.Get(c => c.SteamName));
             var list = MyEntities.GetEntities().OfType<MyCubeGrid>().ToList();
             for (var index = 0; index < list.Count; ++index)
                 if ((list[index].Max - list[index].Min + Vector3I.One).Size < 16 ||
