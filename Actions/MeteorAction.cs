@@ -5,7 +5,7 @@
         public string Message { get; set; }
         public void Execute()
         {
-            Plugin.Static.Game.Invoke(Plugin.Static.QueueMeteors, "QueueMeteorsDonation");
+            SessionHandler.EnqueueMeteors();
         }
     }
 }

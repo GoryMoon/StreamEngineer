@@ -146,7 +146,6 @@ namespace GoryMoon.StreamEngineer.Data
             var amount = Convert.ToInt32(key.Split('-')[1]);
             if (dictionary.TryGetValue(amount, out var action)) return action;
             
-            Logger.WriteLine(dictionary.ToString());
             foreach (var pair in dictionary.OrderBy(pair => pair.Key))
             {
                 if (pair.Key >= amount)
@@ -162,13 +161,16 @@ namespace GoryMoon.StreamEngineer.Data
 
         private void SendMessage(string msg, bool alwaysSendMessage, IAction action)
         {
-            Logger.WriteLine(msg);
-            if (action == null && !alwaysSendMessage) return;
+            SessionHandler.RunOnMainThread(() =>
+            {
+                Logger.WriteLine(msg);
+                if (action == null && !alwaysSendMessage) return;
             
-            if (MyMultiplayer.Static != null)
-                MyMultiplayer.Static.SendChatMessageScripted(msg, ChatChannel.Global, 0, "[StreamEngineer]");
-            else
-                MyHud.Chat.ShowMessageScripted("[StreamEngineer]", msg);
+                if (MyMultiplayer.Static != null)
+                    MyMultiplayer.Static.SendChatMessageScripted(msg, ChatChannel.GlobalScripted, 0, "[StreamEngineer]");
+                else
+                    MyHud.Chat.ShowMessageScripted("[StreamEngineer]", msg);
+            });
         }
 
         private string GetMessage(IAction action)

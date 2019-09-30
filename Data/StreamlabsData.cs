@@ -14,6 +14,8 @@ namespace GoryMoon.StreamEngineer.Data
         private SocketIO _socketIo;
         private readonly DataHandler _dataHandler;
 
+        private bool _running = false;
+        
         private static StreamlabsData Static { get; set; }
         public StreamlabsData(DataHandler dataHandler)
         {
@@ -23,7 +25,11 @@ namespace GoryMoon.StreamEngineer.Data
 
         public void Dispose()
         {
-            _socketIo?.CloseAsync();
+            if (_running)
+            {
+                _socketIo?.CloseAsync();
+                _running = false;
+            }
         }
 
         public void Init(string token)
@@ -51,6 +57,7 @@ namespace GoryMoon.StreamEngineer.Data
                 }
             });
             _socketIo.ConnectAsync();
+            _running = true;
         }
 
         private async void OnSocketClosed(ServerCloseReason reason)
@@ -64,7 +71,7 @@ namespace GoryMoon.StreamEngineer.Data
                     try
                     {
                         await _socketIo.ConnectAsync();
-                        break;
+                        return;
                     }
                     catch (WebSocketException ex)
                     {
@@ -72,9 +79,10 @@ namespace GoryMoon.StreamEngineer.Data
                         await Task.Delay(2000);
                     }
                 }
-
+                
                 Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
             }
+            _running = false;
         }
 
         /*[Event(null, 452)]

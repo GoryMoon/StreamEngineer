@@ -71,7 +71,7 @@ namespace GoryMoon.StreamEngineer
             TargetList.Clear();
         }
 
-        private static void MeteorWaveInternal()
+        public static void MeteorWave()
         {
             if (MySession.Static.EnvironmentHostility != MyEnvironmentHostilityEnum.SAFE)
             {
@@ -239,7 +239,7 @@ namespace GoryMoon.StreamEngineer
             }
             else
             {
-                Plugin.Static.QueueMeteors();
+                SessionHandler.EnqueueMeteors();
             }
         }
 
@@ -298,11 +298,6 @@ namespace GoryMoon.StreamEngineer
                 return;
             direction.CalculatePerpendicularVector(out _mRightVector);
             _mDownVector = MyUtils.Normalize(Vector3.Cross(direction, _mRightVector));
-        }
-
-        public static void MeteorWave()
-        {
-            MeteorWaveInternal();
         }
 
         [Event(null, 567)]
