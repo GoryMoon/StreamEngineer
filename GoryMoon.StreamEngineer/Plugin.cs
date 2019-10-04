@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using GoryMoon.StreamEngineer.Actions;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
 using Sandbox.Game;
@@ -12,7 +13,8 @@ namespace GoryMoon.StreamEngineer
 {
     public class Plugin : IPlugin
     {
-        private static Plugin _static;
+        public static Plugin Static;
+        public Logger Logger { get; private set; }
         private DataHandler _dataHandler;
         private StreamlabsData _streamlabsData;
 
@@ -22,11 +24,12 @@ namespace GoryMoon.StreamEngineer
 
         public void Init(object gameInstance)
         {
-            _static = this;
+            Static = this;
             var path = Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(typeof(Plugin).Assembly.CodeBase).Path));
             Configuration.TokenConfig.Init(path);
             Configuration.PluginConfig.Init(path);
-
+            
+            Logger = new Logger();
             _dataHandler = new DataHandler();
             _streamlabsData = new StreamlabsData(_dataHandler);
 
@@ -42,12 +45,12 @@ namespace GoryMoon.StreamEngineer
             if (!Sync.IsServer) return;
 
             var token = Configuration.Token.Get(c => c.StreamlabsToken).Trim();
-            if (token.Length > 0) _static._streamlabsData.Init(token);
+            if (token.Length > 0) Static._streamlabsData.Init(token);
         }
 
         public static void StopService()
         {
-            if (Sync.IsServer) _static._streamlabsData.Dispose();
+            if (Sync.IsServer) Static._streamlabsData.Dispose();
         }
 
         public void ScreenAdded(MyGuiScreenBase screenBase)

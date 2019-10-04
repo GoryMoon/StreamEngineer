@@ -64,9 +64,11 @@
     <Reference Include="Sandbox.RenderDirect, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>D:\SteamLibrary\SteamApps\common\SpaceEngineers\Bin64\Sandbox.RenderDirect.dll</HintPath>
     </Reference>
-    <Reference Include="SocketIOClient, Version=1.0.2.5, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\SocketIOClient.1.0.2.5\lib\netstandard2.0\SocketIOClient.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SpaceEngineers.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>D:\SteamLibrary\SteamApps\common\SpaceEngineers\Bin64\SpaceEngineers.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="SpaceEngineers.ObjectBuilders, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>D:\SteamLibrary\SteamApps\common\SpaceEngineers\Bin64\SpaceEngineers.ObjectBuilders.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -137,18 +139,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\DataHandler.cs" />
     <Compile Include="Actions\IAction.cs" />
     <Compile Include="Actions\MeteorAction.cs" />
+    <Compile Include="Actions\WarheadAction.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\CustomFileStore.cs" />
-    <Compile Include="Data\DataHandler.cs" />
-    <Compile Include="Data\StreamlabsData.cs" />
     <Compile Include="HudNotification.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MeteorShower.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionHandler.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -157,7 +160,14 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Ideas.txt" />
     <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GoryMoon.StreamEngineer.Data\GoryMoon.StreamEngineer.Data.csproj">
+      <Project>{5efd72ad-909c-4e58-a0a5-b21bb670c04d}</Project>
+      <Name>GoryMoon.StreamEngineer.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

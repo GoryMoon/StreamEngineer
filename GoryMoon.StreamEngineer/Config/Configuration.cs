@@ -65,6 +65,7 @@ namespace GoryMoon.StreamEngineer.Config
             public class ActionSettings
             {
                 public Action MeteorShower { get; set; } = new Action(new[] {"Don-20"}, "Let it RAIN!");
+                public Action WarheadDrop { get; set; } = new Action(message: "Watch OUT!");
             }
 
             public class Action

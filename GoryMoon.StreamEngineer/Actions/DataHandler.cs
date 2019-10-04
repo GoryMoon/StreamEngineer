@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoryMoon.StreamEngineer.Actions;
 using GoryMoon.StreamEngineer.Config;
+using GoryMoon.StreamEngineer.Data;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Game.Gui;
 
-namespace GoryMoon.StreamEngineer.Data
+namespace GoryMoon.StreamEngineer.Actions
 {
-    public class DataHandler
+    public class DataHandler: IDataHandler
     {
         //Normal Actions
         private readonly Dictionary<string, IAction> _actions = new Dictionary<string, IAction>();
@@ -30,6 +30,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         //Actions
         private readonly IAction _meteorAction = new MeteorAction();
+        private readonly IAction _warheadAction = new WarheadAction();
 
         public DataHandler()
         {
@@ -56,6 +57,7 @@ namespace GoryMoon.StreamEngineer.Data
                 _mixerHostActions.Clear();
 
                 SetAction(_meteorAction, actionSettings.MeteorShower);
+                SetAction(_warheadAction, actionSettings.WarheadDrop);
             }
         }
 
@@ -273,5 +275,7 @@ namespace GoryMoon.StreamEngineer.Data
             var messageEvent = Configuration.Plugin.Get(c => c.Events.MixerHostMessage);
             SendMessage("Not implemented yet!", messageEvent.AlwaysSendMessage, null);
         }
+
+        public ILogger Logger => Plugin.Static.Logger;
     }
 }

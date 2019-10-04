@@ -1,16 +1,17 @@
 ﻿using System;
+using GoryMoon.StreamEngineer.Data;
 using Sandbox;
 
 namespace GoryMoon.StreamEngineer
 {
-    public class Logger
+    public class Logger: ILogger
     {
-        public static void WriteLine(string msg)
+        public void WriteLine(string msg)
         {
             MySandboxGame.Log.WriteLineAndConsole($"[StreamEngineer]: {msg}");
         }
 
-        public static void WriteLine(Exception e)
+        public void WriteLine(Exception e)
         {
             WriteLine("Exception: ");
             MySandboxGame.Log.WriteLine(e);

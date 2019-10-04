@@ -9,12 +9,12 @@ namespace GoryMoon.StreamEngineer.Data
 {
     public class StreamlabsData
     {
-        private readonly DataHandler _dataHandler;
+        private readonly IDataHandler _dataHandler;
 
         private bool _running;
         private SocketIO _socketIo;
 
-        public StreamlabsData(DataHandler dataHandler)
+        public StreamlabsData(IDataHandler dataHandler)
         {
             Static = this;
             _dataHandler = dataHandler;
@@ -40,18 +40,18 @@ namespace GoryMoon.StreamEngineer.Data
                     {"token", token}
                 }
             };
-            _socketIo.OnConnected += () => Logger.WriteLine("Connected to Streamlabs");
+            _socketIo.OnConnected += () => _dataHandler.Logger.WriteLine("Connected to Streamlabs");
             _socketIo.OnClosed += OnSocketClosed;
             _socketIo.On("event", args =>
             {
                 try
                 {
-                    Logger.WriteLine("Message: " + args.Text);
+                    _dataHandler.Logger.WriteLine("Message: " + args.Text);
                     Static.OnSocketMessage(args.Text);
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine(e);
+                    _dataHandler.Logger.WriteLine(e);
                 }
             });
             _socketIo.ConnectAsync();
@@ -60,10 +60,10 @@ namespace GoryMoon.StreamEngineer.Data
 
         private async void OnSocketClosed(ServerCloseReason reason)
         {
-            Logger.WriteLine($"Closed Streamlabs: {reason}");
+            _dataHandler.Logger.WriteLine($"Closed Streamlabs: {reason}");
             if (reason != ServerCloseReason.ClosedByClient)
             {
-                Logger.WriteLine("Reconnecting Streamlabs");
+                _dataHandler.Logger.WriteLine("Reconnecting Streamlabs");
                 for (var i = 0; i < 3; i++)
                     try
                     {
@@ -72,11 +72,11 @@ namespace GoryMoon.StreamEngineer.Data
                     }
                     catch (WebSocketException ex)
                     {
-                        Logger.WriteLine(ex.Message);
+                        _dataHandler.Logger.WriteLine(ex.Message);
                         await Task.Delay(2000);
                     }
 
-                Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
+                _dataHandler.Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
             }
 
             _running = false;
@@ -84,7 +84,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         private void OnSocketMessage(string args)
         {
-            Logger.WriteLine("Socketmessage: " + args);
+            _dataHandler.Logger.WriteLine("Socketmessage: " + args);
             var o = JObject.Parse(args);
             var type = (string) o["type"];
             var account = (string) o["for"];
