@@ -142,6 +142,7 @@
     <Compile Include="Actions\DataHandler.cs" />
     <Compile Include="Actions\MeteorAction.cs" />
     <Compile Include="Actions\PowerOffAction.cs" />
+    <Compile Include="Actions\PowerToggleAction.cs" />
     <Compile Include="Actions\RefillAction.cs" />
     <Compile Include="Actions\WarheadAction.cs" />
     <Compile Include="Config\Configuration.cs" />

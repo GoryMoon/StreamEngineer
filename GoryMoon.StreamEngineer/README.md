@@ -16,11 +16,12 @@ Extract this folder anywhere and get it's path, save this for later.
 To edit the events open the `events.json`, can be done while game is running.
 
 ### Actions
-|      Type     | Comments                                                                                       |               Additional parameters              |
-|:-------------:|------------------------------------------------------------------------------------------------|:------------------------------------------------:|
-|  `"meteors"`  | Spawns `amount` of meteor storms, `radius` of `1.0` is like vanilla, lower is closer to player | `"radius": 1.0, "amount": "number" or "$event$"` |
-| `"power_off"` | Turns off the power of the current vehicle                                                     |                                                  |
-|   `"refill"`  | Refills health, O2, H2 and energy                                                              |                                                  |
+|      Type        | Comments                                                                                       |               Additional parameters              |
+|:----------------:|------------------------------------------------------------------------------------------------|:------------------------------------------------:|
+|  `"meteors"`     | Spawns `amount` of meteor storms, `radius` of `1.0` is like vanilla, lower is closer to player | `"radius": 1.0, "amount": "number" or "event"`   |
+| `"power_off"`    | Turns off the power of the current vehicle                                                     |                                                  |
+| `"power_toggle"` | Toggles the the power of the current vehicle                                                   |                                                  |
+|   `"refill"`     | Refills health, O2, H2 and energy                                                              |                                                  |
 
 `$event$` can be used on supported parameters to use the amount data from the event. 
 For example the amount of months a user have subscribed.
@@ -36,7 +37,7 @@ You can leave the condition array empty to always run the action.
 
 ```json
 {
-  "type": "bits",
+  "type": "twitch_bits",
   "from": 100,
   "to": 500
 }
@@ -71,7 +72,7 @@ You can have multiple of the same event with different conditions
     "action": {
       "conditions": [
         {
-          "type": "bits",
+          "type": "twitch_bits",
           "from": 100,
           "to": 500
         }
@@ -92,7 +93,7 @@ You can have multiple of the same event with different conditions
       ],
       "message": "Let it RAIN!",
       "radius": 0.2,
-      "amount": "$event$"
+      "amount": "event / 5"
     }
   }
 ]

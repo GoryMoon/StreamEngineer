@@ -11,8 +11,8 @@ namespace GoryMoon.StreamEngineer.Actions
         
         public override void Execute(Data.Data data)
         {
-            int amount = GetEventValue(Amount, 1, data);
-            SessionHandler.EnqueueMeteors(amount, Radius);
+            double amount = GetEventValue(Amount, 1, data);
+            SessionHandler.EnqueueMeteors((int) Math.Ceiling(amount), Radius);
         }
     }
 }

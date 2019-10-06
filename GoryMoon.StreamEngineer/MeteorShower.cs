@@ -71,7 +71,7 @@ namespace GoryMoon.StreamEngineer
             TargetList.Clear();
         }
 
-        public static void MeteorWave()
+        public static void MeteorWave(double radius)
         {
             if (MySession.Static.EnvironmentHostility != MyEnvironmentHostilityEnum.SAFE)
             {
@@ -87,7 +87,7 @@ namespace GoryMoon.StreamEngineer
                         if (TargetList.Count == 0)
                         {
                             _mWaveCounter = WavesInShower + 1;
-                            RescheduleEvent();
+                            RescheduleEvent(radius);
                             return;
                         }
                     }
@@ -106,15 +106,15 @@ namespace GoryMoon.StreamEngineer
                     _meteoroidCount = MathHelper.Clamp(_meteoroidCount, 1, 30);
                 }
 
-                RescheduleEvent();
+                RescheduleEvent(radius);
                 CheckTargetValid();
                 if (_mWaveCounter < 0)
                     return;
-                StartWave();
+                StartWave(radius);
             }
         }
 
-        private static void StartWave()
+        private static void StartWave(double radius)
         {
             if (!_mCurrentTarget.HasValue)
                 return;
@@ -125,8 +125,8 @@ namespace GoryMoon.StreamEngineer
             var circleNormalized1 = MyUtils.GetRandomVector3CircleNormalized();
             var randomFloat2 = MyUtils.GetRandomFloat(0.0f, 1f);
             var vector3D1 = (Vector3D) (circleNormalized1.X * _mRightVector + circleNormalized1.Z * _mDownVector);
-            var vector3D2 = _mCurrentTarget.Value.Center + Math.Pow(randomFloat2, 0.699999988079071) *
-                            _mCurrentTarget.Value.Radius * vector3D1 * MeteorBlurKoef;
+            var vector3D2 = _mCurrentTarget.Value.Center + (Math.Pow(randomFloat2, 0.699999988079071) *
+                            _mCurrentTarget.Value.Radius * vector3D1 * MeteorBlurKoef * radius);
             var vector3D3 =
                 -Vector3D.Normalize(MyGravityProviderSystem.CalculateNaturalGravityInPoint(vector3D2));
             if (vector3D3 != Vector3D.Zero)
@@ -226,7 +226,7 @@ namespace GoryMoon.StreamEngineer
             _mTmpEntityList.Clear();
         }
 
-        private static void RescheduleEvent()
+        private static void RescheduleEvent(double radius)
         {
             if (_mWaveCounter > WavesInShower)
             {
@@ -239,7 +239,7 @@ namespace GoryMoon.StreamEngineer
             }
             else
             {
-                SessionHandler.EnqueueMeteors();
+                SessionHandler.EnqueueMeteors(1, radius);
             }
         }
 

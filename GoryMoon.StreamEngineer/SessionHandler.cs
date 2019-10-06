@@ -46,7 +46,7 @@ namespace GoryMoon.StreamEngineer
             MySandboxGame.Static.Invoke(action, "SessionHandler.RunOnMainThread");
         }
 
-        public static void EnqueueMeteors(int amount, float radius)
+        public static void EnqueueMeteors(int amount, double radius)
         {
             for (var i = 0; i < amount; i++)
             {

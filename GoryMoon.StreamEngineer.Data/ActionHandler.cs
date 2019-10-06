@@ -18,9 +18,13 @@ namespace GoryMoon.StreamEngineer.Data
 
         private FileSystemWatcher _watcher;
         private byte[] _lastEventsHash = new byte[0];
+
+        private static ActionHandler _handler;
+        public static ILogger Logger => _handler._logger;
         
         public ActionHandler(string path, string fileName, ILogger logger)
         {
+            _handler = this;
             _path = path;
             _fileName = fileName;
             _logger = logger;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NCalc2;
 
 namespace GoryMoon.StreamEngineer.Data
 {
@@ -11,25 +12,18 @@ namespace GoryMoon.StreamEngineer.Data
         
         public abstract void Execute(Data data);
 
-        protected int GetEventValue(string property, int defaultVal, Data data)
+        protected double GetEventValue(string property, int defaultVal, Data data)
         {
-            if ("$event$".Equals(property))
+            if (property == null) return defaultVal;
+            var expression = new Expression(property) {Parameters = {["event"] = data.Amount}};
+            var result = expression.Evaluate();
+            if (expression.HasErrors())
             {
-                return data.Amount;
+                ActionHandler.Logger.WriteLine("Expression error: " + expression.Error);
+                return defaultVal;
             }
+            return Convert.ToDouble(result);
 
-            if (property != null)
-            {
-                try
-                {
-                    return Convert.ToInt32(property);
-                }
-                catch (Exception e)
-                {
-                    // ignored
-                }
-            }
-            return defaultVal;
         }
         
         public bool Test(Data eventData)

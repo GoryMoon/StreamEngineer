@@ -11,9 +11,6 @@ namespace GoryMoon.StreamEngineer.Data
             var streamlabsData = new StreamlabsData(dataHandler);
             var token = Environment.GetEnvironmentVariable("token");
             streamlabsData.Init(token);
-            //var data = new Data {Type = EventType.TwitchBits, Amount = 10000};
-            //var actions = handler.GetActions(data);
-            //actions.ForEach(action => action.Execute());
 
             Console.WriteLine("Stop with: q");
             while (true)
@@ -147,11 +144,12 @@ namespace GoryMoon.StreamEngineer.Data
         {
         
             public int Radius { get; set; }
-            public int Amount { get; set; }
+            public string Amount { get; set; }
         
             public override void Execute(Data data)
             {
                 Console.WriteLine(ToString());
+                Console.WriteLine(GetEventValue(Amount, 1, data));
             }
 
             public override string ToString()
