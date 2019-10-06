@@ -1,10 +1,11 @@
 +Meteorites
 +Increase accuracy with more bits
++Fill power
++Disable dampeners
 
 Raining Trees?
 Jetpack fuel removed
 Random ore below feet
-+Fill power
 Reset build planner
 Warhead above player, 100m+ up
 Drop inventory on ground

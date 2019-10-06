@@ -16,12 +16,19 @@ Extract this folder anywhere and get it's path, save this for later.
 To edit the events open the `events.json`, can be done while game is running.
 
 ### Actions
-|      Type        | Comments                                                                                       |               Additional parameters              |
-|:----------------:|------------------------------------------------------------------------------------------------|:------------------------------------------------:|
-|  `"meteors"`     | Spawns `amount` of meteor storms, `radius` of `1.0` is like vanilla, lower is closer to player | `"radius": 1.0, "amount": "number" or "event"`   |
-| `"power_off"`    | Turns off the power of the current vehicle                                                     |                                                  |
-| `"power_toggle"` | Toggles the the power of the current vehicle                                                   |                                                  |
-|   `"refill"`     | Refills health, O2, H2 and energy                                                              |                                                  |
+|           Type           | Comments                                                                                       |              Additional parameters             |
+|:------------------------:|------------------------------------------------------------------------------------------------|:----------------------------------------------:|
+|        `"meteors"`       | Spawns `amount` of meteor storms, `radius` of `1.0` is like vanilla, lower is closer to player | `"radius": 1.0, "amount": "number" or "event"` |
+|       `"power_on"`       | Turns on the power of the current vehicle                                                      |                                                |
+|       `"power_off"`      | Turns off the power of the current vehicle                                                     |                                                |
+|     `"power_toggle"`     | Toggles the power of the current vehicle                                                       |                                                |
+|     `"power_toggle"`     | Toggles the the power of the current vehicle                                                   |                                                |
+|        `"refill"`        | Refills health, O2, H2 and energy                                                              |                                                |
+|       `"power_up"`       | Refills the batteries in the current vehicle                                                   |                                                |
+|   `"toggle_dampeners"`   | Toggles the dampeners                                                                          |                                                |
+|   `"enable_dampeners"`   | Turns the dampeners on                                                                         |                                                |
+|   `"disable_dampeners"`  | Turns the dampeners off                                                                        |                                                |
+| `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                |
 
 `$event$` can be used on supported parameters to use the amount data from the event. 
 For example the amount of months a user have subscribed.

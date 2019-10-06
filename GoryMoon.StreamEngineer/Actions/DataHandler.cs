@@ -16,9 +16,19 @@ namespace GoryMoon.StreamEngineer.Actions
         {
             _actionHandler = new ActionHandler(path, "events.json", Logger);
             _actionHandler.AddAction("meteors", typeof(MeteorAction));
+            
+            _actionHandler.AddAction("power_on", typeof(PowerOnAction));
             _actionHandler.AddAction("power_off", typeof(PowerOffAction));
             _actionHandler.AddAction("power_toggle", typeof(PowerToggleAction));
+            
             _actionHandler.AddAction("refill", typeof(RefillAction));
+            _actionHandler.AddAction("power_up", typeof(PowerUpAction));
+            
+            _actionHandler.AddAction("toggle_dampeners", typeof(ToggleDampenersAction));
+            _actionHandler.AddAction("enable_dampeners", typeof(EnableDampenersAction));
+            _actionHandler.AddAction("disable_dampeners", typeof(DisableDampenersAction));
+            
+            _actionHandler.AddAction("fulfill_buildplanner", typeof(FulfillBuildPlannerAction));
             _actionHandler.StartWatching();
         }
 
