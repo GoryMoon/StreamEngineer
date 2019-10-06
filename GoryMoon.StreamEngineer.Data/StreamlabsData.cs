@@ -7,20 +7,18 @@ using SocketIOClient;
 
 namespace GoryMoon.StreamEngineer.Data
 {
-    public class StreamlabsData
+    public class StreamlabsData: IDisposable
     {
-        private readonly IDataHandler _dataHandler;
+        private readonly BaseDataHandler _baseDataHandler;
 
         private bool _running;
         private SocketIO _socketIo;
 
-        public StreamlabsData(IDataHandler dataHandler)
+        public StreamlabsData(BaseDataHandler baseDataHandler)
         {
-            Static = this;
-            _dataHandler = dataHandler;
+            _baseDataHandler = baseDataHandler;
         }
-
-        private static StreamlabsData Static { get; set; }
+        
 
         public void Dispose()
         {
@@ -40,18 +38,18 @@ namespace GoryMoon.StreamEngineer.Data
                     {"token", token}
                 }
             };
-            _socketIo.OnConnected += () => _dataHandler.Logger.WriteLine("Connected to Streamlabs");
+            _socketIo.OnConnected += () => _baseDataHandler.Logger.WriteLine("Connected to Streamlabs");
             _socketIo.OnClosed += OnSocketClosed;
             _socketIo.On("event", args =>
             {
                 try
                 {
-                    _dataHandler.Logger.WriteLine("Message: " + args.Text);
-                    Static.OnSocketMessage(args.Text);
+                    _baseDataHandler.Logger.WriteLine("Message: " + args.Text);
+                    OnSocketMessage(args.Text);
                 }
                 catch (Exception e)
                 {
-                    _dataHandler.Logger.WriteLine(e);
+                    _baseDataHandler.Logger.WriteLine(e);
                 }
             });
             _socketIo.ConnectAsync();
@@ -60,10 +58,10 @@ namespace GoryMoon.StreamEngineer.Data
 
         private async void OnSocketClosed(ServerCloseReason reason)
         {
-            _dataHandler.Logger.WriteLine($"Closed Streamlabs: {reason}");
+            _baseDataHandler.Logger.WriteLine($"Closed Streamlabs: {reason}");
             if (reason != ServerCloseReason.ClosedByClient)
             {
-                _dataHandler.Logger.WriteLine("Reconnecting Streamlabs");
+                _baseDataHandler.Logger.WriteLine("Reconnecting Streamlabs");
                 for (var i = 0; i < 3; i++)
                     try
                     {
@@ -72,11 +70,11 @@ namespace GoryMoon.StreamEngineer.Data
                     }
                     catch (WebSocketException ex)
                     {
-                        _dataHandler.Logger.WriteLine(ex.Message);
+                        _baseDataHandler.Logger.WriteLine(ex.Message);
                         await Task.Delay(2000);
                     }
 
-                _dataHandler.Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
+                _baseDataHandler.Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
             }
 
             _running = false;
@@ -84,7 +82,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         private void OnSocketMessage(string args)
         {
-            _dataHandler.Logger.WriteLine("Socketmessage: " + args);
+            _baseDataHandler.Logger.WriteLine("Socketmessage: " + args);
             var o = JObject.Parse(args);
             var type = (string) o["type"];
             var account = (string) o["for"];
@@ -100,7 +98,8 @@ namespace GoryMoon.StreamEngineer.Data
                         name = (string) message["from"];
                         var amount = (int) double.Parse((string) message["amount"]);
                         var formatted = (string) message["formatted_amount"];
-                        _dataHandler.OnDonation(name, amount, formatted);
+                        
+                        _baseDataHandler.OnDonation(name, amount, formatted);
                         break;
                     }
                     case "subscription":
@@ -111,14 +110,14 @@ namespace GoryMoon.StreamEngineer.Data
                             case "twitch_account":
                             {
                                 var tier = (string) message["sub_plan"];
-                                _dataHandler.OnTwitchSubscription(name, months, tier, false);
+                                _baseDataHandler.OnTwitchSubscription(name, months, tier, false);
                                 break;
                             }
                             case "youtube_account":
-                                _dataHandler.OnYoutubeSponsor(name, months);
+                                _baseDataHandler.OnYoutubeSponsor(name, months);
                                 break;
                             case "mixer_account":
-                                _dataHandler.OnMixerSubscription(name, months);
+                                _baseDataHandler.OnMixerSubscription(name, months);
                                 break;
                         }
 
@@ -132,28 +131,28 @@ namespace GoryMoon.StreamEngineer.Data
                             case "twitch_account":
                             {
                                 var tier = (string) message["sub_plan"];
-                                _dataHandler.OnTwitchSubscription(name, months, tier, true);
+                                _baseDataHandler.OnTwitchSubscription(name, months, tier, true);
                                 break;
                             }
                             case "youtube_account":
-                                _dataHandler.OnYoutubeSponsor(name, months);
+                                _baseDataHandler.OnYoutubeSponsor(name, months);
                                 break;
                             case "mixer_account":
-                                _dataHandler.OnMixerSubscription(name, months);
+                                _baseDataHandler.OnMixerSubscription(name, months);
                                 break;
                         }
 
                         break;
                     }
                     case "follow" when account == "twitch_account":
-                        _dataHandler.OnTwitchFollow(name);
+                        _baseDataHandler.OnTwitchFollow(name);
                         break;
                     case "follow" when account == "youtube_account":
-                        _dataHandler.OnYoutubeSubscription(name);
+                        _baseDataHandler.OnYoutubeSubscription(name);
                         break;
                     case "follow" when account == "mixer_account":
                     {
-                        _dataHandler.OnMixerFollow(name);
+                        _baseDataHandler.OnMixerFollow(name);
                         break;
                     }
                     case "host":
@@ -162,10 +161,10 @@ namespace GoryMoon.StreamEngineer.Data
                         switch (account)
                         {
                             case "twitch_account":
-                                _dataHandler.OnTwitchHost(name, viewers);
+                                _baseDataHandler.OnTwitchHost(name, viewers);
                                 break;
                             case "mixer_account":
-                                _dataHandler.OnMixerHost(name, viewers);
+                                _baseDataHandler.OnMixerHost(name, viewers);
                                 break;
                         }
 
@@ -174,20 +173,20 @@ namespace GoryMoon.StreamEngineer.Data
                     case "bits":
                     {
                         var amount = int.Parse((string) message["amount"]);
-                        _dataHandler.OnTwitchBits(name, amount);
+                        _baseDataHandler.OnTwitchBits(name, amount);
                         break;
                     }
                     case "raid":
                     {
                         var amount = (int) message["raiders"];
-                        _dataHandler.OnTwitchRaid(name, amount);
+                        _baseDataHandler.OnTwitchRaid(name, amount);
                         break;
                     }
                     case "superchat":
                     {
                         var amount = int.Parse((string) message["amount"]);
                         var formatted = (string) message["displayString"];
-                        _dataHandler.OnYoutubeSuperchat(name, amount, formatted);
+                        _baseDataHandler.OnYoutubeSuperchat(name, amount, formatted);
                         break;
                     }
                 }

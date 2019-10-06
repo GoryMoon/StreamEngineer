@@ -20,6 +20,8 @@ namespace GoryMoon.StreamEngineer
 
         public void Dispose()
         {
+            _dataHandler.Dispose();
+            _streamlabsData.Dispose();
         }
 
         public void Init(object gameInstance)
@@ -30,7 +32,7 @@ namespace GoryMoon.StreamEngineer
             Configuration.PluginConfig.Init(path);
             
             Logger = new Logger();
-            _dataHandler = new DataHandler();
+            _dataHandler = new DataHandler(path);
             _streamlabsData = new StreamlabsData(_dataHandler);
 
             //MyScreenManager.ScreenAdded += ScreenAdded;

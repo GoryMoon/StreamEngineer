@@ -8,148 +8,31 @@ using Sandbox.Game.Gui;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
-    public class DataHandler: IDataHandler
+    public class DataHandler: BaseDataHandler
     {
-        //Normal Actions
-        private readonly Dictionary<string, IAction> _actions = new Dictionary<string, IAction>();
-        private readonly Dictionary<int, IAction> _bitsActions = new Dictionary<int, IAction>();
-        private readonly Dictionary<int, IAction> _twitchHostActions = new Dictionary<int, IAction>();
-        private readonly Dictionary<int, IAction> _twitchRaidActions = new Dictionary<int, IAction>();
-        private readonly Dictionary<int, IAction> _mixerHostActions = new Dictionary<int, IAction>();
+        private ActionHandler _actionHandler;
         
-        //Fuzzy actions
-        private readonly Dictionary<int, IAction> _donationActions = new Dictionary<int, IAction>();
-        private readonly Dictionary<int, IAction> _mixSubActions = new Dictionary<int, IAction>();
-        private readonly Dictionary<int, IAction> _twitchSubActions = new Dictionary<int, IAction>();
-        private readonly Dictionary<int, IAction> _youtubeSubActions = new Dictionary<int, IAction>();
-        private bool _fuzzyBits;
-        private bool _fuzzyDonations;
-        private bool _fuzzySubs;
-
-        private int _lastActionSettingsHash;
-
-        //Actions
-        private readonly IAction _meteorAction = new MeteorAction();
-        private readonly IAction _warheadAction = new WarheadAction();
-
-        public DataHandler()
+        public DataHandler(string path) : base(Plugin.Static.Logger)
         {
-            UpdateCache();
+            _actionHandler = new ActionHandler(path, "events.json", Logger);
+            _actionHandler.AddAction("meteors", typeof(MeteorAction));
+            _actionHandler.AddAction("power_off", typeof(PowerOffAction));
+            _actionHandler.AddAction("refill", typeof(RefillAction));
+            _actionHandler.StartWatching();
         }
 
-        private void UpdateCache()
+        public override void Dispose()
         {
-            var actionSettings = Configuration.Plugin.Get(c => c.Actions);
-            if (!Equals(_lastActionSettingsHash, actionSettings.GetHashCode()))
-            {
-                _lastActionSettingsHash = actionSettings.GetHashCode();
-                _fuzzyDonations = Configuration.Plugin.Get(c => c.FuzzyDonations);
-                _fuzzyBits = Configuration.Plugin.Get(c => c.FuzzyBits);
-                _fuzzySubs = Configuration.Plugin.Get(c => c.FuzzySubs);
-                _donationActions.Clear();
-                _bitsActions.Clear();
-                _twitchSubActions.Clear();
-                _youtubeSubActions.Clear();
-                _mixSubActions.Clear();
-                _actions.Clear();
-                _twitchHostActions.Clear();
-                _twitchRaidActions.Clear();
-                _mixerHostActions.Clear();
-
-                SetAction(_meteorAction, actionSettings.MeteorShower);
-                SetAction(_warheadAction, actionSettings.WarheadDrop);
-            }
+            _actionHandler.Dispose();
         }
 
-        private void SetAction(IAction action, Configuration.PluginConfig.Action config)
-        {
-            action.Message = config.Message;
-            foreach (var configEvent in config.Events)
-            {
-                var split = configEvent.Split('-');
-                if (_fuzzyDonations || _fuzzyBits || _fuzzySubs)
-                {
-                    if (_fuzzyDonations && configEvent.StartsWith("Don-"))
-                        _donationActions.Add(int.Parse(split[1]), action);
-                    else if (_fuzzySubs && configEvent.StartsWith("TSub-"))
-                        _twitchSubActions.Add(int.Parse(split[1]), action);
-                    else if (_fuzzyBits && configEvent.StartsWith("TBits-"))
-                        _bitsActions.Add(int.Parse(split[1]), action);
-                    else if (_fuzzySubs && configEvent.StartsWith("YSponsor-"))
-                        _youtubeSubActions.Add(int.Parse(split[1]), action);
-                    else if (_fuzzySubs && configEvent.StartsWith("MSub-")) _mixSubActions.Add(int.Parse(split[1]), action);
-                }
-
-                if (configEvent.StartsWith("THost-"))
-                    _twitchHostActions.Add(int.Parse(split[1]), action);
-                else if (configEvent.StartsWith("TRaid"))
-                    _twitchRaidActions.Add(int.Parse(split[1]), action);
-                else if (configEvent.StartsWith("MHost-"))
-                    _mixerHostActions.Add(int.Parse(split[1]), action);
-                else
-                    _actions.Add(configEvent, action);
-            }
-        }
-
-        private IAction GetAction(string action)
-        {
-            UpdateCache();
-            return _actions.GetValueOrDefault(action, null);
-        }
-
-        private IAction GetDonationAction(string key)
-        {
-            UpdateCache();
-            return GetFuzzyAction(_donationActions, _fuzzyDonations, key);
-        }
-
-        private IAction GetBitsAction(string key)
-        {
-            UpdateCache();
-            return GetFuzzyAction(_bitsActions, _fuzzyBits, key);
-        }
-
-        private IAction GetTwitchSubAction(string key)
-        {
-            UpdateCache();
-            return GetFuzzyAction(_twitchSubActions, _fuzzySubs, key);
-        }
-
-        private IAction GetYoutubeSubAction(string key)
-        {
-            UpdateCache();
-            return GetFuzzyAction(_youtubeSubActions, _fuzzySubs, key);
-        }
-
-        private IAction GetMixerSubAction(string key)
-        {
-            UpdateCache();
-            return GetFuzzyAction(_mixSubActions, _fuzzySubs, key);
-        }
-
-        private IAction GetFuzzyAction(Dictionary<int, IAction> dictionary, bool fuzzy, string key)
-        {
-            if (!fuzzy) return _actions.GetValueOrDefault(key, null);
-
-            var amount = Convert.ToInt32(key.Split('-')[1]);
-            if (dictionary.TryGetValue(amount, out var action)) return action;
-
-            foreach (var pair in dictionary.OrderBy(pair => pair.Key))
-            {
-                if (pair.Key >= amount) break;
-
-                action = pair.Value;
-            }
-
-            return action;
-        }
-
-        private void SendMessage(string msg, bool alwaysSendMessage, IAction action)
+        private void SendMessage(string msg, bool alwaysSendMessage, List<BaseAction> actions)
         {
             SessionHandler.RunOnMainThread(() =>
             {
+                msg += GetMessage(actions);
                 Logger.WriteLine(msg);
-                if (action == null && !alwaysSendMessage) return;
+                if (actions.Count <= 0 && !alwaysSendMessage) return;
 
                 if (MyMultiplayer.Static != null)
                     MyMultiplayer.Static.SendChatMessageScripted(msg, ChatChannel.GlobalScripted, 0, "[StreamEngineer]");
@@ -158,24 +41,28 @@ namespace GoryMoon.StreamEngineer.Actions
             });
         }
 
-        private string GetMessage(IAction action)
+        private string GetMessage(IReadOnlyCollection<BaseAction> actions)
         {
-            return action?.Message == null ? "" : " " + action.Message;
+            return actions.Count > 0 ? " " + string.Join(" ", actions.Select(action => action.Message)) : "";
         }
 
-        public void OnDonation(string name, int amount, string formattedAmount)
+        private List<BaseAction> GetAndExecute(Data.Data data)
         {
-            var action = GetDonationAction($"Don-{amount}");
-            action?.Execute();
+            var actions = _actionHandler.GetActions(data);
+            actions.ForEach(action => action.Execute(data));
+            return actions;
+        }
 
+        public override void OnDonation(string name, int amount, string formattedAmount)
+        {
+            var actions = GetAndExecute(new Data.Data {Type = EventType.Donation, Amount = amount});
             var messageEvent = Configuration.Plugin.Get(c => c.Events.Donation);
-            SendMessage(string.Format(messageEvent.Message, name, formattedAmount) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
+            SendMessage(string.Format(messageEvent.Message, name, formattedAmount), messageEvent.AlwaysSendMessage, actions);
         }
 
-        public void OnTwitchSubscription(string name, int months, string tier, bool resub)
+        public override void OnTwitchSubscription(string name, int months, string tier, bool resub)
         {
-            var action = GetTwitchSubAction($"TSub-{months}");
-            action?.Execute();
+            var actions = GetAndExecute(new Data.Data {Type = EventType.TwitchSubscription, Amount = months});
             var messages = Configuration.Plugin.Get(c => c.Events.TwitchSubscription);
 
             var msg = months == 1 ? messages.NewMessage : messages.ResubMessage;
@@ -193,89 +80,85 @@ namespace GoryMoon.StreamEngineer.Actions
                     break;
             }
 
-            SendMessage(string.Format(msg, name, tierMsg, months) + GetMessage(action), messages.AlwaysSendMessage, action);
+            SendMessage(string.Format(msg, name, tierMsg, months), messages.AlwaysSendMessage, actions);
         }
 
-        public void OnTwitchBits(string name, int amount)
+        public override void OnTwitchBits(string name, int amount)
         {
-            var action = GetBitsAction($"TBits-{amount}");
-            action?.Execute();
+            var actions = GetAndExecute(new Data.Data {Type = EventType.TwitchBits, Amount = amount});
 
             var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchBits);
-            SendMessage(string.Format(messageEvent.Message, name, amount) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
+            SendMessage(string.Format(messageEvent.Message, name, amount), messageEvent.AlwaysSendMessage, actions);
         }
 
-        public void OnTwitchFollow(string name)
+        public override void OnTwitchFollow(string name)
         {
-            var action = GetAction("TFollow");
-            action?.Execute();
+            var actions = GetAndExecute(new Data.Data {Type = EventType.TwitchFollow, Amount = -1});
 
             var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchFollowed);
-            SendMessage(string.Format(messageEvent.Message, name) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
+            SendMessage(string.Format(messageEvent.Message, name), messageEvent.AlwaysSendMessage, actions);
         }
 
-        public void OnTwitchHost(string name, int viewers)
+        public override void OnTwitchHost(string name, int viewers)
         {
+            var actions = GetAndExecute(new Data.Data {Type = EventType.TwitchHost, Amount = viewers});
             var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchHost);
-            SendMessage(string.Format(messageEvent.Message, name, viewers) + GetMessage(null), messageEvent.AlwaysSendMessage, null);
+            SendMessage(string.Format(messageEvent.Message, name, viewers), messageEvent.AlwaysSendMessage, actions);
         }
 
-        public void OnTwitchRaid(string name, int viewers)
+        public override void OnTwitchRaid(string name, int viewers)
         {
+            var actions = GetAndExecute(new Data.Data {Type = EventType.TwitchRaid, Amount = viewers});
             var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchRaid);
-            SendMessage(string.Format(messageEvent.Message, name, viewers) + GetMessage(null), messageEvent.AlwaysSendMessage, null);
+            SendMessage(string.Format(messageEvent.Message, name, viewers), messageEvent.AlwaysSendMessage, actions);
         }
 
-        public void OnYoutubeSubscription(string name)
+        public override void OnYoutubeSubscription(string name)
         {
-            var action = GetAction("YSub");
-            action?.Execute();
+            var actions = GetAndExecute(new Data.Data {Type = EventType.YoutubeSubscription, Amount = -1});
 
             var messageEvent = Configuration.Plugin.Get(c => c.Events.YoutubeSubscription);
-            SendMessage(string.Format(messageEvent.Message, name) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
+            SendMessage(string.Format(messageEvent.Message, name), messageEvent.AlwaysSendMessage, actions);
         }
 
-        public void OnYoutubeSponsor(string name, int months)
+        public override void OnYoutubeSponsor(string name, int months)
         {
-            var action = GetYoutubeSubAction($"YSponsor-{months}");
-            action?.Execute();
+            var actions = GetAndExecute(new Data.Data {Type = EventType.YoutubeSponsor, Amount = months});
 
             var messages = Configuration.Plugin.Get(c => c.Events.YoutubeSponsor);
             var msg = months == 1 ? messages.NewMessage : messages.ResubMessage;
-            SendMessage(string.Format(msg, name, months) + GetMessage(action), messages.AlwaysSendMessage, action);
+            SendMessage(string.Format(msg, name, months), messages.AlwaysSendMessage, actions);
         }
 
-        public void OnYoutubeSuperchat(string name, int amount, string formatted)
+        public override void OnYoutubeSuperchat(string name, int amount, string formatted)
         {
+            var actions = GetAndExecute(new Data.Data {Type = EventType.YoutubeSuperchat, Amount = amount});
             var messageEvent = Configuration.Plugin.Get(c => c.Events.YoutubeSuperchat);
-            SendMessage("Not implemented yet!", messageEvent.AlwaysSendMessage, null);
+            SendMessage(string.Format(messageEvent.Message, name, formatted), messageEvent.AlwaysSendMessage, actions);
         }
 
-        public void OnMixerSubscription(string name, int months)
+        public override void OnMixerSubscription(string name, int months)
         {
-            var action = GetMixerSubAction($"MSub-{months}");
-            action?.Execute();
+            var actions = GetAndExecute(new Data.Data {Type = EventType.MixerSubscription, Amount = months});
 
             var messages = Configuration.Plugin.Get(c => c.Events.MixerSubscription);
             var msg = months == 1 ? messages.NewMessage : messages.ResubMessage;
-            SendMessage(string.Format(msg, name, months) + GetMessage(action), messages.AlwaysSendMessage, action);
+            SendMessage(string.Format(msg, name, months), messages.AlwaysSendMessage, actions);
         }
 
-        public void OnMixerFollow(string name)
+        public override void OnMixerFollow(string name)
         {
-            var action = GetAction("MFollow");
-            action?.Execute();
+            var actions = GetAndExecute(new Data.Data {Type = EventType.MixerFollow, Amount = -1});
 
             var messageEvent = Configuration.Plugin.Get(c => c.Events.MixerFollowMessage);
-            SendMessage(string.Format(messageEvent.Message, name) + GetMessage(action), messageEvent.AlwaysSendMessage, action);
+            SendMessage(string.Format(messageEvent.Message, name), messageEvent.AlwaysSendMessage, actions);
         }
 
-        public void OnMixerHost(string name, int viewers)
+        public override void OnMixerHost(string name, int viewers)
         {
+            var actions = GetAndExecute(new Data.Data {Type = EventType.MixerHost, Amount = viewers});
             var messageEvent = Configuration.Plugin.Get(c => c.Events.MixerHostMessage);
-            SendMessage("Not implemented yet!", messageEvent.AlwaysSendMessage, null);
+            SendMessage(string.Format(messageEvent.Message, name, viewers), messageEvent.AlwaysSendMessage, actions);
         }
-
-        public ILogger Logger => Plugin.Static.Logger;
     }
 }

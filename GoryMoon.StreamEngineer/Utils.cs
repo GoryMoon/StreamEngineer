@@ -3,7 +3,7 @@ using Sandbox.Game.World;
 
 namespace GoryMoon.StreamEngineer
 {
-    public class Utils
+    public static class Utils
     {
 
         public static MyPlayer GetPlayer()

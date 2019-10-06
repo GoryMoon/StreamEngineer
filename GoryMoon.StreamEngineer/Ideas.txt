@@ -1,12 +1,12 @@
 +Meteorites
-Increase accuracy with more bits
++Increase accuracy with more bits
 
 Raining Trees?
 Jetpack fuel removed
 Random ore below feet
-Fill power
++Fill power
 Reset build planner
-Warhead aboev player, 100m+ up
+Warhead above player, 100m+ up
 Drop inventory on ground
 Spawn spider?
 Random message, "Fuel Critical", "No Oxygen"

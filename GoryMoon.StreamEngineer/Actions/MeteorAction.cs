@@ -1,12 +1,18 @@
-﻿namespace GoryMoon.StreamEngineer.Actions
-{
-    public class MeteorAction : IAction
-    {
-        public string Message { get; set; }
+﻿using System;
+using GoryMoon.StreamEngineer.Data;
 
-        public void Execute()
+namespace GoryMoon.StreamEngineer.Actions
+{
+    public class MeteorAction : BaseAction
+    {
+        
+        public float Radius { get; set; }
+        public string Amount { get; set; }
+        
+        public override void Execute(Data.Data data)
         {
-            SessionHandler.EnqueueMeteors();
+            int amount = GetEventValue(Amount, 1, data);
+            SessionHandler.EnqueueMeteors(amount, Radius);
         }
     }
 }

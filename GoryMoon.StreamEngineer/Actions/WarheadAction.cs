@@ -1,4 +1,5 @@
-﻿using Sandbox.Common.ObjectBuilders;
+﻿using GoryMoon.StreamEngineer.Data;
+using Sandbox.Common.ObjectBuilders;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using VRage.Game;
@@ -8,15 +9,14 @@ using VRageMath;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
-    public class WarheadAction: IAction
+    //TODO WIP NOT WORKING
+    public class WarheadAction: BaseAction
     {
-        public string Message { get; set; }
-
-        public void Execute()
+        public override void Execute(Data.Data data)
         {
             
 
-            //TODO WIP NOT WORKING
+            
             var player = Utils.GetPlayer();
             if (player != null)
             {

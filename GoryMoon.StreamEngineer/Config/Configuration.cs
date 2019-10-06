@@ -28,29 +28,12 @@ namespace GoryMoon.StreamEngineer.Config
         public class PluginConfig
         {
             [TomlComment("Shows a popup when the game start to inform about this file, auto sets to false")]
+            [TomlIgnore]
             public bool ShowMenuPopup { get; set; } = true;
-
-            [TomlComment("If donations not matching an action should perform the closest action with lower donation goal")]
-            public bool FuzzyDonations { get; set; } = false;
-
-            [TomlComment("If subscriptions not matching an action should perform the closest action with lower sub goal")]
-            public bool FuzzySubs { get; set; } = false;
-
-            [TomlComment("If bits not matching an action should perform the closest action with lower bits goal")]
-            public bool FuzzyBits { get; set; } = false;
 
             [TomlComment("Display name of your steam account so actions know what player to target")]
             public string SteamName { get; set; } = "";
-
-            [TomlComment("Here you can setup what actions are triggered by what event, each action can have multiple events, separate with a ','")]
-            [TomlComment("For the following types you can replace '?' with a value of your choice")]
-            [TomlComment(
-                "Donation: Don-?\nTwitch Subscription: TSub-?\nTwitch Follow: TFollow\nTwitch Bits: TBits-?\nTwitch Host(value is lowest viewer count): THost-?")]
-            [TomlComment(
-                "Twitch Raid(value is lowest viewer count): TRaid-?\nYouTube Subscription: YSub\nYouTube Sponsor: YSponsor-?\nYouTube Superchat: YSuper-?")]
-            [TomlComment("Mixer Subscription: MSub-?\nMixer Follow: MFollow\nMixer Host(value is lowest viewer count): MHost-?")]
-            public ActionSettings Actions { get; set; } = new ActionSettings();
-
+            
             public EventMessages Events { get; set; } = new EventMessages();
 
             public static void Init(string path)
@@ -61,31 +44,6 @@ namespace GoryMoon.StreamEngineer.Config
                         builder.CustomStore(CustomFileStore.Create($"{path}/settings{Toml.FileExtension}")))
                     .Initialize();
             }
-
-            public class ActionSettings
-            {
-                public Action MeteorShower { get; set; } = new Action(new[] {"Don-20"}, "Let it RAIN!");
-                public Action WarheadDrop { get; set; } = new Action(message: "Watch OUT!");
-            }
-
-            public class Action
-            {
-                public Action()
-                    : this(null)
-                {
-                }
-
-                public Action(string[] events = null, string message = "")
-                {
-                    Events = events ?? new string[0];
-                    Message = message;
-                }
-
-                public string[] Events { get; set; }
-
-                public string Message { get; set; }
-            }
-
 
             public class EventMessages
             {
