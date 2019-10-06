@@ -22,7 +22,6 @@ To edit the events open the `events.json`, can be done while game is running.
 |       `"power_on"`       | Turns on the power of the current vehicle                                                      |                                                |
 |       `"power_off"`      | Turns off the power of the current vehicle                                                     |                                                |
 |     `"power_toggle"`     | Toggles the power of the current vehicle                                                       |                                                |
-|     `"power_toggle"`     | Toggles the the power of the current vehicle                                                   |                                                |
 |        `"refill"`        | Refills health, O2, H2 and energy                                                              |                                                |
 |       `"power_up"`       | Refills the batteries in the current vehicle                                                   |                                                |
 |   `"toggle_dampeners"`   | Toggles the dampeners                                                                          |                                                |
