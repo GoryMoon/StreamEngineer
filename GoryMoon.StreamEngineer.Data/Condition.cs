@@ -8,8 +8,8 @@ namespace GoryMoon.StreamEngineer.Data
     {
         [JsonConverter(typeof(StringEnumConverter), typeof(SnakeCaseNamingStrategy))]
         public EventType Type { get; set; }
-        public int From { get; set; } = -1;
-        public int To { get; set; } = -1;
+        public double From { get; set; } = -1;
+        public double To { get; set; } = -1;
 
         public bool Test(Data data)
         {

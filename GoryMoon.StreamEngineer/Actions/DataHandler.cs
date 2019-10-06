@@ -23,6 +23,7 @@ namespace GoryMoon.StreamEngineer.Actions
             
             _actionHandler.AddAction("refill", typeof(RefillAction));
             _actionHandler.AddAction("power_up", typeof(PowerUpAction));
+            _actionHandler.AddAction("power_down", typeof(PowerDownAction));
             
             _actionHandler.AddAction("toggle_dampeners", typeof(ToggleDampenersAction));
             _actionHandler.AddAction("enable_dampeners", typeof(EnableDampenersAction));

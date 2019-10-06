@@ -3,6 +3,8 @@
 +Fill power
 +Disable dampeners
 
+Kick player out of cockpit
+Override gyros?
 Raining Trees?
 Jetpack fuel removed
 Random ore below feet
