@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -121,37 +120,24 @@
     <Reference Include="VRage.XmlSerializers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>D:\SteamLibrary\SteamApps\common\SpaceEngineers\Bin64\VRage.XmlSerializers.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c">
-      <HintPath>..\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c">
-      <HintPath>..\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c">
-      <HintPath>..\packages\xunit.extensibility.core.2.4.1\lib\net452\xunit.core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c">
-      <HintPath>..\packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\DataHandler.cs" />
     <Compile Include="Actions\DisableDampenersAction.cs" />
+    <Compile Include="Actions\DisableThrustersAction.cs" />
     <Compile Include="Actions\EnableDampenersAction.cs" />
+    <Compile Include="Actions\EnableThrustersAction.cs" />
     <Compile Include="Actions\FulfillBuildPlannerAction.cs" />
     <Compile Include="Actions\MeteorAction.cs" />
     <Compile Include="Actions\PowerDownAction.cs" />
-    <Compile Include="Actions\PowerOffAction.cs" />
-    <Compile Include="Actions\PowerOnAction.cs" />
-    <Compile Include="Actions\PowerToggleAction.cs" />
+    <Compile Include="Actions\DisablePowerAction.cs" />
+    <Compile Include="Actions\EnablePowerAction.cs" />
+    <Compile Include="Actions\TogglePowerAction.cs" />
     <Compile Include="Actions\PowerUpAction.cs" />
-    <Compile Include="Actions\DynamicRandomSelector.cs" />
+    <Compile Include="Actions\RandomAction.cs" />
     <Compile Include="Actions\RefillAction.cs" />
     <Compile Include="Actions\ToggleDampenersAction.cs" />
+    <Compile Include="Actions\ToggleThrustersAction.cs" />
     <Compile Include="Actions\WarheadAction.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\CustomFileStore.cs" />
@@ -167,9 +153,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Ideas.txt" />
     <Content Include="README.md" />
   </ItemGroup>
@@ -180,14 +163,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
-    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
-  </Target>
-  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.  
        Other similar extension points exist, see Microsoft.Common.targets. 
   <Target Name="BeforeBuild">

@@ -3,7 +3,7 @@ using Sandbox.Game.Entities;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
-    public class PowerToggleAction: BaseAction
+    public class DisableThrustersAction: BaseAction
     {
         public override void Execute(Data.Data data)
         {
@@ -12,10 +12,11 @@ namespace GoryMoon.StreamEngineer.Actions
                 var player = Utils.GetPlayer();
                 if (player != null)
                 {
-                    var isUsing = player.Character.IsUsing;
-                    if (isUsing is MyShipController shipController )
+                    var controlledEntity = player.Controller.ControlledEntity;
+
+                    if (controlledEntity.EnabledThrusts)
                     {
-                        shipController.SwitchReactors();
+                        controlledEntity.SwitchThrusts();
                     }
                 }
             });

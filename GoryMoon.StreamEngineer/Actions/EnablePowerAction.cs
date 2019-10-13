@@ -3,7 +3,7 @@ using Sandbox.Game.Entities;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
-    public class PowerOffAction: BaseAction
+    public class EnablePowerAction: BaseAction
     {
         public override void Execute(Data.Data data)
         {
@@ -16,7 +16,7 @@ namespace GoryMoon.StreamEngineer.Actions
                     if (isUsing is MyShipController shipController )
                     {
                         var controller = shipController;
-                        if (controller.CubeGrid.IsPowered)
+                        if (!controller.CubeGrid.IsPowered)
                         {
                             controller.SwitchReactors();
                         }

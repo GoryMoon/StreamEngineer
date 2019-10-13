@@ -16,9 +16,13 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler = new ActionHandler(path, "events.json", Logger);
             _actionHandler.AddAction("meteors", typeof(MeteorAction));
 
-            _actionHandler.AddAction("power_on", typeof(PowerOnAction));
-            _actionHandler.AddAction("power_off", typeof(PowerOffAction));
-            _actionHandler.AddAction("power_toggle", typeof(PowerToggleAction));
+            _actionHandler.AddAction("power_on", typeof(EnablePowerAction));
+            _actionHandler.AddAction("power_off", typeof(DisablePowerAction));
+            _actionHandler.AddAction("power_toggle", typeof(TogglePowerAction));
+            
+            _actionHandler.AddAction("toggle_power", typeof(TogglePowerAction));
+            _actionHandler.AddAction("enable_power", typeof(EnablePowerAction));
+            _actionHandler.AddAction("disable_power", typeof(DisablePowerAction));
 
             _actionHandler.AddAction("refill", typeof(RefillAction));
             _actionHandler.AddAction("power_up", typeof(PowerUpAction));
@@ -27,6 +31,10 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler.AddAction("toggle_dampeners", typeof(ToggleDampenersAction));
             _actionHandler.AddAction("enable_dampeners", typeof(EnableDampenersAction));
             _actionHandler.AddAction("disable_dampeners", typeof(DisableDampenersAction));
+
+            _actionHandler.AddAction("toggle_thrusters", typeof(ToggleThrustersAction));
+            _actionHandler.AddAction("enable_thrusters", typeof(EnableThrustersAction));
+            _actionHandler.AddAction("disable_thrusters", typeof(DisableThrustersAction));
 
             _actionHandler.AddAction("fulfill_buildplanner", typeof(FulfillBuildPlannerAction));
             _actionHandler.AddAction("random", typeof(RandomAction));
