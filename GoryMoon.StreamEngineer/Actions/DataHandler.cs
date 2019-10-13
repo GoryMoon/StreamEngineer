@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
@@ -8,28 +7,29 @@ using Sandbox.Game.Gui;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
-    public class DataHandler: BaseDataHandler
+    public class DataHandler : BaseDataHandler
     {
-        private ActionHandler _actionHandler;
-        
+        private readonly ActionHandler _actionHandler;
+
         public DataHandler(string path) : base(Plugin.Static.Logger)
         {
             _actionHandler = new ActionHandler(path, "events.json", Logger);
             _actionHandler.AddAction("meteors", typeof(MeteorAction));
-            
+
             _actionHandler.AddAction("power_on", typeof(PowerOnAction));
             _actionHandler.AddAction("power_off", typeof(PowerOffAction));
             _actionHandler.AddAction("power_toggle", typeof(PowerToggleAction));
-            
+
             _actionHandler.AddAction("refill", typeof(RefillAction));
             _actionHandler.AddAction("power_up", typeof(PowerUpAction));
             _actionHandler.AddAction("power_down", typeof(PowerDownAction));
-            
+
             _actionHandler.AddAction("toggle_dampeners", typeof(ToggleDampenersAction));
             _actionHandler.AddAction("enable_dampeners", typeof(EnableDampenersAction));
             _actionHandler.AddAction("disable_dampeners", typeof(DisableDampenersAction));
-            
+
             _actionHandler.AddAction("fulfill_buildplanner", typeof(FulfillBuildPlannerAction));
+            _actionHandler.AddAction("random", typeof(RandomAction));
             _actionHandler.StartWatching();
         }
 
@@ -47,7 +47,8 @@ namespace GoryMoon.StreamEngineer.Actions
                 if (actions.Count <= 0 && !alwaysSendMessage) return;
 
                 if (MyMultiplayer.Static != null)
-                    MyMultiplayer.Static.SendChatMessageScripted(msg, ChatChannel.GlobalScripted, 0, "[StreamEngineer]");
+                    MyMultiplayer.Static.SendChatMessageScripted(msg, ChatChannel.GlobalScripted, 0,
+                        "[StreamEngineer]");
                 else
                     MyHud.Chat.ShowMessageScripted("[StreamEngineer]", msg);
             });
@@ -69,7 +70,8 @@ namespace GoryMoon.StreamEngineer.Actions
         {
             var actions = GetAndExecute(new Data.Data {Type = EventType.Donation, Amount = amount});
             var messageEvent = Configuration.Plugin.Get(c => c.Events.Donation);
-            SendMessage(string.Format(messageEvent.Message, name, formattedAmount), messageEvent.AlwaysSendMessage, actions);
+            SendMessage(string.Format(messageEvent.Message, name, formattedAmount), messageEvent.AlwaysSendMessage,
+                actions);
         }
 
         public override void OnTwitchSubscription(string name, int months, string tier, bool resub)

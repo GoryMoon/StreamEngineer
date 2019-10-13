@@ -149,6 +149,7 @@
     <Compile Include="Actions\PowerOnAction.cs" />
     <Compile Include="Actions\PowerToggleAction.cs" />
     <Compile Include="Actions\PowerUpAction.cs" />
+    <Compile Include="Actions\DynamicRandomSelector.cs" />
     <Compile Include="Actions\RefillAction.cs" />
     <Compile Include="Actions\ToggleDampenersAction.cs" />
     <Compile Include="Actions\WarheadAction.cs" />

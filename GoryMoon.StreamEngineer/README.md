@@ -29,6 +29,7 @@ To edit the events open the `events.json`, can be done while game is running.
 |   `"enable_dampeners"`   | Turns the dampeners on                                                                         |                                                      |
 |   `"disable_dampeners"`  | Turns the dampeners off                                                                        |                                                      |
 | `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                      |
+|        `"random"`        | Runs a random provided action                                                                  | `"actions: []"`, example down below                  |
 
 `$event$` can be used on supported parameters to use the amount data from the event. 
 For example the amount of months a user have subscribed.
@@ -53,7 +54,7 @@ You can leave the condition array empty to always run the action.
 
 The available types are:
 
-|          Type          |           `$event$`           |
+|          Type          |            `event`            |
 |:----------------------:|:-----------------------------:|
 | `donation`             | Donation amount               |
 | `twitch_subscription`  | Months subscribed             |
@@ -101,6 +102,53 @@ You can have multiple of the same event with different conditions
       "message": "Let it RAIN!",
       "radius": 0.2,
       "amount": "event / 5"
+    }
+  }
+]
+```
+
+#### Random action
+
+`action` contains a list of actions to pick from. 
+
+You can set the `weight` on each item to make on more probable, setting the to the same will make it pick equally.
+Setting no weight value will default it to `1`.
+```json
+[
+  {
+    "type": "random",
+    "action": {
+      "conditions": [
+        {
+          "type": "twitch_bits",
+          "from": 100
+        }
+      ],
+      "actions": [
+        {
+          "type": "meteors",
+          "weight": 1,
+          "action": {
+            "message": "Close call!",
+            "amount": 1,
+            "radius": 0.0
+          }
+        },
+        {
+          "type": "power_toggle",
+          "weight": 4,
+          "action": {}
+        },
+        {
+          "type": "meteors",
+          "weight": 3,
+          "action": {
+            "message": "Let it RAIN!",
+            "amount": 2,
+            "radius": 1.0
+          }
+        }
+      ]
     }
   }
 ]
