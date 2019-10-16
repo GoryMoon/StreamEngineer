@@ -54,7 +54,7 @@ namespace GoryMoon.StreamEngineer.Data
                 var path = Path.GetDirectoryName(
                     Uri.UnescapeDataString(new UriBuilder(typeof(Testing).Assembly.CodeBase).Path));
                 _handler = new ActionHandler(path, "events.json", new TestLogger());
-                _handler.AddAction("test", typeof(TestAction));
+                _handler.AddAction("meteors", typeof(TestAction));
                 _handler.AddAction("random", typeof(RandomAction));
                 _handler.StartWatching();
             }
@@ -143,6 +143,15 @@ namespace GoryMoon.StreamEngineer.Data
                 _handler.GetActions(data).ForEach(action => action.Execute(data));
             }
 
+            public override void OnTwitchExtension(string name, int amount, string action, JToken settings)
+            {
+                Logger.WriteLine("OnTwitchExtension");
+                if (_handler.GetAction(action, settings, out var baseAction))
+                {
+                    baseAction.Execute(new Data {Type = EventType.TwitchExtension, Amount = amount});
+                }
+            }
+
             public override void Dispose()
             {
                 _handler.Dispose();
@@ -151,7 +160,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         private class TestAction : BaseAction
         {
-            public int Radius { get; set; }
+            public double Radius { get; set; }
             public string Amount { get; set; }
 
             public override void Execute(Data data)

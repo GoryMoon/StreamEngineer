@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
 
 namespace GoryMoon.StreamEngineer.Data
 {
@@ -23,6 +24,7 @@ namespace GoryMoon.StreamEngineer.Data
         public abstract void OnTwitchBits(string name, int amount);
         public abstract void OnTwitchRaid(string name, int amount);
         public abstract void OnYoutubeSuperchat(string name, int amount, string formatted);
+        public abstract void OnTwitchExtension(string name, int amount, string action, JToken settings);
         public abstract void Dispose();
     }
 }

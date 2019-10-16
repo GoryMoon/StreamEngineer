@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using SocketIOClient;
 
 namespace GoryMoon.StreamEngineer.Data
@@ -29,7 +30,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         public void Init(string token)
         {
-            _socketIo = new SocketIO("ws://localhost:3000/v1/")
+            _socketIo = new SocketIO("ws://localhost:3000/")
             {
                 Parameters = new Dictionary<string, string>
                 {
@@ -38,7 +39,7 @@ namespace GoryMoon.StreamEngineer.Data
             };
             _socketIo.OnConnected += () => _baseDataHandler.Logger.WriteLine("Connected to Twitch Extension");
             _socketIo.OnClosed += OnSocketClosed;
-            _socketIo.On("event", args =>
+            _socketIo.On("action", args =>
             {
                 try
                 {
@@ -71,6 +72,11 @@ namespace GoryMoon.StreamEngineer.Data
                         _baseDataHandler.Logger.WriteLine(ex.Message);
                         await Task.Delay(2000);
                     }
+                    catch (AggregateException ex)
+                    {
+                        _baseDataHandler.Logger.WriteLine(ex.Message);
+                        await Task.Delay(2000);
+                    }
 
                 _baseDataHandler.Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
             }
@@ -80,7 +86,8 @@ namespace GoryMoon.StreamEngineer.Data
 
         private void OnSocketMessage(string args)
         {
-            _baseDataHandler.Logger.WriteLine("Socketmessage: " + args);
+            var data = JObject.Parse(args);
+            _baseDataHandler.OnTwitchExtension((string) data["user"], (int) data["bits"], (string) data["action"], data["settings"]);
         }
     }
 }

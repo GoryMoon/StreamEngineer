@@ -2,6 +2,7 @@
 using System.Linq;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json.Linq;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Game.Gui;
 
@@ -40,7 +41,6 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler.AddAction("random", typeof(RandomAction));
             _actionHandler.StartWatching();
         }
-
         public override void Dispose()
         {
             _actionHandler.Dispose();
@@ -64,7 +64,7 @@ namespace GoryMoon.StreamEngineer.Actions
 
         private string GetMessage(IReadOnlyCollection<BaseAction> actions)
         {
-            return actions.Count > 0 ? " " + string.Join(" ", actions.Select(action => action.Message)) : "";
+            return actions.Count > 0 ? " " + string.Join(" ", actions.Select(action => action.Message ?? "")) : "";
         }
 
         private List<BaseAction> GetAndExecute(Data.Data data)
@@ -181,6 +181,24 @@ namespace GoryMoon.StreamEngineer.Actions
             var actions = GetAndExecute(new Data.Data {Type = EventType.MixerHost, Amount = viewers});
             var messageEvent = Configuration.Plugin.Get(c => c.Events.MixerHostMessage);
             SendMessage(string.Format(messageEvent.Message, name, viewers), messageEvent.AlwaysSendMessage, actions);
+        }
+        
+        public override void OnTwitchExtension(string name, int amount, string action, JToken settings)
+        {
+            if (_actionHandler.GetAction(action, settings, out var baseAction))
+            {
+                baseAction.Execute(new Data.Data {Type = EventType.TwitchExtension, Amount = amount});
+                if (baseAction.Message != null && baseAction.Message.Trim().Length > 0)
+                {
+                    var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchExtension);
+                    SendMessage(string.Format(messageEvent.WithMessage, name, amount), true, new List<BaseAction> {baseAction});
+                }
+                else
+                {
+                    var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchExtension);
+                    SendMessage(string.Format(messageEvent.WithoutMessage, name, amount), true, new List<BaseAction> {baseAction});
+                }
+            }
         }
     }
 }

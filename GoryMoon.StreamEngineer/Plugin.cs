@@ -17,11 +17,13 @@ namespace GoryMoon.StreamEngineer
         public Logger Logger { get; private set; }
         private DataHandler _dataHandler;
         private StreamlabsData _streamlabsData;
+        private TwitchExtensionData _twitchExtensionData;
 
         public void Dispose()
         {
             _dataHandler.Dispose();
             _streamlabsData.Dispose();
+            _twitchExtensionData.Dispose();
         }
 
         public void Init(object gameInstance)
@@ -34,6 +36,7 @@ namespace GoryMoon.StreamEngineer
             Logger = new Logger();
             _dataHandler = new DataHandler(path);
             _streamlabsData = new StreamlabsData(_dataHandler);
+            _twitchExtensionData = new TwitchExtensionData(_dataHandler);
 
             //MyScreenManager.ScreenAdded += ScreenAdded;
         }
@@ -48,11 +51,18 @@ namespace GoryMoon.StreamEngineer
 
             var token = Configuration.Token.Get(c => c.StreamlabsToken).Trim();
             if (token.Length > 0) Static._streamlabsData.Init(token);
+            
+            var twitchToken = Configuration.Token.Get(c => c.TwitchExtensionToken).Trim();
+            if (twitchToken.Length > 0) Static._twitchExtensionData.Init(twitchToken);
         }
 
         public static void StopService()
         {
-            if (Sync.IsServer) Static._streamlabsData.Dispose();
+            if (Sync.IsServer)
+            {
+                Static._streamlabsData.Dispose();
+                Static._twitchExtensionData.Dispose();
+            }
         }
 
         public void ScreenAdded(MyGuiScreenBase screenBase)

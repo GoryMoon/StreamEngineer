@@ -13,6 +13,7 @@
         YoutubeSponsor,
         MixerFollow,
         MixerSubscription,
-        MixerHost
+        MixerHost,
+        TwitchExtension,
     }
 }

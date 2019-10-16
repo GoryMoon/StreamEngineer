@@ -14,6 +14,9 @@ namespace GoryMoon.StreamEngineer.Config
             [TomlComment("Login to Streamlabs and go to this link: https://streamlabs.com/dashboard#/settings/api-settings")]
             [TomlComment("Click on 'API Tokens' and copy the 'Your Socket API Token' here")]
             public string StreamlabsToken { get; set; } = "";
+            
+            [TomlComment("Add the Stream Engineer extension to your channel and copy the token from the configuration page")]
+            public string TwitchExtensionToken { get; set; } = "";
 
             public static void Init(string path)
             {
@@ -53,7 +56,7 @@ namespace GoryMoon.StreamEngineer.Config
                 public TwitchSubscriptionEvent TwitchSubscription { get; set; } = new TwitchSubscriptionEvent();
 
                 [TomlComment("0:Name of cheerer, 1:Amount cheered")]
-                public SingleMessageEvent TwitchBits { get; set; } = new SingleMessageEvent("{0} cheer with {1} bits!", true);
+                public SingleMessageEvent TwitchBits { get; set; } = new SingleMessageEvent("{0} cheered with {1} bits!", true);
 
                 [TomlComment("0:Name of follower")] public SingleMessageEvent TwitchFollowed { get; set; } = new SingleMessageEvent("{0} followed!");
 
@@ -63,6 +66,9 @@ namespace GoryMoon.StreamEngineer.Config
                 [TomlComment("0:Name of raider, 1:Amount of viewers")]
                 public SingleMessageEvent TwitchRaid { get; set; } = new SingleMessageEvent("{0} raided with {1} viewers!");
 
+                [TomlComment("0:Name of sender, 1:Amount bits sent")]
+                public TwitchExtensionEvent TwitchExtension { get; set; } = new TwitchExtensionEvent();
+                
                 [TomlComment("0:Name of subscriber")]
                 public SingleMessageEvent YoutubeSubscription { get; set; } = new SingleMessageEvent("{0} subscribed!");
 
@@ -97,6 +103,7 @@ namespace GoryMoon.StreamEngineer.Config
                 [TomlComment("If an message should be sent even if no action is executed")]
                 public bool AlwaysSendMessage { get; set; }
             }
+            
 
             public class TwitchSubscriptionEvent
             {
@@ -114,6 +121,17 @@ namespace GoryMoon.StreamEngineer.Config
                 public string Tier3 { get; set; } = "Tier 3";
             }
 
+            public class TwitchExtensionEvent
+            {
+                public TwitchExtensionEvent()
+                {
+                }
+
+                public string WithMessage { get; set; } = "{0} sent {1} bits for action:";
+                
+                public string WithoutMessage { get; set; } = "{0} sent {1} bits!";
+            }
+            
             public class YoutubeSponsorEvent
             {
                 [TomlComment("0:Name of sponsor")] public string NewMessage { get; set; } = "{0} sponsored the channel!";
