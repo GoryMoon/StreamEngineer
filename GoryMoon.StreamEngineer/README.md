@@ -11,6 +11,12 @@ Extract this folder anywhere and get it's path, save this for later.
  5. Open the `settings.toml` and enter the `SteamName` 
  6. Open the `token-settings.toml` and enter the `StreamLabsToken`
  
+## Twitch Extension
+
+Go to the twitch extensions and search for `Stream Engineer` and add it.
+
+In the configuration of the extension you need to copy the `Mod Token` into the `token-settings.toml` file.
+
 ## Configuring events
 
 To edit the events open the `events.json`, can be done while game is running.
