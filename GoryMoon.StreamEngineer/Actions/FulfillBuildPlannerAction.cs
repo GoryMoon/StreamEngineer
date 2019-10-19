@@ -1,6 +1,8 @@
 ﻿using GoryMoon.StreamEngineer.Data;
 using Sandbox.Game.Entities;
+using VRage.Game;
 using VRage.ObjectBuilders;
+using VRageMath;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
@@ -17,12 +19,17 @@ namespace GoryMoon.StreamEngineer.Actions
                     var inventory = character.GetInventory();
                     foreach (var planItem in character.BuildPlanner)
                     {
-                        ActionHandler.Logger.WriteLine("Planned item: " + planItem.BlockDefinition.Id);
                         foreach (var component in planItem.Components)
                         {
                             var newObject = MyObjectBuilderSerializer.CreateNewObject(component.ComponentDefinition.Id);
                             if (inventory.AddItems(component.Count, newObject))
                             {
+                                component.Count = 0;
+                            }
+                            else
+                            {
+                                var matrix = player.Character.WorldMatrix;
+                                MyFloatingObjects.Spawn(component.ComponentDefinition, matrix.Translation, matrix.Forward, matrix.Up, component.Count);
                                 component.Count = 0;
                             }
                         }
