@@ -255,6 +255,8 @@ namespace GoryMoon.StreamEngineer
                     --index;
                 }
 
+            var closestDistance = double.MaxValue;
+            BoundingSphereD closestTarget = BoundingSphereD.CreateInvalid();
             while (list.Count > 0)
             {
                 var myCubeGrid1 = list[MyUtils.GetRandomInt(list.Count - 1)];
@@ -282,8 +284,20 @@ namespace GoryMoon.StreamEngineer
                 worldVolume.Radius += 150.0;
                 var containmentType =
                     player == null ? ContainmentType.Contains : worldVolume.Contains(player.GetPosition());
+                var distance = player != null ? Math.Abs((worldVolume.Center - player.GetPosition()).Sum): double.MaxValue;
+                
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestTarget = worldVolume;
+                }
                 if (containmentType == ContainmentType.Intersects || containmentType == ContainmentType.Contains)
                     TargetList.Add(worldVolume);
+            }
+
+            if (TargetList.Count == 0 && closestTarget.Center != Vector3D.Zero)
+            {
+                TargetList.Add(closestTarget);   
             }
         }
 
