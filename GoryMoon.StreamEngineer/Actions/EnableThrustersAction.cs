@@ -10,14 +10,20 @@ namespace GoryMoon.StreamEngineer.Actions
             SessionHandler.EnqueueAction(() =>
             {
                 var player = Utils.GetPlayer();
-                if (player != null)
-                {
-                    var controlledEntity = player.Controller.ControlledEntity;
+                if (player == null) return;
+                var controlledEntity = player?.Controller.ControlledEntity;
 
-                    if (!controlledEntity.EnabledThrusts)
+                if (controlledEntity is MyShipController controller)
+                {
+                    var blocks = controller.CubeGrid.GetFatBlocks<MyThrust>();
+                    foreach (var block in blocks)
                     {
-                        controlledEntity.SwitchThrusts();
+                        block.Enabled = true;
                     }
+                }
+                else
+                {
+                    controlledEntity?.SwitchThrusts();
                 }
             });
         }
