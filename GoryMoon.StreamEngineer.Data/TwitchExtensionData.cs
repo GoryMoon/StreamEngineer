@@ -30,7 +30,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         public void Init(string token)
         {
-            _socketIo = new SocketIO("wss://seapi.gorymoon.se/")
+            _socketIo = new SocketIO("wss://seapi.gorymoon.se/v1")
             {
                 Parameters = new Dictionary<string, string>
                 {
