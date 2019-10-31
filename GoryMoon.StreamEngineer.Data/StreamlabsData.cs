@@ -57,8 +57,8 @@ namespace GoryMoon.StreamEngineer.Data
                     _baseDataHandler.Logger.WriteLine(e);
                 }
             });
-            _socketIo.ConnectAsync();
             _running = true;
+            Connect();
         }
 
         private async void OnSocketClosed(ServerCloseReason reason)
@@ -66,32 +66,37 @@ namespace GoryMoon.StreamEngineer.Data
             _baseDataHandler.Logger.WriteLine($"Closed Streamlabs: {reason}");
             if (reason != ServerCloseReason.ClosedByClient)
             {
-                while (_running)
-                {
-                    _baseDataHandler.Logger.WriteLine("Reconnecting Streamlabs");
-                    for (var i = 0; i < 3; i++)
-                        try
-                        {
-                            await _socketIo.ConnectAsync();
-                            return;
-                        }
-                        catch (WebSocketException ex)
-                        {
-                            _baseDataHandler.Logger.WriteLine(ex.Message);
-                            await Task.Delay(2000);
-                        }
-                        catch (AggregateException ex)
-                        {
-                            _baseDataHandler.Logger.WriteLine(ex.Message);
-                            await Task.Delay(2000);
-                        }
-
-                    _baseDataHandler.Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
-                    await Task.Delay(10000);
-                }
+                await Connect();
             }
 
             _running = false;
+        }
+
+        private async Task Connect()
+        {
+            while (_running)
+            {
+                _baseDataHandler.Logger.WriteLine("Reconnecting Streamlabs");
+                for (var i = 0; i < 3; i++)
+                    try
+                    {
+                        await _socketIo.ConnectAsync();
+                        return;
+                    }
+                    catch (WebSocketException ex)
+                    {
+                        _baseDataHandler.Logger.WriteLine(ex.Message);
+                        await Task.Delay(2000);
+                    }
+                    catch (AggregateException ex)
+                    {
+                        _baseDataHandler.Logger.WriteLine(ex.Message);
+                        await Task.Delay(2000);
+                    }
+
+                _baseDataHandler.Logger.WriteLine("Tried to reconnect 3 times, unable to connect to the server");
+                await Task.Delay(10000);
+            }
         }
 
         private void OnSocketMessage(string args)
