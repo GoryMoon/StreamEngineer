@@ -55,7 +55,7 @@ namespace GoryMoon.StreamEngineer.Actions
                 if (actions.Count <= 0 && !alwaysSendMessage) return;
 
                 if (MyMultiplayer.Static != null)
-                    MyMultiplayer.Static.SendChatMessageScripted(msg, ChatChannel.GlobalScripted, 0,
+                    MyMultiplayer.Static.SendChatMessage(msg, ChatChannel.GlobalScripted, 0,
                         "[StreamEngineer]");
                 else
                     MyHud.Chat.ShowMessageScripted("[StreamEngineer]", msg);
