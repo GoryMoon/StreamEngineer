@@ -1,9 +1,11 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using GoryMoon.StreamEngineer.Actions;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
+using Harmony;
 using Sandbox.Game;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Graphics.GUI;
@@ -37,7 +39,9 @@ namespace GoryMoon.StreamEngineer
             _dataHandler = new DataHandler(path);
             _streamlabsData = new StreamlabsData(_dataHandler);
             _twitchExtensionData = new TwitchExtensionData(_dataHandler);
-
+            
+            var harmony = HarmonyInstance.Create("se.gorymoon.streamengineer");
+            harmony.PatchAll(Assembly.GetExecutingAssembly());
             //MyScreenManager.ScreenAdded += ScreenAdded;
         }
 

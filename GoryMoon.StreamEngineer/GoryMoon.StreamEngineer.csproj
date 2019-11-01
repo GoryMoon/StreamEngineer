@@ -35,6 +35,10 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony, Version=1.2.0.1, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Lib.Harmony.1.2.0.1\lib\net45\0Harmony.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Nett, Version=0.13.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b">
       <HintPath>..\packages\Nett.0.13.0\lib\net40\Nett.dll</HintPath>
