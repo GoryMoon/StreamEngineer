@@ -3,6 +3,7 @@ using Sandbox.Common.ObjectBuilders;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
+using Sandbox.Game.World;
 using VRage.Game;
 using VRage.ObjectBuilders;
 using VRage.Utils;
@@ -34,6 +35,17 @@ namespace GoryMoon.StreamEngineer.Actions
                     player.Character.EntityId, entity =>
                     {
                         var grid = (MyCubeGrid) entity;
+
+                        var factions = MySession.Static.Factions;
+                        foreach (var pair in factions.Factions)
+                        {
+                            if (factions.IsNpcFaction(pair.Key) && factions.IsFactionWithPlayerEnemy(player.Identity.IdentityId, pair.Key))
+                            {
+                                grid.ChangeGridOwner(pair.Key, MyOwnershipShareModeEnum.None);
+                                break;
+                            }
+                        }
+                        
                         foreach (var warhead in grid.GetFatBlocks<MyWarhead>())
                         {
                             warhead.IsArmed = true;
