@@ -114,7 +114,7 @@ Example of the items definition
 | Ore/Uranium                                   | Uranium Ore                  | Can have Decimals  |
 | Ore/Scrap                                     | Scrap Metal                  | Can have Decimals  |
 | Ore/Ice                                       | Ice Ore                      | Can have Decimals  |
- |
+|                                               |                              |                    |
 | Ingot/Stone                                   | Gravel                       | Can have Decimals  |
 | Ingot/Iron                                    | Iron Ingot                   | Can have Decimals  |
 | Ingot/Nickel                                  | Nickel Ingot                 | Can have Decimals  |
@@ -126,7 +126,7 @@ Example of the items definition
 | Ingot/Platinum                                | Platinum Ingot               | Can have Decimals  |
 | Ingot/Uranium                                 | Uranium Ingot                | Can have Decimals  |
 | Ingot/Scrap                                   | Old Scrap Metal              | Can have Decimals  |
- |
+|                                               |                              |                    |
 | PhysicalGunObject/AutomaticRifleItem          | Automatic Rifle              | No Decimals        |
 | PhysicalGunObject/PreciseAutomaticRifleItem   | Precise Automatic Rifle      | No Decimals        |
 | PhysicalGunObject/RapidFireAutomaticRifleItem | Rapid\-Fire Automatic Rifle  | No Decimals        |
@@ -143,19 +143,19 @@ Example of the items definition
 | PhysicalGunObject/HandDrill2Item              | Enhanced Hand Drill          | No Decimals        |
 | PhysicalGunObject/HandDrill3Item              | Proficient Hand Drill        | No Decimals        |
 | PhysicalGunObject/HandDrill4Item              | Elite Hand Drill             | No Decimals        |
- |
+|                                               |                              |                    |
 | OxygenContainerObject/OxygenBottle            | Oxygen Bottle                | Empty, No Decimals |
 | GasContainerObject/HydrogenBottle             | Hydrogen Bottle              | Empty, No Decimals |
- |
+|                                               |                              |                    |
 | ConsumableItem/ClangCola                      | Clang Kola                   | No Decimals        |
 | ConsumableItem/CosmicCoffee                   | Cosmic Coffee                | No Decimals        |
 | ConsumableItem/Medkit                         | Medkit                       | No Decimals        |
 | ConsumableItem/Powerkit                       | Powerkit                     | No Decimals        |
- |
+|                                               |                              |                    |
 | AmmoMagazine/NATO\_5p56x45mm                  | 5\.56x45mm NATO magazine     | No Decimals        |
 | AmmoMagazine/NATO\_25x184mm                   | 25x184mm NATO ammo container | No Decimals        |
 | AmmoMagazine/Missile200mm                     | 200mm missile container      | No Decimals        |
- |
+|                                               |                              |                    |
 | Component/Construction                        | Construction Comp\.          | No Decimals        |
 | Component/MetalGrid                           | Metal Grid                   | No Decimals        |
 | Component/InteriorPlate                       | Interior Plate               | No Decimals        |
