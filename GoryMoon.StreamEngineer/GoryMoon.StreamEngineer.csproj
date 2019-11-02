@@ -132,6 +132,7 @@
     <Compile Include="Actions\EnableDampenersAction.cs" />
     <Compile Include="Actions\EnableThrustersAction.cs" />
     <Compile Include="Actions\FulfillBuildPlannerAction.cs" />
+    <Compile Include="Actions\GiveItem.cs" />
     <Compile Include="Actions\MeteorAction.cs" />
     <Compile Include="Actions\PowerDownAction.cs" />
     <Compile Include="Actions\DisablePowerAction.cs" />

@@ -12,9 +12,9 @@ namespace GoryMoon.StreamEngineer.Actions
 {
     public class WarheadAction: BaseAction
     {
-        public int Speed { get; set; } = 5;
-        public int Distance { get; set; } = 100;
-        public int Countdown { get; set; } = 10;
+        public string Speed { get; set; }
+        public string Distance { get; set; }
+        public string Countdown { get; set; }
 
         public override void Execute(Data.Data data)
         {
@@ -26,7 +26,7 @@ namespace GoryMoon.StreamEngineer.Actions
 
                 var up = player.Character.PositionComp.GetOrientation().Up;
                 up.Normalize();
-                var pos = player.GetPosition() + up * Distance;
+                var pos = player.GetPosition() + up * GetEventValue(Distance, 100, data);
                 MatrixD world = MatrixD.CreateWorld(pos, Vector3.Forward, Vector3.Up);
                 Vector3 color = Color.Red.ColorToHSV();
                 MyCubeBuilder.SpawnDynamicGrid(definitionBase, player.Character, world, color, MyStringHash.NullOrEmpty,
@@ -37,13 +37,13 @@ namespace GoryMoon.StreamEngineer.Actions
                         foreach (var warhead in grid.GetFatBlocks<MyWarhead>())
                         {
                             warhead.IsArmed = true;
-                            warhead.DetonationTime = Countdown;
+                            warhead.DetonationTime = (float) GetEventValue(Countdown, 10, data);
                             warhead.StartCountdown();
                         }
                         
                         var direction = player.GetPosition() - grid.PositionComp.GetPosition();
                         direction.Normalize();
-                        grid.Physics.LinearVelocity += direction * Speed;
+                        grid.Physics.LinearVelocity += direction * GetEventValue(Speed, 5, data);
                     });
             }
         }

@@ -22,25 +22,27 @@ In the configuration of the extension you need to copy the `Mod Token` into the 
 To edit the events open the `events.json`, can be done while game is running.
 
 ### Actions
-|           Type           | Comments                                                                                       |              Additional parameters                   |
-|:------------------------:|------------------------------------------------------------------------------------------------|:----------------------------------------------------:|
-|        `"meteors"`       | Spawns `amount` of meteor storms, `radius` of `1.0` is like vanilla, lower is closer to player | `"radius": 1.0, "amount": "number" or "event"`       |
-|     `"toggle_power"`     | Turns on the power of the current vehicle                                                      |                                                      |
-|     `"disable_power"`    | Turns off the power of the current vehicle                                                     |                                                      |
-|     `"toggle_power"`     | Toggles the power of the current vehicle                                                       |                                                      |
-|        `"refill"`        | Refills health, O2, H2 and energy                                                              |                                                      |
-|       `"power_up"`       | Refills the batteries in the current vehicle                                                   |                                                      |
-|      `"power_down"`      | Empties the batteries in the current vehicle                                                   | `"amount": -1` empties, other values removes, in MWh |
-|   `"toggle_dampeners"`   | Toggles the dampeners                                                                          |                                                      |
-|   `"enable_dampeners"`   | Turns the dampeners on                                                                         |                                                      |
-|   `"disable_dampeners"`  | Turns the dampeners off                                                                        |                                                      |
-|   `"toggle_thrusters"`   | Toggles the thrusters                                                                          |                                                      |
-|   `"enable_thrusters"`   | Turns the thrusters on                                                                         |                                                      |
-|   `"disable_thrusters"`  | Turns the thrusters off                                                                        |                                                      |
-| `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                      |
-|        `"random"`        | Runs a random provided action                                                                  | `"actions: []"`, example down below                  |
+|           Type           | Comments                                                                                       |              Additional parameters                        |
+|:------------------------:|------------------------------------------------------------------------------------------------|:---------------------------------------------------------:|
+|        `"meteors"`       | Spawns `amount` of meteor storms, `radius` of `1.0` is like vanilla, lower is closer to player | `"radius": 1.0, "amount": "number" or "event"`            |
+|     `"toggle_power"`     | Turns on the power of the current vehicle                                                      |                                                           |
+|     `"disable_power"`    | Turns off the power of the current vehicle                                                     |                                                           |
+|     `"toggle_power"`     | Toggles the power of the current vehicle                                                       |                                                           |
+|        `"refill"`        | Refills health, O2, H2 and energy                                                              |                                                           |
+|       `"power_up"`       | Refills the batteries in the current vehicle                                                   |                                                           |
+|      `"power_down"`      | Empties the batteries in the current vehicle                                                   | `"amount": -1` empties, other values removes, in MWh      |
+|   `"toggle_dampeners"`   | Toggles the dampeners                                                                          |                                                           |
+|   `"enable_dampeners"`   | Turns the dampeners on                                                                         |                                                           |
+|   `"disable_dampeners"`  | Turns the dampeners off                                                                        |                                                           |
+|   `"toggle_thrusters"`   | Toggles the thrusters                                                                          |                                                           |
+|   `"enable_thrusters"`   | Turns the thrusters on                                                                         |                                                           |
+|   `"disable_thrusters"`  | Turns the thrusters off                                                                        |                                                           |
+| `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                           |
+|        `"random"`        | Runs a random provided action                                                                  | `"actions: []"`, example down below                       |
+|       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed, distance, countdown: "number" or "event"`        |
+|      `"give_item"`       | Gives the defined item/items to the player, IDs are below                                      | `"items: [{"id": "ID", "amount": "number" or " event"}]"` |
 
-`$event$` can be used on supported parameters to use the amount data from the event. 
+`event` can be used on supported parameters to use the amount data from the event. 
 For example the amount of months a user have subscribed.
 
 ### Conditions
@@ -77,6 +79,107 @@ The available types are:
 | `mixer_follow`         |                               |
 | `mixer_subscription`   | Months subscribed             |
 | `mixer_host`           | The amount of viewers hosted  |
+
+### Give Item Action
+
+The Amount with the item can have decimals for some items and not for others, it's listed below
+
+Example of the items definition
+```json
+{
+  "items": [
+    {
+      "id": "Ore/Iron",
+      "amount": "0.5"
+    },
+    {
+      "id": "Component/SteelPlate",
+      "amount": "50"
+    }
+  ]
+}
+```
+
+| Id                                            | Display Name                 | Notes              |
+|-----------------------------------------------|------------------------------|--------------------|
+| Ore/Stone                                     | Stone                        | Can have Decimals  |
+| Ore/Iron                                      | Iron Ore                     | Can have Decimals  |
+| Ore/Nickel                                    | Nickel Ore                   | Can have Decimals  |
+| Ore/Cobalt                                    | Cobalt Ore                   | Can have Decimals  |
+| Ore/Magnesium                                 | Magnesium Ore                | Can have Decimals  |
+| Ore/Silicon                                   | Silicon Ore                  | Can have Decimals  |
+| Ore/Silver                                    | Silver Ore                   | Can have Decimals  |
+| Ore/Gold                                      | Gold Ore                     | Can have Decimals  |
+| Ore/Platinum                                  | Platinum Ore                 | Can have Decimals  |
+| Ore/Uranium                                   | Uranium Ore                  | Can have Decimals  |
+| Ore/Scrap                                     | Scrap Metal                  | Can have Decimals  |
+| Ore/Ice                                       | Ice Ore                      | Can have Decimals  |
+ |
+| Ingot/Stone                                   | Gravel                       | Can have Decimals  |
+| Ingot/Iron                                    | Iron Ingot                   | Can have Decimals  |
+| Ingot/Nickel                                  | Nickel Ingot                 | Can have Decimals  |
+| Ingot/Cobalt                                  | Cobalt Ingot                 | Can have Decimals  |
+| Ingot/Magnesium                               | Magnesium Powder             | Can have Decimals  |
+| Ingot/Silicon                                 | Silicon Wafer                | Can have Decimals  |
+| Ingot/Silver                                  | Silver Ingot                 | Can have Decimals  |
+| Ingot/Gold                                    | Gold Ingot                   | Can have Decimals  |
+| Ingot/Platinum                                | Platinum Ingot               | Can have Decimals  |
+| Ingot/Uranium                                 | Uranium Ingot                | Can have Decimals  |
+| Ingot/Scrap                                   | Old Scrap Metal              | Can have Decimals  |
+ |
+| PhysicalGunObject/AutomaticRifleItem          | Automatic Rifle              | No Decimals        |
+| PhysicalGunObject/PreciseAutomaticRifleItem   | Precise Automatic Rifle      | No Decimals        |
+| PhysicalGunObject/RapidFireAutomaticRifleItem | Rapid\-Fire Automatic Rifle  | No Decimals        |
+| PhysicalGunObject/UltimateAutomaticRifleItem  | Elite Automatic Rifle        | No Decimals        |
+| PhysicalGunObject/WelderItem                  | Welder                       | No Decimals        |
+| PhysicalGunObject/Welder2Item                 | Enhanced Welder              | No Decimals        |
+| PhysicalGunObject/Welder3Item                 | Proficient Welder            | No Decimals        |
+| PhysicalGunObject/Welder4Item                 | Elite Welder                 | No Decimals        |
+| PhysicalGunObject/AngleGrinderItem            | Grinder                      | No Decimals        |
+| PhysicalGunObject/AngleGrinder2Item           | Enhanced Grinder             | No Decimals        |
+| PhysicalGunObject/AngleGrinder3Item           | Proficient Grinder           | No Decimals        |
+| PhysicalGunObject/AngleGrinder4Item           | Elite Grinder                | No Decimals        |
+| PhysicalGunObject/HandDrillItem               | Hand Drill                   | No Decimals        |
+| PhysicalGunObject/HandDrill2Item              | Enhanced Hand Drill          | No Decimals        |
+| PhysicalGunObject/HandDrill3Item              | Proficient Hand Drill        | No Decimals        |
+| PhysicalGunObject/HandDrill4Item              | Elite Hand Drill             | No Decimals        |
+ |
+| OxygenContainerObject/OxygenBottle            | Oxygen Bottle                | Empty, No Decimals |
+| GasContainerObject/HydrogenBottle             | Hydrogen Bottle              | Empty, No Decimals |
+ |
+| ConsumableItem/ClangCola                      | Clang Kola                   | No Decimals        |
+| ConsumableItem/CosmicCoffee                   | Cosmic Coffee                | No Decimals        |
+| ConsumableItem/Medkit                         | Medkit                       | No Decimals        |
+| ConsumableItem/Powerkit                       | Powerkit                     | No Decimals        |
+ |
+| AmmoMagazine/NATO\_5p56x45mm                  | 5\.56x45mm NATO magazine     | No Decimals        |
+| AmmoMagazine/NATO\_25x184mm                   | 25x184mm NATO ammo container | No Decimals        |
+| AmmoMagazine/Missile200mm                     | 200mm missile container      | No Decimals        |
+ |
+| Component/Construction                        | Construction Comp\.          | No Decimals        |
+| Component/MetalGrid                           | Metal Grid                   | No Decimals        |
+| Component/InteriorPlate                       | Interior Plate               | No Decimals        |
+| Component/SteelPlate                          | Steel Plate                  | No Decimals        |
+| Component/Girder                              | Girder                       | No Decimals        |
+| Component/SmallTube                           | Small Steel Tube             | No Decimals        |
+| Component/LargeTube                           | Large Steel Tube             | No Decimals        |
+| Component/Motor                               | Motor                        | No Decimals        |
+| Component/Display                             | Display                      | No Decimals        |
+| Component/BulletproofGlass                    | Bulletproof Glass            | No Decimals        |
+| Component/Superconductor                      | Superconductor               | No Decimals        |
+| Component/Computer                            | Computer                     | No Decimals        |
+| Component/Reactor                             | Reactor Comp\.               | No Decimals        |
+| Component/Thrust                              | Thruster Comp\.              | No Decimals        |
+| Component/GravityGenerator                    | Gravity Comp\.               | No Decimals        |
+| Component/Medical                             | Medical Comp\.               | No Decimals        |
+| Component/RadioCommunication                  | Radio\-comm Comp\.           | No Decimals        |
+| Component/Detector                            | Detector Comp\.              | No Decimals        |
+| Component/Explosives                          | Explosives                   | No Decimals        |
+| Component/SolarCell                           | Solar Cell                   | No Decimals        |
+| Component/PowerCell                           | Power Cell                   | No Decimals        |
+| Component/Canvas                              | Canvas                       | No Decimals        |
+| Component/ZoneChip                            | Zone Chip                    | No Decimals        |
+
 
 ### Example
 

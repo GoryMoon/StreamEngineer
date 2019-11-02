@@ -14,7 +14,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         public abstract void Execute(Data data);
 
-        protected double GetEventValue(string property, int defaultVal, Data data)
+        protected double GetEventValue(string property, double defaultVal, Data data)
         {
             if (property == null) return defaultVal;
             var expression = new Expression(property) {Parameters = {["event"] = data.Amount}};

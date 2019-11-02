@@ -2,6 +2,7 @@
 +Increase accuracy with more bits
 +Fill power
 +Disable dampeners
++Warhead above player, 100m+ up
 
 Kick player out of cockpit
 Override gyros?
@@ -9,7 +10,6 @@ Raining Trees?
 Jetpack fuel removed
 Random ore below feet
 Reset build planner
-Warhead above player, 100m+ up
 Drop inventory on ground
 Spawn spider?
 Random message, "Fuel Critical", "No Oxygen"

@@ -40,6 +40,7 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler.AddAction("fulfill_buildplanner", typeof(FulfillBuildPlannerAction));
             _actionHandler.AddAction("random", typeof(RandomAction));
             _actionHandler.AddAction("warhead", typeof(WarheadAction));
+            _actionHandler.AddAction("give_item", typeof(GiveItem));
             _actionHandler.StartWatching();
         }
         public override void Dispose()

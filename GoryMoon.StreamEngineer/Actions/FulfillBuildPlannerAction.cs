@@ -15,30 +15,15 @@ namespace GoryMoon.StreamEngineer.Actions
                 if (player != null)
                 {
                     var character = player.Character;
-                    var inventory = character.GetInventory();
-                    var matrix = player.Character.WorldMatrix;
+                    var matrix = character.WorldMatrix;
                     
                     foreach (var planItem in character.BuildPlanner)
                     {
                         foreach (var component in planItem.Components)
                         {
-                            var newObject = MyObjectBuilderSerializer.CreateNewObject(component.ComponentDefinition.Id);
-
-                            var remaining = 0;
-                            for (var i = 0; i < component.Count; i++)
-                            {
-                                if (!inventory.AddItems(1, newObject))
-                                {
-                                    remaining = component.Count - i;
-                                    break;
-                                }
-                            }
-                            component.Count = remaining;
-                            if (remaining != 0)
-                            {
-                                MyFloatingObjects.Spawn(component.ComponentDefinition, matrix.Translation, matrix.Forward, matrix.Up, component.Count);
-                                component.Count = 0;
-                            }
+                            var amount = (double) component.Count;
+                            Utils.AddOrDropItem(player, component.ComponentDefinition, ref amount, matrix);
+                            component.Count = (int) amount;
                         }
 
                         planItem.Components.RemoveAll(component => component.Count <= 0);
