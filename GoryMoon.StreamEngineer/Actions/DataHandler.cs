@@ -37,6 +37,10 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler.AddAction("enable_thrusters", typeof(EnableThrustersAction));
             _actionHandler.AddAction("disable_thrusters", typeof(DisableThrustersAction));
 
+            _actionHandler.AddAction("toggle_helmet", typeof(ToggleHelmetAction));
+            _actionHandler.AddAction("enable_helmet", typeof(EnableHelmetAction));
+            _actionHandler.AddAction("disable_helmet", typeof(DisableHelmetAction));
+
             _actionHandler.AddAction("fulfill_buildplanner", typeof(FulfillBuildPlannerAction));
             _actionHandler.AddAction("random", typeof(RandomAction));
             _actionHandler.AddAction("warhead", typeof(WarheadAction));

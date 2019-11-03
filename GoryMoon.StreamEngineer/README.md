@@ -37,6 +37,9 @@ To edit the events open the `events.json`, can be done while game is running.
 |   `"toggle_thrusters"`   | Toggles the thrusters                                                                          |                                                           |
 |   `"enable_thrusters"`   | Turns the thrusters on                                                                         |                                                           |
 |   `"disable_thrusters"`  | Turns the thrusters off                                                                        |                                                           |
+|    `"toggle_helmet"`     | Toggles the helmet                                                                             |                                                           |
+|    `"enable_helmet"`     | Turns opens the helmet                                                                         |                                                           |
+|    `"disable_helmet"`    | Turns closes the helmet                                                                        |                                                           |
 | `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                           |
 |        `"random"`        | Runs a random provided action                                                                  | `"actions: []"`, example down below                       |
 |       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed, distance, countdown: "number" or "event"`        |

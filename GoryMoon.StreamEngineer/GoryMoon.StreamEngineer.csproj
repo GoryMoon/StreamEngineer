@@ -129,8 +129,10 @@
     <Compile Include="ActionNotification.cs" />
     <Compile Include="Actions\DataHandler.cs" />
     <Compile Include="Actions\DisableDampenersAction.cs" />
+    <Compile Include="Actions\DisableHelmetAction.cs" />
     <Compile Include="Actions\DisableThrustersAction.cs" />
     <Compile Include="Actions\EnableDampenersAction.cs" />
+    <Compile Include="Actions\EnableHelmetAction.cs" />
     <Compile Include="Actions\EnableThrustersAction.cs" />
     <Compile Include="Actions\FulfillBuildPlannerAction.cs" />
     <Compile Include="Actions\GiveItem.cs" />
@@ -138,6 +140,7 @@
     <Compile Include="Actions\PowerDownAction.cs" />
     <Compile Include="Actions\DisablePowerAction.cs" />
     <Compile Include="Actions\EnablePowerAction.cs" />
+    <Compile Include="Actions\ToggleHelmetAction.cs" />
     <Compile Include="Actions\TogglePowerAction.cs" />
     <Compile Include="Actions\PowerUpAction.cs" />
     <Compile Include="Actions\RandomAction.cs" />
