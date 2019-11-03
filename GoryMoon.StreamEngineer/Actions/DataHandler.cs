@@ -52,9 +52,11 @@ namespace GoryMoon.StreamEngineer.Actions
         {
             SessionHandler.RunOnMainThread(() =>
             {
-                msg += GetMessage(actions);
+                var actionMessage = GetMessage(actions);
+                msg += actionMessage;
                 Logger.WriteLine(msg);
                 if (actions.Count <= 0 && !alwaysSendMessage) return;
+                ActionNotification.SendActionMessage(msg);
 
                 if (MyMultiplayer.Static != null)
                     MyMultiplayer.Static.SendChatMessage(msg, ChatChannel.GlobalScripted, 0,

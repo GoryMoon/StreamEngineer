@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionNotification.cs" />
     <Compile Include="Actions\DataHandler.cs" />
     <Compile Include="Actions\DisableDampenersAction.cs" />
     <Compile Include="Actions\DisableThrustersAction.cs" />
