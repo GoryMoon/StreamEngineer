@@ -23,7 +23,11 @@ namespace GoryMoon.StreamEngineer.Actions
                 }
                 else
                 {
-                    controlledEntity?.SwitchThrusts();
+                    var thrusts = controlledEntity?.EnabledThrusts;
+                    if (thrusts.HasValue && thrusts.Value)
+                    {
+                        controlledEntity?.SwitchThrusts();
+                    }
                 }
             });
         }
