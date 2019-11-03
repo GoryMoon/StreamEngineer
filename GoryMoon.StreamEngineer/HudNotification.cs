@@ -26,8 +26,6 @@ namespace GoryMoon.StreamEngineer
         private WarningState _mWarningState;
         private MyHudNotification _notification;
 
-        public override bool IsRequiredByGame => true;
-
         public HudNotification()
         {
             Static = this;
