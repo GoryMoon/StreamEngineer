@@ -44,7 +44,9 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler.AddAction("fulfill_buildplanner", typeof(FulfillBuildPlannerAction));
             _actionHandler.AddAction("random", typeof(RandomAction));
             _actionHandler.AddAction("warhead", typeof(WarheadAction));
-            _actionHandler.AddAction("give_item", typeof(GiveItem));
+            _actionHandler.AddAction("give_item", typeof(GiveItemAction));
+            _actionHandler.AddAction("spawn_drone", typeof(SpawnDroneAction));
+            _actionHandler.AddAction("snap", typeof(SnapAction));
             _actionHandler.StartWatching();
         }
         public override void Dispose()
@@ -60,13 +62,8 @@ namespace GoryMoon.StreamEngineer.Actions
                 msg += actionMessage;
                 Logger.WriteLine(msg);
                 if (actions.Count <= 0 && !alwaysSendMessage) return;
-                ActionNotification.SendActionMessage(msg);
-
-                if (MyMultiplayer.Static != null)
-                    MyMultiplayer.Static.SendChatMessage(msg, ChatChannel.GlobalScripted, 0,
-                        "[StreamEngineer]");
-                else
-                    MyHud.Chat.ShowMessageScripted("[StreamEngineer]", msg);
+                ActionNotification.SendActionMessage(msg, null);
+                Utils.SendChat(msg);
             });
         }
 
@@ -75,11 +72,17 @@ namespace GoryMoon.StreamEngineer.Actions
             return actions.Count > 0 ? " " + string.Join(" ", actions.Select(action => action.Message ?? "")) : "";
         }
 
-        private List<BaseAction> GetAndExecute(Data.Data data)
+        public List<BaseAction> GetAndExecute(Data.Data data)
         {
             var actions = _actionHandler.GetActions(data);
             actions.ForEach(action => action.Execute(data));
             return actions;
+        }
+        
+        public void Execute(string type, JToken token, Data.Data data)
+        {
+            _actionHandler.GetAction(type, token, out var action);
+            action.Execute(data);
         }
 
         public override void OnDonation(string name, int amount, string formattedAmount)

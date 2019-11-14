@@ -49,7 +49,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sandbox.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -135,11 +135,13 @@
     <Compile Include="Actions\EnableHelmetAction.cs" />
     <Compile Include="Actions\EnableThrustersAction.cs" />
     <Compile Include="Actions\FulfillBuildPlannerAction.cs" />
-    <Compile Include="Actions\GiveItem.cs" />
+    <Compile Include="Actions\GiveItemAction.cs" />
     <Compile Include="Actions\MeteorAction.cs" />
     <Compile Include="Actions\PowerDownAction.cs" />
     <Compile Include="Actions\DisablePowerAction.cs" />
     <Compile Include="Actions\EnablePowerAction.cs" />
+    <Compile Include="Actions\SnapAction.cs" />
+    <Compile Include="Actions\SpawnDroneAction.cs" />
     <Compile Include="Actions\ToggleHelmetAction.cs" />
     <Compile Include="Actions\TogglePowerAction.cs" />
     <Compile Include="Actions\PowerUpAction.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="Actions\ToggleDampenersAction.cs" />
     <Compile Include="Actions\ToggleThrustersAction.cs" />
     <Compile Include="Actions\WarheadAction.cs" />
+    <Compile Include="CommandAction.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\CustomFileStore.cs" />
     <Compile Include="HudNotification.cs" />

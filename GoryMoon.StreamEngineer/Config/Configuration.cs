@@ -37,6 +37,19 @@ namespace GoryMoon.StreamEngineer.Config
             [TomlComment("Display name of your steam account so actions know what player to target")]
             public string SteamName { get; set; } = "";
             
+            [TomlComment("The 'SpawnGroupDefinition' drones to be able to spawn when in space")]
+            public string[] SpaceDrones { get; set; } =
+            {
+                "Blue Drone MK1", "Blue Drone MK2", "Red Drone MK1", "Light patrol drone", "Escord Drone", "Vulture Drone",
+                "ProtectoBot", "Raider Drone", "Salvage Drone", "Seeker Mine", "Snub Fighter", "Stash-satellite",
+                "V2-Gunboat", "Hostile Miner", "Tusk", "DroneS 1GG_1", "DroneS 1GG_2", "DroneS 1GG_3",
+                "DroneS Drill.Warhead", "DroneS 2GG.1GT", "DroneS 1MT.2GG", "DroneS 2GG.1GT.1RL", "DroneS 2GG.2GT",
+                "DroneL 1RL.1GG.2IT", "BossDroneL 1RL.2GT.1MT.2IT"
+            };
+            
+            [TomlComment("The 'SpawnGroupDefinition' drones to be able to spawn when on a planet")]
+            public string[] PlanetDrones { get; set; } = { "Vulture Drone" };
+            
             public EventMessages Events { get; set; } = new EventMessages();
 
             public static void Init(string path)

@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using GoryMoon.StreamEngineer.Actions;
@@ -16,14 +19,18 @@ namespace GoryMoon.StreamEngineer
     public class Plugin : IPlugin
     {
         public static Plugin Static;
+        public const bool Dev = true;
         public Logger Logger { get; private set; }
-        private DataHandler _dataHandler;
+        public DataHandler DataHandler { get; private set; }
         private StreamlabsData _streamlabsData;
         private TwitchExtensionData _twitchExtensionData;
 
+        private static readonly ConcurrentQueue<Action> DeferredActions = new ConcurrentQueue<Action>();
+        public static bool Started { get; private set; }
+
         public void Dispose()
         {
-            _dataHandler.Dispose();
+            DataHandler.Dispose();
             _streamlabsData.Dispose();
             _twitchExtensionData.Dispose();
         }
@@ -31,17 +38,22 @@ namespace GoryMoon.StreamEngineer
         public void Init(object gameInstance)
         {
             Static = this;
-            var path = Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(typeof(Plugin).Assembly.CodeBase).Path));
+            var path = Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(Assembly.GetExecutingAssembly().Location).Path));
             Configuration.TokenConfig.Init(path);
             Configuration.PluginConfig.Init(path);
             
             Logger = new Logger();
-            _dataHandler = new DataHandler(path);
-            _streamlabsData = new StreamlabsData(_dataHandler);
-            _twitchExtensionData = new TwitchExtensionData(_dataHandler);
+            Logger.WriteLine(Assembly.GetExecutingAssembly().Location);
+            Logger.WriteLine(path);
+            DataHandler = new DataHandler(path);
+            _streamlabsData = new StreamlabsData(DataHandler);
+            _twitchExtensionData = new TwitchExtensionData(DataHandler);
             
             var harmony = HarmonyInstance.Create("se.gorymoon.streamengineer");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+            Started = true;
+            DeferredActions.ForEach(a => a.Invoke());
             //MyScreenManager.ScreenAdded += ScreenAdded;
         }
 
@@ -53,11 +65,11 @@ namespace GoryMoon.StreamEngineer
         {
             if (!Sync.IsServer) return;
 
-            var token = Configuration.Token.Get(c => c.StreamlabsToken).Trim();
-            if (token.Length > 0) Static._streamlabsData.Init(token);
+            var token = Configuration.Token.Get(c => c.StreamlabsToken)?.Trim();
+            if (!string.IsNullOrEmpty(token)) Static._streamlabsData.Init(token);
             
-            var twitchToken = Configuration.Token.Get(c => c.TwitchExtensionToken).Trim();
-            if (twitchToken.Length > 0) Static._twitchExtensionData.Init(twitchToken);
+            var twitchToken = Configuration.Token.Get(c => c.TwitchExtensionToken)?.Trim();
+            if (!string.IsNullOrEmpty(twitchToken)) Static._twitchExtensionData.Init(twitchToken);
         }
 
         public static void StopService()
@@ -78,6 +90,18 @@ namespace GoryMoon.StreamEngineer
                     new StringBuilder(
                         "Welcome to StreamEngineer\nTo get started you need to do some changes to the 'settings.toml' in the plugin folder.\nYou need to restart after changing any service settings,\nyou don't need to restart for settings related to events."),
                     new StringBuilder("StreamEngineer")));
+        }
+
+        public static void RunOrDefer(Action action)
+        {
+            if (Started)
+            {
+                action.Invoke();
+            }
+            else
+            {
+                DeferredActions.Enqueue(action);
+            }
         }
     }
 }

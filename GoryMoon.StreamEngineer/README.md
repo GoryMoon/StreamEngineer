@@ -41,9 +41,11 @@ To edit the events open the `events.json`, can be done while game is running.
 |    `"enable_helmet"`     | Turns opens the helmet                                                                         |                                                           |
 |    `"disable_helmet"`    | Turns closes the helmet                                                                        |                                                           |
 | `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                           |
-|        `"random"`        | Runs a random provided action                                                                  | `"actions: []"`, example down below                       |
-|       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed, distance, countdown: "number" or "event"`        |
-|      `"give_item"`       | Gives the defined item/items to the player, IDs are below                                      | `"items: [{"id": "ID", "amount": "number" or " event"}]"` |
+|        `"random"`        | Runs a random provided action                                                                  | `"actions": []"`, example down below                      |
+|       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed", distance, countdown: "number" or "event"`       |
+|      `"give_item"`       | Gives the defined item/items to the player, IDs are below                                      | `"items": [{"id": "ID", "amount": "number" or " event"}]` |
+|     `"spawn_drone"`      | Spawns a random drone or a specified one                                                       | `"drone": "id of drone"`, optional, find id below         |
+|         `"snap"`         | Does the Thanos Snap, WARNING! Can be very destructive                                         | `"vehicle": true or false`, does a snap on all cubes      |
 
 `event` can be used on supported parameters to use the amount data from the event. 
 For example the amount of months a user have subscribed.
@@ -183,6 +185,40 @@ Example of the items definition
 | Component/Canvas                              | Canvas                       | No Decimals        |
 | Component/ZoneChip                            | Zone Chip                    | No Decimals        |
 
+### Spawn Drone ids
+
+The action can take a specific drone to spawn or use a random one from the config file.
+If the drone id isn't correct it won't spawn anything.
+
+The drones must be of the type `SpawnGroupDefinition`, for custom drones you need to find the ids of those
+
+| Id                         | Type         |
+|----------------------------|--------------|
+| Blue Drone MK1             | Space        |
+| Blue Drone MK2             | Space        |
+| Red Drone MK1              | Space        |
+| Light patrol drone         | Space        |
+| Escord Drone               | Space        |
+| Vulture Drone              | Space/Planet |
+| ProtectoBot                | Space        |
+| Raider Drone               | Space        |
+| Salvage Drone              | Space        |
+| Seeker Mine                | Space        |
+| Snub Fighter               | Space        |
+| Stash-satellite            | Space        |
+| V2-Gunboat                 | Space        |
+| Hostile Miner              | Space        |
+| Tusk                       | Space        |
+| DroneS 1GG_1               | Space        |
+| DroneS 1GG_2               | Space        |
+| DroneS 1GG_3               | Space        |
+| DroneS Drill.Warhead       | Space        |
+| DroneS 2GG.1GT             | Space        |
+| DroneS 1MT.2GG             | Space        |
+| DroneS 2GG.1GT.1RL         | Space        |
+| DroneS 2GG.2GT             | Space        |
+| DroneL 1RL.1GG.2IT         | Space        |
+| BossDroneL 1RL.2GT.1MT.2IT | Space        |
 
 ### Example
 

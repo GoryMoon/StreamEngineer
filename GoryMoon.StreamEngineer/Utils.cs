@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Linq;
 using GoryMoon.StreamEngineer.Config;
+using Sandbox;
 using Sandbox.Definitions;
+using Sandbox.Engine.Multiplayer;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
+using Sandbox.Game.Gui;
 using Sandbox.Game.World;
 using VRage;
 using VRage.Game;
@@ -17,6 +21,13 @@ namespace GoryMoon.StreamEngineer
         public static MyPlayer GetPlayer()
         {
             return MySession.Static.Players.GetPlayerByName(Configuration.Plugin.Get(c => c.SteamName));
+        }
+
+        public static bool IsInSpace(Vector3D pos)
+        {
+            var closestPlanet = MyGamePruningStructure.GetClosestPlanet(pos);
+            return closestPlanet == null || !closestPlanet.HasAtmosphere ||
+                   closestPlanet.GetAirDensity(pos) <= 0.5;
         }
 
         public static void AddOrDropItem(MyPlayer player, MyPhysicalItemDefinition item, ref double amount, MatrixD position)
@@ -71,6 +82,29 @@ namespace GoryMoon.StreamEngineer
             }
 
             return remaining;
+        }
+
+        public static void SendChat(string msg)
+        {
+            if (!MySandboxGame.IsGameReady)
+                return;
+            if (MyMultiplayer.Static != null)
+                MyMultiplayer.Static.SendChatMessage(msg, ChatChannel.GlobalScripted, 0,
+                "[StreamEngineer]");
+            else
+                MyHud.Chat.ShowMessageScripted("[StreamEngineer]", msg);
+        }
+        
+        public static string ToSplitCase(this string inputString)
+        {
+            return inputString.Aggregate(string.Empty, (result, next) =>
+            {
+                if (char.IsUpper(next) && result.Length > 0)
+                {
+                    result += ' ';
+                }
+                return result + (next == '_' ? ' ': next);
+            });
         }
     }
 }

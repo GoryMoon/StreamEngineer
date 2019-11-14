@@ -11,6 +11,7 @@ using VRage.Collections;
 using VRage.Game;
 using VRage.Game.Components;
 using VRage.Network;
+using VRage.Serialization;
 using VRage.Utils;
 using VRageMath;
 using Game = Sandbox.Engine.Platform.Game;
@@ -21,8 +22,8 @@ namespace GoryMoon.StreamEngineer
     [StaticEventOwner]
     public class ActionNotification : MySessionComponentBase
     {
-        private static readonly MyConcurrentQueue<string> MessageQueue = new MyConcurrentQueue<string>();
-        private static StringBuilder _currentMessage;
+        private static readonly MyConcurrentQueue<Message> MessageQueue = new MyConcurrentQueue<Message>();
+        private static Message? _currentMessage;
         
         private int _currentDisplayTime;
         private Vector2 _position;
@@ -35,15 +36,15 @@ namespace GoryMoon.StreamEngineer
 
         public override bool IsRequiredByGame => true;
 
-        public static void SendActionMessage(string message)
+        public static void SendActionMessage(string message, Color? color, string sound = "ArcNewItemImpact")
         {
             if (Sync.IsServer)
             {
                 if (!Game.IsDedicated)
                 {
-                    AddActionMessage(message);
+                    AddActionMessage(message, color, sound);
                 }
-                MyMultiplayer.RaiseStaticEvent(x => AddActionMessage, message, new EndpointId(), new Vector3D?());
+                MyMultiplayer.RaiseStaticEvent(x => AddActionMessage, message, color, sound, new EndpointId(), new Vector3D?());
             }
         }
 
@@ -57,8 +58,8 @@ namespace GoryMoon.StreamEngineer
             if (_currentDisplayTime <= 0 && MessageQueue.Count > 0)
             {
                 _currentDisplayTime = 200;
-                _currentMessage = new StringBuilder(MessageQueue.Dequeue());
-                MyAudio.Static.PlaySound(MySoundPair.GetCueId("ArcNewItemImpact"));
+                _currentMessage = MessageQueue.Dequeue();
+                MyAudio.Static.PlaySound(MySoundPair.GetCueId(_currentMessage.Value.Sound));
             }
             else if (_currentDisplayTime > 0)
             {
@@ -72,10 +73,10 @@ namespace GoryMoon.StreamEngineer
 
         public override void Draw()
         {
-            if (_currentMessage != null)
+            if (_currentMessage.HasValue)
             {
-                MyGuiManager.DrawString("Debug", _currentMessage, _position,
-                    MyGuiSandbox.GetDefaultTextScaleWithLanguage() * 1.2f, Color.PaleGoldenrod,
+                MyGuiManager.DrawString("Debug", _currentMessage.Value.Text, _position,
+                    MyGuiSandbox.GetDefaultTextScaleWithLanguage() * 1.2f, _currentMessage.Value.Color,
                     MyGuiDrawAlignEnum.HORISONTAL_CENTER_AND_VERTICAL_CENTER, MyVideoSettingsManager.IsTripleHead());
             }
         }
@@ -83,9 +84,17 @@ namespace GoryMoon.StreamEngineer
         [Event(null, 53)]
         [Reliable]
         [Broadcast]
-        private static void AddActionMessage(string message)
+        private static void AddActionMessage(string message, [Nullable] Color? color, string sound)
         {
-            MessageQueue.Enqueue(message);
+            MessageQueue.Enqueue(new Message()
+                {Text = new StringBuilder(message), Color = color ?? Color.PaleGoldenrod, Sound = sound});
+        }
+        
+        private struct Message
+        {
+            public StringBuilder Text;
+            public Color Color;
+            public string Sound;
         }
     }
 }

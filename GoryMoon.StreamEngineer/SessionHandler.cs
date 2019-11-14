@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Reflection;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
+using Sandbox.Engine.Platform;
+using Sandbox.Game.GameSystems;
+using Sandbox.Game.World;
 using VRage.Collections;
 using VRage.Game.Components;
 
@@ -22,8 +26,9 @@ namespace GoryMoon.StreamEngineer
 
         public override void BeforeStart()
         {
-            MyMultiplayer.ReplicationLayer.RegisterFromAssembly(typeof(Plugin).Assembly);
-            Plugin.StartService();
+            MyMultiplayer.ReplicationLayer.RegisterFromAssembly(Assembly.GetExecutingAssembly());
+            Plugin.RunOrDefer(Plugin.StartService);
+            MySession.Static.ChatSystem.CommandSystem.ScanAssemblyForCommands(Assembly.GetExecutingAssembly());
         }
 
         public override void UpdateBeforeSimulation()
