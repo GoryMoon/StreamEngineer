@@ -42,13 +42,16 @@ To edit the events open the `events.json`, can be done while game is running.
 |    `"disable_helmet"`    | Turns closes the helmet                                                                        |                                                           |
 | `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                           |
 |        `"random"`        | Runs a random provided action                                                                  | `"actions": []"`, example down below                      |
-|       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed", distance, countdown: "number" or "event"`       |
+|       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed", distance, countdown: "number" or "event", "space_speed", space_distance, space_countdown: "number" or "event",  "hostile": true or false, ` |
 |      `"give_item"`       | Gives the defined item/items to the player, IDs are below                                      | `"items": [{"id": "ID", "amount": "number" or " event"}]` |
 |     `"spawn_drone"`      | Spawns a random drone or a specified one                                                       | `"drone": "id of drone"`, optional, find id below         |
 |         `"snap"`         | Does the Thanos Snap, WARNING! Can be very destructive                                         | `"vehicle": true or false`, does a snap on all cubes      |
 
 `event` can be used on supported parameters to use the amount data from the event. 
 For example the amount of months a user have subscribed.
+
+The warhead have different settings for space or a planet, if only planet settings are set those are used for both. 
+By default the warhead is owned by the player.
 
 ### Conditions
 

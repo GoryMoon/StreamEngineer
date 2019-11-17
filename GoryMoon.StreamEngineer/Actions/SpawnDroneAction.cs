@@ -53,7 +53,7 @@ namespace GoryMoon.StreamEngineer.Actions
                             if (pirateAntennas != null)
                             {
                                 var drones = Utils.IsInSpace(pos) ? Configuration.Plugin.Get(c => c.SpaceDrones): Configuration.Plugin.Get(c => c.PlanetDrones);
-                                var drone = (Drone ?? drones[_random.Next(drones.Length)]) ?? "Vulture Drone";
+                                var drone = (string.IsNullOrEmpty(Drone) ? drones[_random.Next(drones.Length)]: Drone) ?? "Vulture Drone";
                                 
                                 MyDefinitionManager.Static.TryGetDefinition(
                                     new MyDefinitionId(
