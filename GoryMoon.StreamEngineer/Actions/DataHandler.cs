@@ -75,14 +75,19 @@ namespace GoryMoon.StreamEngineer.Actions
         public List<BaseAction> GetAndExecute(Data.Data data)
         {
             var actions = _actionHandler.GetActions(data);
-            actions.ForEach(action => action.Execute(data));
+            var param = GetParams(data);
+            if (EventType.TwitchSubscription.Equals(data.Type))
+            {
+                param.Add("tier", data.Tier);
+            }
+            actions.ForEach(action => action.Execute(data, param));
             return actions;
         }
         
         public void Execute(string type, JToken token, Data.Data data)
         {
             _actionHandler.GetAction(type, token, out var action);
-            action.Execute(data);
+            action.Execute(data, GetParams(data));
         }
 
         public override void OnDonation(string name, int amount, string formattedAmount)
@@ -95,7 +100,7 @@ namespace GoryMoon.StreamEngineer.Actions
 
         public override void OnTwitchSubscription(string name, int months, string tier, bool resub)
         {
-            var actions = GetAndExecute(new Data.Data {Type = EventType.TwitchSubscription, Amount = months});
+            var actions = GetAndExecute(new Data.Data {Type = EventType.TwitchSubscription, Amount = months, Tier = tier == "2000" ? 2: tier == "3000" ? 3: 1});
             var messages = Configuration.Plugin.Get(c => c.Events.TwitchSubscription);
 
             var msg = months == 1 ? messages.NewMessage : messages.ResubMessage;
@@ -198,7 +203,8 @@ namespace GoryMoon.StreamEngineer.Actions
         {
             if (_actionHandler.GetAction(action, settings, out var baseAction))
             {
-                baseAction.Execute(new Data.Data {Type = EventType.TwitchExtension, Amount = amount});
+                var data = new Data.Data {Type = EventType.TwitchExtension, Amount = amount};
+                baseAction.Execute(data, GetParams(data));
                 if (baseAction.Message != null && baseAction.Message.Trim().Length > 0)
                 {
                     var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchExtension);

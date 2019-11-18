@@ -1,4 +1,5 @@
-﻿using GoryMoon.StreamEngineer.Data;
+﻿using System.Collections.Generic;
+using GoryMoon.StreamEngineer.Data;
 using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.EntityComponents;
 using Sandbox.Game.GameSystems;
@@ -10,7 +11,7 @@ namespace GoryMoon.StreamEngineer.Actions
 {
     public class RefillAction: BaseAction
     {
-        public override void Execute(Data.Data data)
+        public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>
             {

@@ -4,6 +4,7 @@
     {
         Donation,
         TwitchSubscription,
+        TwitchSubscriptionTier,
         TwitchBits,
         TwitchFollow,
         TwitchHost,

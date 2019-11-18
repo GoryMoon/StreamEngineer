@@ -116,5 +116,8 @@ namespace GoryMoon.StreamEngineer.Data
     {
         public EventType Type;
         public int Amount;
+
+        // Twitch sub tier
+        public int Tier;
     }
 }

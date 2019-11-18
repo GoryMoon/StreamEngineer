@@ -1,4 +1,5 @@
-﻿using GoryMoon.StreamEngineer.Data;
+﻿using System.Collections.Generic;
+using GoryMoon.StreamEngineer.Data;
 using Sandbox.Definitions;
 using VRage.Game;
 
@@ -7,7 +8,7 @@ namespace GoryMoon.StreamEngineer.Actions
     public class GiveItemAction: BaseAction
     {
         public Item[] Items { get; set; }
-        public override void Execute(Data.Data data)
+        public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>
             {
@@ -21,7 +22,7 @@ namespace GoryMoon.StreamEngineer.Actions
                         if (MyDefinitionId.TryParse("MyObjectBuilder_" + item.Id, out var id) &&
                             MyDefinitionManager.Static.TryGetPhysicalItemDefinition(id, out var itemDefinition))
                         {
-                            var amount = GetEventValue(item.Amount, 1, data);
+                            var amount = GetEventValue(item.Amount, 1, parameters);
                             Utils.AddOrDropItem(player, itemDefinition, ref amount, worldMatrix);
                         }
                     }

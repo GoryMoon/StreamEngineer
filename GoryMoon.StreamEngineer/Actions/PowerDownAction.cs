@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
 using Sandbox.Game.Entities;
 
@@ -7,7 +8,7 @@ namespace GoryMoon.StreamEngineer.Actions
     public class PowerDownAction: BaseAction
     {
         public string Amount { get; set; }
-        public override void Execute(Data.Data data)
+        public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>
             {
@@ -18,7 +19,7 @@ namespace GoryMoon.StreamEngineer.Actions
 
                     if (controlledEntity is MyShipController controller)
                     {
-                        var eventValue = GetEventValue(Amount, -1, data);
+                        var eventValue = GetEventValue(Amount, -1, parameters);
                         var lower = Math.Abs(eventValue - (-1)) < Double.Epsilon;
                         
                         var blocks = controller.CubeGrid.GetFatBlocks<MyBatteryBlock>();

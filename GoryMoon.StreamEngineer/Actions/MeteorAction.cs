@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
 
 namespace GoryMoon.StreamEngineer.Actions
@@ -9,9 +10,9 @@ namespace GoryMoon.StreamEngineer.Actions
         public float Radius { get; set; }
         public string Amount { get; set; }
         
-        public override void Execute(Data.Data data)
+        public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
-            double amount = GetEventValue(Amount, 1, data);
+            double amount = GetEventValue(Amount, 1, parameters);
             SessionHandler.EnqueueMeteors((int) Math.Ceiling(amount), Radius);
         }
     }

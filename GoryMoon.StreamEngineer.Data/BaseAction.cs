@@ -12,12 +12,12 @@ namespace GoryMoon.StreamEngineer.Data
 
         [JsonProperty] public List<Condition> Conditions { get; set; }
 
-        public abstract void Execute(Data data);
+        public abstract void Execute(Data data, Dictionary<string, object> parameters);
 
-        protected double GetEventValue(string property, double defaultVal, Data data)
+        protected double GetEventValue(string property, double defaultVal, Dictionary<string, object> parameters)
         {
             if (property == null) return defaultVal;
-            var expression = new Expression(property) {Parameters = {["event"] = data.Amount}};
+            var expression = new Expression(property) {Parameters = parameters};
             var result = expression.Evaluate();
             if (expression.HasErrors())
             {

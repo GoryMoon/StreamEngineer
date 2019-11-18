@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace GoryMoon.StreamEngineer.Data
@@ -10,6 +11,11 @@ namespace GoryMoon.StreamEngineer.Data
         protected BaseDataHandler(ILogger logger)
         {
             Logger = logger;
+        }
+        
+        protected Dictionary<string, object> GetParams(Data data)
+        {
+            return new Dictionary<string, object> {["event"] = data.Amount};
         }
 
         public abstract void OnDonation(string name, int amount, string formatted);

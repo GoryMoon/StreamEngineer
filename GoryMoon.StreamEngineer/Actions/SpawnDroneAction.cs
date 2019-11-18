@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
@@ -28,7 +29,7 @@ namespace GoryMoon.StreamEngineer.Actions
             _spawnDrone = MethodInvoker.GetHandler(AccessTools.Method(typeof(MyPirateAntennas), "SpawnDrone", new []{typeof(MyRadioAntenna), typeof(long), typeof(Vector3D), typeof(MySpawnGroupDefinition), typeof(Vector3), typeof(Vector3)}));
         }
 
-        public override void Execute(Data.Data data)
+        public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>
             {

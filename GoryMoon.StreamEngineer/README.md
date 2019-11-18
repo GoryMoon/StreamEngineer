@@ -42,13 +42,14 @@ To edit the events open the `events.json`, can be done while game is running.
 |    `"disable_helmet"`    | Turns closes the helmet                                                                        |                                                           |
 | `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                           |
 |        `"random"`        | Runs a random provided action                                                                  | `"actions": []"`, example down below                      |
-|       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed", distance, countdown: "number" or "event", "spaceSpeed", spaceDistance, spaceCountdown: "number" or "event",  "hostile": true or false, ` |
+|       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed, distance, countdown": "number" or "event", "space_speed, space_distance, space_countdown": "number" or "event",  "hostile": true or false, ` |
 |      `"give_item"`       | Gives the defined item/items to the player, IDs are below                                      | `"items": [{"id": "ID", "amount": "number" or " event"}]` |
 |     `"spawn_drone"`      | Spawns a random drone or a specified one                                                       | `"drone": "id of drone"`, optional, find id below         |
-|         `"snap"`         | Does the Thanos Snap, WARNING! Can be very destructive                                         | `"vehicle": true or false`, does a snap on all cubes      |
+|         `"snap"`         | Does the Thanos Snap, WARNING! Can be very destructive, can set snap check percentage          | `"vehicle": true or false`, does a snap on all cubes, `"vehicle_percentage": 0.5`, `"player_percentage": 0.5` |
 
 `event` can be used on supported parameters to use the amount data from the event. 
 For example the amount of months a user have subscribed.
+For `twitch_subscription` you can use `tier` as a parameter to calculate amount, the `tier` value can be `1`, `2` or `3`, prime sub is also `1`
 
 The warhead have different settings for space or a planet, if only planet settings are set those are used for both. 
 By default the warhead is owned by the player.
@@ -69,24 +70,33 @@ You can leave the condition array empty to always run the action.
   "to": 500
 }
 ```
+
+Only affect tier 3 twitch subscriptions
+```json
+{
+  "type": "twitch_subscription_tier",
+  "from": 3
+}
+```
 > Example condition
 
 The available types are:
 
-|          Type          |            `event`            |
-|:----------------------:|:-----------------------------:|
-| `donation`             | Donation amount               |
-| `twitch_subscription`  | Months subscribed             |
-| `twitch_bits`          | The amount of bits            |
-| `twitch_follow`        |                               |
-| `twitch_host`          | The amount of viewers hosted  |
-| `twitch_raid`          | The amount of viewers raiding |
-| `youtube_subscription` |                               |
-| `youtube_sponsor`      | Months sponsored              |
-| `youtube_superchat`    | The amount superchatted       |
-| `mixer_follow`         |                               |
-| `mixer_subscription`   | Months subscribed             |
-| `mixer_host`           | The amount of viewers hosted  |
+|          Type               |            `event`            |
+|:---------------------------:|:-----------------------------:|
+| `donation`                  | Donation amount               |
+| `twitch_subscription`       | Months subscribed             |
+| `twitch_subscription_tier`  | The tier, `1`,`2` or `3`      |
+| `twitch_bits`               | The amount of bits            |
+| `twitch_follow`             |                               |
+| `twitch_host`               | The amount of viewers hosted  |
+| `twitch_raid`               | The amount of viewers raiding |
+| `youtube_subscription`      |                               |
+| `youtube_sponsor`           | Months sponsored              |
+| `youtube_superchat`         | The amount superchatted       |
+| `mixer_follow`              |                               |
+| `mixer_subscription`        | Months subscribed             |
+| `mixer_host`                | The amount of viewers hosted  |
 
 ### Give Item Action
 

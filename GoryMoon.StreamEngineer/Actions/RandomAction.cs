@@ -34,13 +34,13 @@ namespace GoryMoon.StreamEngineer.Actions
                 _actions.Build();
         }
 
-        public override void Execute(Data.Data data)
+        public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             if (_actions.Count <= 0) return;
 
             var action = _actions.SelectRandomItem();
             Message = action.Message;
-            action.Execute(data);
+            action.Execute(data, parameters);
         }
     }
 }

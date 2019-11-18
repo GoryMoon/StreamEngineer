@@ -13,13 +13,21 @@ namespace GoryMoon.StreamEngineer.Data
 
         public bool Test(Data data)
         {
-            bool flag;
-            if (!Type.Equals(data.Type)) return false;
-            if (data.Amount == -1) return true;
+            if (Type.Equals(EventType.TwitchSubscriptionTier) && EventType.TwitchSubscription.Equals(data.Type))
+            {
+                return Test(data.Tier);
+            }
 
+            if (!Type.Equals(data.Type)) return false;
+            return data.Amount == -1 || Test(data.Amount);
+        }
+
+        private bool Test(int val)
+        {
+            bool flag;
             if (To > -1)
             {
-                flag = To >= data.Amount;
+                flag = To >= val;
             }
             else
             {
@@ -28,9 +36,8 @@ namespace GoryMoon.StreamEngineer.Data
 
             if (From > -1)
             {
-                flag &= From <= data.Amount;
+                flag &= From <= val;
             }
-
             return flag;
         }
         

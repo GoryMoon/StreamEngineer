@@ -1,4 +1,8 @@
-﻿using GoryMoon.StreamEngineer.Data;
+﻿using System.Collections.Generic;
+using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Sandbox.Common.ObjectBuilders;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
@@ -11,6 +15,7 @@ using VRageMath;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
+    [JsonConverter(typeof(StringEnumConverter), typeof(SnakeCaseNamingStrategy))]
     public class WarheadAction : BaseAction
     {
         public bool Hostile { get; set; } = false;
@@ -23,7 +28,7 @@ namespace GoryMoon.StreamEngineer.Actions
         public string Distance { get; set; }
         public string Countdown { get; set; }
 
-        public override void Execute(Data.Data data)
+        public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>
             {
@@ -36,7 +41,7 @@ namespace GoryMoon.StreamEngineer.Actions
                     var inSpace = Utils.IsInSpace(player.GetPosition());
                     var up = player.Character.PositionComp.GetOrientation().Up;
                     up.Normalize();
-                    var pos = player.GetPosition() + up * GetEventValue(inSpace && SpaceDistance != null ? SpaceDistance: Distance, 100, data);
+                    var pos = player.GetPosition() + up * GetEventValue(inSpace && SpaceDistance != null ? SpaceDistance: Distance, 100, parameters);
                     MatrixD world = MatrixD.CreateWorld(pos, Vector3.Forward, Vector3.Up);
                     Vector3 color = Color.Red.ColorToHSV();
                     var pirateFaction = MySession.Static.Factions.TryGetFactionByTag("SPRT");
@@ -49,13 +54,13 @@ namespace GoryMoon.StreamEngineer.Actions
                             foreach (var warhead in grid.GetFatBlocks<MyWarhead>())
                             {
                                 warhead.IsArmed = true;
-                                warhead.DetonationTime = (float) GetEventValue(inSpace && SpaceCountdown != null ? SpaceCountdown: Countdown, 10, data);
+                                warhead.DetonationTime = (float) GetEventValue(inSpace && SpaceCountdown != null ? SpaceCountdown: Countdown, 10, parameters);
                                 warhead.StartCountdown();
                             }
 
                             var direction = player.GetPosition() - grid.PositionComp.GetPosition();
                             direction.Normalize();
-                            grid.Physics.LinearVelocity += direction * GetEventValue(inSpace && SpaceSpeed != null ? SpaceSpeed: Speed, 5, data);
+                            grid.Physics.LinearVelocity += direction * GetEventValue(inSpace && SpaceSpeed != null ? SpaceSpeed: Speed, 5, parameters);
                         });
                 }
             });

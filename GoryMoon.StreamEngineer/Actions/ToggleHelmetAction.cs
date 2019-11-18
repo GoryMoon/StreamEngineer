@@ -1,10 +1,11 @@
-﻿using GoryMoon.StreamEngineer.Data;
+﻿using System.Collections.Generic;
+using GoryMoon.StreamEngineer.Data;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
     public class ToggleHelmetAction: BaseAction
     {
-        public override void Execute(Data.Data data)
+        public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>
             {
