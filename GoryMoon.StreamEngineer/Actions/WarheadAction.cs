@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Sandbox.Common.ObjectBuilders;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
@@ -15,17 +13,23 @@ using VRageMath;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
-    [JsonConverter(typeof(StringEnumConverter), typeof(SnakeCaseNamingStrategy))]
     public class WarheadAction : BaseAction
     {
+        [JsonProperty("hostile")]
         public bool Hostile { get; set; } = false;
         
+        [JsonProperty("space_speed")]
         public string SpaceSpeed { get; set; }
+        [JsonProperty("space_distance")]
         public string SpaceDistance { get; set; }
+        [JsonProperty("space_countdown")]
         public string SpaceCountdown { get; set; }
         
+        [JsonProperty("speed")]
         public string Speed { get; set; }
+        [JsonProperty("distance")]
         public string Distance { get; set; }
+        [JsonProperty("countdown")]
         public string Countdown { get; set; }
 
         public override void Execute(Data.Data data, Dictionary<string, object> parameters)

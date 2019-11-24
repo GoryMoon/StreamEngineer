@@ -16,16 +16,17 @@ using VRage.Plugins;
 
 namespace GoryMoon.StreamEngineer
 {
-    public class Plugin : IPlugin
+    public class Plugin : IPlugin, IDataPlugin
     {
         public static Plugin Static;
-        public const bool Dev = true;
-        public Logger Logger { get; private set; }
+        public ILogger Logger { get; set; }
+
         public DataHandler DataHandler { get; private set; }
         private StreamlabsData _streamlabsData;
         private TwitchExtensionData _twitchExtensionData;
 
         private static readonly ConcurrentQueue<Action> DeferredActions = new ConcurrentQueue<Action>();
+        private static readonly ConcurrentQueue<string> Messages = new ConcurrentQueue<string>();
         public static bool Started { get; private set; }
 
         public void Dispose()
@@ -45,16 +46,16 @@ namespace GoryMoon.StreamEngineer
             Logger = new Logger();
             Logger.WriteLine(Assembly.GetExecutingAssembly().Location);
             Logger.WriteLine(path);
-            DataHandler = new DataHandler(path);
-            _streamlabsData = new StreamlabsData(DataHandler);
-            _twitchExtensionData = new TwitchExtensionData(DataHandler);
+            DataHandler = new DataHandler(path, this);
+            _streamlabsData = new StreamlabsData(DataHandler, this);
+            _twitchExtensionData = new TwitchExtensionData(DataHandler, this);
             
             var harmony = HarmonyInstance.Create("se.gorymoon.streamengineer");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             Started = true;
             DeferredActions.ForEach(a => a.Invoke());
-            //MyScreenManager.ScreenAdded += ScreenAdded;
+            MyScreenManager.ScreenAdded += ScreenAdded;
         }
 
         public void Update()
@@ -81,15 +82,35 @@ namespace GoryMoon.StreamEngineer
             }
         }
 
+        public void ConnectionError(string name, string msg)
+        {
+            if (!Sync.IsDedicated)
+            {
+                Messages.Enqueue($"Unable to connect to '{name}' with message:\n{msg}.");
+            }
+        }
+        
         public void ScreenAdded(MyGuiScreenBase screenBase)
         {
-            if (screenBase.GetType() == MyPerGameSettings.GUI.MainMenu && Configuration.Plugin.Get(c => c.ShowMenuPopup))
+            if (false && screenBase.GetType() == MyPerGameSettings.GUI.MainMenu &&
+                Configuration.Plugin.Get(c => c.ShowMenuPopup))
+            {
                 //Configuration.Config.Set(c => c.ShowMenuPopup, false);
                 MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(MyMessageBoxStyleEnum.Info,
                     MyMessageBoxButtonsType.OK,
                     new StringBuilder(
                         "Welcome to StreamEngineer\nTo get started you need to do some changes to the 'settings.toml' in the plugin folder.\nYou need to restart after changing any service settings,\nyou don't need to restart for settings related to events."),
                     new StringBuilder("StreamEngineer")));
+            } else if (screenBase.GetType() == MyPerGameSettings.GUI.HUDScreen && !Messages.IsEmpty)
+            {
+                while (Messages.TryDequeue(out var msg))
+                {
+                    MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(MyMessageBoxStyleEnum.Error,
+                                        MyMessageBoxButtonsType.OK,
+                                        new StringBuilder(msg),
+                                        new StringBuilder("StreamEngineer")));
+                }
+            }
         }
 
         public static void RunOrDefer(Action action)

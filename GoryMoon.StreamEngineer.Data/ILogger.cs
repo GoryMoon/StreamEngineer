@@ -7,5 +7,7 @@ namespace GoryMoon.StreamEngineer.Data
         void WriteLine(string msg);
 
         void WriteLine(Exception e);
+
+        void WriteAndChat(string msg);
     }
 }

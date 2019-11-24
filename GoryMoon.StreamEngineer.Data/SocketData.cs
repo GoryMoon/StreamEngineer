@@ -9,6 +9,7 @@ namespace GoryMoon.StreamEngineer.Data
     public abstract class SocketData: IDisposable
     {
         protected readonly BaseDataHandler BaseDataHandler;
+        private readonly IDataPlugin _plugin;
 
         private bool _running;
         private SocketIO _socketIo;
@@ -17,9 +18,10 @@ namespace GoryMoon.StreamEngineer.Data
         protected abstract string Name { get; }
         protected abstract string Url { get; }
 
-        protected SocketData(BaseDataHandler baseDataHandler)
+        protected SocketData(BaseDataHandler baseDataHandler, IDataPlugin plugin)
         {
             BaseDataHandler = baseDataHandler;
+            _plugin = plugin;
         }
 
         public void Dispose()
@@ -37,23 +39,24 @@ namespace GoryMoon.StreamEngineer.Data
             {
                 Parameters = parameters
             };
-            _socketIo.OnConnected += () => BaseDataHandler.Logger.WriteLine($"Connected to {Name}");
+            _socketIo.OnConnected += () => _plugin.Logger.WriteLine($"Connected to {Name}");
             _socketIo.OnClosed += OnSocketClosed;
             _socketIo.OnError += (args) =>
             {
-                BaseDataHandler.Logger.WriteLine(args.Text);
+                _plugin.ConnectionError(Name, args.Text);
+                _plugin.Logger.WriteLine(args.Text);
                 _socketIo.CloseAsync();
             };
             _socketIo.On(Event, args =>
             {
                 try
                 {
-                    BaseDataHandler.Logger.WriteLine("Message: " + args.Text);
+                    _plugin.Logger.WriteLine("Message: " + args.Text);
                     OnSocketMessage(args.Text);
                 }
                 catch (Exception e)
                 {
-                    BaseDataHandler.Logger.WriteLine(e);
+                    _plugin.Logger.WriteLine(e);
                 }
             });
             _running = true;
@@ -64,43 +67,36 @@ namespace GoryMoon.StreamEngineer.Data
 
         private async void OnSocketClosed(ServerCloseReason reason)
         {
-            BaseDataHandler.Logger.WriteLine($"Closed {Name}: {reason}");
+            _plugin.Logger.WriteLine($"Closed {Name}: {reason}");
             if (reason != ServerCloseReason.ClosedByClient)
             {
                 await Connect();
             }
-
-            _running = false;
+            else
+            {
+                _running = false;
+            }
         }
 
         private async Task Connect()
         {
             while (_running)
             {
-                BaseDataHandler.Logger.WriteLine($"Reconnecting {Name}");
+                _plugin.Logger.WriteLine($"Reconnecting {Name}");
                 for (var i = 0; i < 3; i++)
                     try
                     {
                         await _socketIo.ConnectAsync();
                         return;
                     }
-                    catch (WebSocketException ex)
+                    catch (Exception ex)
                     {
-                        BaseDataHandler.Logger.WriteLine(ex.Message);
-                        await Task.Delay(2000);
-                    }
-                    catch (AggregateException ex)
-                    {
-                        BaseDataHandler.Logger.WriteLine(ex.Message);
-                        await Task.Delay(2000);
-                    }
-                    catch (TimeoutException ex)
-                    {
-                        BaseDataHandler.Logger.WriteLine(ex.Message);
+                        _plugin.Logger.WriteLine(ex.Message);
+                        _plugin.Logger.WriteLine(ex.StackTrace);
                         await Task.Delay(2000);
                     }
 
-                BaseDataHandler.Logger.WriteLine($"{Name}: Tried to reconnect 3 times, unable to connect to the server");
+                _plugin.Logger.WriteLine($"{Name}: Tried to reconnect 3 times, unable to connect to the server");
                 await Task.Delay(10000);
             }
         }

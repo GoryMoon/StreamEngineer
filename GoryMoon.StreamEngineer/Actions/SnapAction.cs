@@ -11,12 +11,13 @@ using VRageMath;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
-    [JsonConverter(typeof(StringEnumConverter), typeof(SnakeCaseNamingStrategy))]
     public class SnapAction: BaseAction
     {
         public bool Vehicle { get; set; } = true;
         
+        [JsonProperty("vehicle_percentage")]
         public double VehiclePercentage { get; set; } = 0.5;
+        [JsonProperty("player_percentage")]
         public double PlayerPercentage { get; set; } = 0.5;
         
         private readonly Random _random = new Random();
@@ -39,6 +40,8 @@ namespace GoryMoon.StreamEngineer.Actions
                         }
                     }
 
+                    Plugin.Static.Logger.WriteLine($"PlayerPercentage: {PlayerPercentage}");
+                    Plugin.Static.Logger.WriteLine($"PlayerPercentage: {VehiclePercentage}");
                     if (_random.NextDouble() < PlayerPercentage)
                     {
                         player.Character.Kill(true, new MyDamageInformation());

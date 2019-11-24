@@ -6,13 +6,13 @@ namespace GoryMoon.StreamEngineer.Data
 {
     public abstract class BaseDataHandler: IDisposable
     {
-        public ILogger Logger { get; }
+        public IDataPlugin Plugin { get; }
 
-        protected BaseDataHandler(ILogger logger)
+        protected BaseDataHandler(IDataPlugin plugin)
         {
-            Logger = logger;
+            Plugin = plugin;
         }
-        
+
         protected Dictionary<string, object> GetParams(Data data)
         {
             return new Dictionary<string, object> {["event"] = data.Amount};

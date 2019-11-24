@@ -9,7 +9,7 @@ namespace GoryMoon.StreamEngineer.Data
 {
     public class TwitchExtensionData: SocketData
     {
-        public TwitchExtensionData(BaseDataHandler baseDataHandler) : base(baseDataHandler) {}
+        public TwitchExtensionData(BaseDataHandler baseDataHandler, IDataPlugin plugin) : base(baseDataHandler, plugin) {}
 
         protected override string Event => "action";
         protected override string Name => "Twitch Extension";

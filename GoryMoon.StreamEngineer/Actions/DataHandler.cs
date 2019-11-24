@@ -12,9 +12,9 @@ namespace GoryMoon.StreamEngineer.Actions
     {
         private readonly ActionHandler _actionHandler;
 
-        public DataHandler(string path) : base(Plugin.Static.Logger)
+        public DataHandler(string path, IDataPlugin plugin) : base(plugin)
         {
-            _actionHandler = new ActionHandler(path, "events.json", Logger);
+            _actionHandler = new ActionHandler(path, "events.json", Plugin.Logger);
             _actionHandler.AddAction("meteors", typeof(MeteorAction));
 
             _actionHandler.AddAction("power_on", typeof(EnablePowerAction));
@@ -60,7 +60,7 @@ namespace GoryMoon.StreamEngineer.Actions
             {
                 var actionMessage = GetMessage(actions);
                 msg += actionMessage;
-                Logger.WriteLine(msg);
+                Plugin.Logger.WriteLine(msg);
                 if (actions.Count <= 0 && !alwaysSendMessage) return;
                 ActionNotification.SendActionMessage(msg, null);
                 Utils.SendChat(msg);

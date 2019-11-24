@@ -13,7 +13,7 @@ namespace GoryMoon.StreamEngineer.Data
         protected override string Name => "Streamlabs";
         protected override string Url => "wss://sockets.streamlabs.com";
         
-        public StreamlabsData(BaseDataHandler baseDataHandler): base(baseDataHandler) {}
+        public StreamlabsData(BaseDataHandler baseDataHandler, IDataPlugin plugin): base(baseDataHandler, plugin) {}
 
         public void Init(string token)
         {
