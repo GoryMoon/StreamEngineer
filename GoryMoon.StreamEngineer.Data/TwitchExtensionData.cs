@@ -11,7 +11,7 @@ namespace GoryMoon.StreamEngineer.Data
     {
         public TwitchExtensionData(BaseDataHandler baseDataHandler, IDataPlugin plugin) : base(baseDataHandler, plugin) {}
 
-        protected override string Event => "action";
+        protected override string[] Event => new []{"action", "cp_action"};
         protected override string Name => "Twitch Extension";
         protected override string Url => "wss://seapi.gorymoon.se/v1";
 
@@ -23,10 +23,18 @@ namespace GoryMoon.StreamEngineer.Data
             });
         }
 
-        protected override void OnSocketMessage(string args)
+        protected override void OnSocketMessage(string s, string args)
         {
             var data = JObject.Parse(args);
-            BaseDataHandler.OnTwitchExtension((string) data["user"], (int) data["bits"], (string) data["action"], data["settings"]);
+            switch (s)
+            {
+                case "action":
+                    BaseDataHandler.OnTwitchExtension((string) data["user"], (int) data["bits"], (string) data["action"], data["settings"]);
+                    break;
+                case "cp_action":
+                    BaseDataHandler.OnTwitchChannelPoints((string) data["user"], (string) data["id"]);
+                    break;
+            }
         }
     }
 }

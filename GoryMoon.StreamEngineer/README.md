@@ -63,6 +63,7 @@ Not setting one of `to` or `from` will match up to or from to everything dependi
 
 You can leave the condition array empty to always run the action.
 
+> Example conditions
 ```json
 {
   "type": "twitch_bits",
@@ -78,7 +79,14 @@ Only affect tier 3 twitch subscriptions
   "from": 3
 }
 ```
-> Example condition
+
+Only affect when a specific channel point reward is run, get the id from https://seapi.gorymoon.se/dashboard/chat
+```json
+{
+  "type": "twitch_channel_points",
+  "id": "e6149787-6bcc-4bbc-bdd9-c360de68c956"
+}
+```
 
 The available types are:
 
@@ -91,6 +99,7 @@ The available types are:
 | `twitch_follow`             |                               |
 | `twitch_host`               | The amount of viewers hosted  |
 | `twitch_raid`               | The amount of viewers raiding |
+| `twitch_channel_points`     |                               |
 | `youtube_subscription`      |                               |
 | `youtube_sponsor`           | Months sponsored              |
 | `youtube_superchat`         | The amount superchatted       |

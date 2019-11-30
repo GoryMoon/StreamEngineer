@@ -82,6 +82,9 @@ namespace GoryMoon.StreamEngineer.Config
                 [TomlComment("0:Name of sender, 1:Amount bits sent")]
                 public TwitchExtensionEvent TwitchExtension { get; set; } = new TwitchExtensionEvent();
                 
+                [TomlComment("0:Name of user")]
+                public SingleMessageEvent TwitchChannelPoints { get; set; } = new SingleMessageEvent("{0} ran action with channel points!", true);
+                
                 [TomlComment("0:Name of subscriber")]
                 public SingleMessageEvent YoutubeSubscription { get; set; } = new SingleMessageEvent("{0} subscribed!");
 

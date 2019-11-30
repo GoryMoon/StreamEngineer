@@ -217,5 +217,13 @@ namespace GoryMoon.StreamEngineer.Actions
                 }
             }
         }
+        
+        public override void OnTwitchChannelPoints(string name, string id)
+        {
+            var actions = GetAndExecute(new Data.Data {Type = EventType.TwitchChannelPoints, Id = id});
+
+            var messageEvent = Configuration.Plugin.Get(c => c.Events.TwitchChannelPoints);
+            SendMessage(string.Format(messageEvent.Message, name), messageEvent.AlwaysSendMessage, actions);
+        }
     }
 }

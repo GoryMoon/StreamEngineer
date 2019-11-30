@@ -9,7 +9,7 @@ namespace GoryMoon.StreamEngineer.Data
 {
     public class StreamlabsData: SocketData
     {
-        protected override string Event => "event";
+        protected override string[] Event => new []{"event"};
         protected override string Name => "Streamlabs";
         protected override string Url => "wss://sockets.streamlabs.com";
         
@@ -23,7 +23,7 @@ namespace GoryMoon.StreamEngineer.Data
             });
         }
 
-        protected override void OnSocketMessage(string args)
+        protected override void OnSocketMessage(string s, string args)
         {
             var o = JObject.Parse(args);
             var type = (string) o["type"];

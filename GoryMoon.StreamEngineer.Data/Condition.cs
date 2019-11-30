@@ -10,12 +10,19 @@ namespace GoryMoon.StreamEngineer.Data
         public EventType Type { get; set; }
         public double From { get; set; } = -1;
         public double To { get; set; } = -1;
+        [JsonProperty("channel_point_id")]
+        public string Id { get; set; } = "";
 
         public bool Test(Data data)
         {
             if (Type.Equals(EventType.TwitchSubscriptionTier) && EventType.TwitchSubscription.Equals(data.Type))
             {
                 return Test(data.Tier);
+            }
+
+            if (Type.Equals(EventType.TwitchChannelPoints) && EventType.TwitchChannelPoints.Equals(data.Type))
+            {
+                return Id.Equals(data.Id);
             }
 
             if (!Type.Equals(data.Type)) return false;

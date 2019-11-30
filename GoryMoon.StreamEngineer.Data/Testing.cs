@@ -171,6 +171,13 @@ namespace GoryMoon.StreamEngineer.Data
                 }
             }
 
+            public override void OnTwitchChannelPoints(string name, string id)
+            {
+                Plugin.Logger.WriteLine("OnTwitchChannelPoints");
+                var data = new Data {Type = EventType.TwitchChannelPoints, Amount = 0};
+                _handler.GetActions(data).ForEach(action => action.Execute(data, GetParams(data)));
+            }
+
             public override void Dispose()
             {
                 _handler.Dispose();

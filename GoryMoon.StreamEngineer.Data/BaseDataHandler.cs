@@ -31,6 +31,7 @@ namespace GoryMoon.StreamEngineer.Data
         public abstract void OnTwitchRaid(string name, int amount);
         public abstract void OnYoutubeSuperchat(string name, int amount, string formatted);
         public abstract void OnTwitchExtension(string name, int amount, string action, JToken settings);
+        public abstract void OnTwitchChannelPoints(string name, string id);
         public abstract void Dispose();
     }
 }

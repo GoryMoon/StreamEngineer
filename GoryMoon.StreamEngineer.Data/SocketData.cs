@@ -14,7 +14,7 @@ namespace GoryMoon.StreamEngineer.Data
         private bool _running;
         private SocketIO _socketIo;
 
-        protected abstract string Event { get; }
+        protected abstract string[] Event { get; }
         protected abstract string Name { get; }
         protected abstract string Url { get; }
 
@@ -47,23 +47,26 @@ namespace GoryMoon.StreamEngineer.Data
                 _plugin.Logger.WriteLine(args.Text);
                 _socketIo.CloseAsync();
             };
-            _socketIo.On(Event, args =>
+            foreach (var s in Event)
             {
-                try
+                _socketIo.On(s, args =>
                 {
-                    _plugin.Logger.WriteLine("Message: " + args.Text);
-                    OnSocketMessage(args.Text);
-                }
-                catch (Exception e)
-                {
-                    _plugin.Logger.WriteLine(e);
-                }
-            });
+                    try
+                    {
+                        _plugin.Logger.WriteLine("Event: " + s + ", Message: " + args.Text);
+                        OnSocketMessage(s, args.Text);
+                    }
+                    catch (Exception e)
+                    {
+                        _plugin.Logger.WriteLine(e);
+                    }
+                });
+            }
             _running = true;
             Connect();
         }
 
-        protected abstract void OnSocketMessage(string text);
+        protected abstract void OnSocketMessage(string s, string text);
 
         private async void OnSocketClosed(ServerCloseReason reason)
         {

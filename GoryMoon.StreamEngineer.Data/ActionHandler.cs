@@ -119,5 +119,8 @@ namespace GoryMoon.StreamEngineer.Data
 
         // Twitch sub tier
         public int Tier;
+        
+        // Twitch channel points
+        public string Id;
     }
 }

@@ -16,5 +16,6 @@
         MixerSubscription,
         MixerHost,
         TwitchExtension,
+        TwitchChannelPoints,
     }
 }
