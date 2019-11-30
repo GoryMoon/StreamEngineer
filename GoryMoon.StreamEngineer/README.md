@@ -44,6 +44,7 @@ To edit the events open the `events.json`, can be done while game is running.
 |        `"random"`        | Runs a random provided action                                                                  | `"actions": []"`, example down below                      |
 |       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed, distance, countdown": "number" or "event", "space_speed, space_distance, space_countdown": "number" or "event",  "hostile": true or false, ` |
 |      `"give_item"`       | Gives the defined item/items to the player, IDs are below                                      | `"items": [{"id": "ID", "amount": "number" or " event"}]` |
+|   `"inventory_bomb"`     | Drops all item in the players inventory                                                        |                                                           |
 |     `"spawn_drone"`      | Spawns a random drone or a specified one                                                       | `"drone": "id of drone"`, optional, find id below         |
 |         `"snap"`         | Does the Thanos Snap, WARNING! Can be very destructive, can set snap check percentage          | `"vehicle": true or false`, does a snap on all cubes, `"vehicle_percentage": 0.5`, `"player_percentage": 0.5` |
 
