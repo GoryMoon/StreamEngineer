@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
 using Sandbox.Game.Entities;
+using Sandbox.Game.EntityComponents;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
@@ -13,33 +14,36 @@ namespace GoryMoon.StreamEngineer.Actions
             SessionHandler.EnqueueAction(() =>
             {
                 var player = Utils.GetPlayer();
-                if (player != null)
+                if (player == null) return;
+                var character = player.Character;
+                var controlledEntity = player.Controller.ControlledEntity;
+
+                if (controlledEntity is MyShipController controller)
                 {
-                    var controlledEntity = player.Controller.ControlledEntity;
-
-                    if (controlledEntity is MyShipController controller)
-                    {
-                        var eventValue = GetEventValue(Amount, -1, parameters);
-                        var lower = Math.Abs(eventValue - (-1)) < Double.Epsilon;
+                    var eventValue = GetEventValue(Amount, -1, parameters);
+                    var lower = Math.Abs(eventValue - (-1)) < Double.Epsilon;
                         
-                        var blocks = controller.CubeGrid.GetFatBlocks<MyBatteryBlock>();
-                        foreach (var block in blocks)
+                    var blocks = controller.CubeGrid.GetFatBlocks<MyBatteryBlock>();
+                    foreach (var block in blocks)
+                    {
+                        if (lower)
                         {
-                            if (lower)
-                            {
-                                var change = block.CurrentStoredPower - eventValue;
-                                block.CurrentStoredPower = (float) Math.Max(0.0, block.CurrentStoredPower - eventValue);
-                                if (change >= 0) return;
+                            var change = block.CurrentStoredPower - eventValue;
+                            block.CurrentStoredPower = (float) Math.Max(0.0, block.CurrentStoredPower - eventValue);
+                            if (change >= 0) return;
 
-                                eventValue -= block.CurrentStoredPower;
-                            }
-                            else
-                            {
-                                block.CurrentStoredPower = 0;
-                            }
+                            eventValue -= block.CurrentStoredPower;
                         }
+                        else
+                        {
+                            block.CurrentStoredPower = 0;
+                        }
+                        controller.CubeGrid.SetCubeDirty(block.Position);
                     }
                 }
+                    
+                character.SuitBattery.ResourceSource.SetRemainingCapacityByType(
+                    MyResourceDistributorComponent.ElectricityId, 2E-07F); // 2% left
             });
         }
     }

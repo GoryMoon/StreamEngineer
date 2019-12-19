@@ -10,8 +10,8 @@ namespace GoryMoon.StreamEngineer.Actions
             SessionHandler.EnqueueAction(() =>
             {
                 var player = Utils.GetPlayer();
-                var controlledEntity = player?.Controller.ControlledEntity;
-                controlledEntity?.SwitchHelmet();
+                if (player == null) return;
+                ActionHelper.SetHelmet(ActionHelper.ActionEnum.Toggle, player.Id.SteamId);
             });
         }
     }

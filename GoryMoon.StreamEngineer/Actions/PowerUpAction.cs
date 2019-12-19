@@ -17,19 +17,19 @@ namespace GoryMoon.StreamEngineer.Actions
             SessionHandler.EnqueueAction(() =>
             {
                 var player = Utils.GetPlayer();
-                if (player != null)
-                {
-                    var controlledEntity = player.Controller.ControlledEntity;
+                if (player == null) return;
+                var controlledEntity = player.Controller.ControlledEntity;
 
-                    if (controlledEntity is MyShipController controller)
+                if (controlledEntity is MyShipController controller)
+                {
+                    var blocks = controller.CubeGrid.GetFatBlocks<MyBatteryBlock>();
+                    foreach (var block in blocks)
                     {
-                        var blocks = controller.CubeGrid.GetFatBlocks<MyBatteryBlock>();
-                        foreach (var block in blocks)
-                        {
-                            block.CurrentStoredPower = block.MaxStoredPower;
-                        }
+                        block.CurrentStoredPower = block.MaxStoredPower;
                     }
                 }
+                player.Character.SuitBattery.ResourceSource.SetRemainingCapacityByType(
+                    MyResourceDistributorComponent.ElectricityId, 1E-05f);
             });
         }
     }

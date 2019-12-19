@@ -127,6 +127,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionNotification.cs" />
+    <Compile Include="Actions\ActionHelper.cs" />
+    <Compile Include="Actions\ChargeJumpDriveAction.cs" />
     <Compile Include="Actions\DataHandler.cs" />
     <Compile Include="Actions\DisableDampenersAction.cs" />
     <Compile Include="Actions\DisableHelmetAction.cs" />
@@ -143,6 +145,7 @@
     <Compile Include="Actions\EnablePowerAction.cs" />
     <Compile Include="Actions\SnapAction.cs" />
     <Compile Include="Actions\SpawnDroneAction.cs" />
+    <Compile Include="Actions\StartJumpDriveAction.cs" />
     <Compile Include="Actions\ToggleHelmetAction.cs" />
     <Compile Include="Actions\TogglePowerAction.cs" />
     <Compile Include="Actions\PowerUpAction.cs" />

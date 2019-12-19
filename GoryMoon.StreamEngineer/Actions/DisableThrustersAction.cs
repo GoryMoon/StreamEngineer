@@ -12,7 +12,7 @@ namespace GoryMoon.StreamEngineer.Actions
             {
                 var player = Utils.GetPlayer();
                 if (player == null) return;
-                var controlledEntity = player?.Controller.ControlledEntity;
+                var controlledEntity = player.Controller.ControlledEntity;
 
                 if (controlledEntity is MyShipController controller)
                 {
@@ -24,11 +24,7 @@ namespace GoryMoon.StreamEngineer.Actions
                 }
                 else
                 {
-                    var thrusts = controlledEntity?.EnabledThrusts;
-                    if (thrusts.HasValue && thrusts.Value)
-                    {
-                        controlledEntity?.SwitchThrusts();
-                    }
+                    ActionHelper.SetThrusters(ActionHelper.ActionEnum.Disable, player.Id.SteamId);
                 }
             });
         }

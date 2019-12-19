@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GoryMoon.StreamEngineer.Data;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Sandbox.Game.Entities;
 using VRage.Game.ModAPI;
 using VRageMath;
@@ -40,8 +38,6 @@ namespace GoryMoon.StreamEngineer.Actions
                         }
                     }
 
-                    Plugin.Static.Logger.WriteLine($"PlayerPercentage: {PlayerPercentage}");
-                    Plugin.Static.Logger.WriteLine($"PlayerPercentage: {VehiclePercentage}");
                     if (_random.NextDouble() < PlayerPercentage)
                     {
                         player.Character.Kill(true, new MyDamageInformation());

@@ -3,8 +3,6 @@ using System.Linq;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
 using Newtonsoft.Json.Linq;
-using Sandbox.Engine.Multiplayer;
-using Sandbox.Game.Gui;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
@@ -42,12 +40,16 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler.AddAction("disable_helmet", typeof(DisableHelmetAction));
 
             _actionHandler.AddAction("fulfill_buildplanner", typeof(FulfillBuildPlannerAction));
+            _actionHandler.AddAction("give_item", typeof(GiveItemAction));
+            _actionHandler.AddAction("inventory_bomb", typeof(InventoryBombAction));
+            
             _actionHandler.AddAction("random", typeof(RandomAction));
             _actionHandler.AddAction("warhead", typeof(WarheadAction));
-            _actionHandler.AddAction("give_item", typeof(GiveItemAction));
             _actionHandler.AddAction("spawn_drone", typeof(SpawnDroneAction));
-            _actionHandler.AddAction("inventory_bomb", typeof(InventoryBombAction));
             _actionHandler.AddAction("snap", typeof(SnapAction));
+            
+            _actionHandler.AddAction("charge_jump_drive", typeof(ChargeJumpDriveAction));
+            //_actionHandler.AddAction("start_jump_drive", typeof(StartJumpDriveAction));
             _actionHandler.StartWatching();
         }
         public override void Dispose()

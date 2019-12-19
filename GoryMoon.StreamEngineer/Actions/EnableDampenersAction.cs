@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
-using Sandbox.Game.Entities;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
@@ -11,15 +10,8 @@ namespace GoryMoon.StreamEngineer.Actions
             SessionHandler.EnqueueAction(() =>
             {
                 var player = Utils.GetPlayer();
-                if (player != null)
-                {
-                    var controlledEntity = player.Controller.ControlledEntity;
-
-                    if (!controlledEntity.EnabledDamping)
-                    {
-                        controlledEntity.SwitchDamping();
-                    }
-                }
+                if (player == null) return;
+                ActionHelper.SetDampener(ActionHelper.ActionEnum.Enable, player.Id.SteamId);
             });
         }
     }

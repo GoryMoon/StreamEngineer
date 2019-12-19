@@ -29,8 +29,8 @@ To edit the events open the `events.json`, can be done while game is running.
 |     `"disable_power"`    | Turns off the power of the current vehicle                                                     |                                                           |
 |     `"toggle_power"`     | Toggles the power of the current vehicle                                                       |                                                           |
 |        `"refill"`        | Refills health, O2, H2 and energy                                                              |                                                           |
-|       `"power_up"`       | Refills the batteries in the current vehicle                                                   |                                                           |
-|      `"power_down"`      | Empties the batteries in the current vehicle                                                   | `"amount": -1` empties, other values removes, in MWh      |
+|       `"power_up"`       | Refills the batteries in the current vehicle and player                                        |                                                           |
+|      `"power_down"`      | Empties the batteries in the current vehicle and player                                        | `"amount": -1` empties, other values removes, in MWh      |
 |   `"toggle_dampeners"`   | Toggles the dampeners                                                                          |                                                           |
 |   `"enable_dampeners"`   | Turns the dampeners on                                                                         |                                                           |
 |   `"disable_dampeners"`  | Turns the dampeners off                                                                        |                                                           |
@@ -47,6 +47,7 @@ To edit the events open the `events.json`, can be done while game is running.
 |   `"inventory_bomb"`     | Drops all item in the players inventory                                                        |                                                           |
 |     `"spawn_drone"`      | Spawns a random drone or a specified one                                                       | `"drone": "id of drone"`, optional, find id below         |
 |         `"snap"`         | Does the Thanos Snap, WARNING! Can be very destructive, can set snap check percentage          | `"vehicle": true or false`, does a snap on all cubes, `"vehicle_percentage": 0.5`, `"player_percentage": 0.5` |
+|  `"charge_jump_drive"`   | Fully charges all jump drives in the current vehicle                                           |                                                           |
 
 `event` can be used on supported parameters to use the amount data from the event. 
 For example the amount of months a user have subscribed.

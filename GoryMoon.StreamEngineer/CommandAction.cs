@@ -21,17 +21,16 @@ namespace GoryMoon.StreamEngineer
             if (args != null)
             {
                 var type = args.Length > 0 ? args[0] : null;
-                var amount = args.Length > 1 ? args[1] : null;
-                var data = args.Length > 2 ? string.Join(" ", args.Skip(2)):null;
+                var data = args.Length > 1 ? string.Join(" ", args.Skip(1)):null;
                 
-                MyMultiplayer.RaiseStaticEvent(x => Action, type, data, amount, new EndpointId(), new Vector3D?());
+                MyMultiplayer.RaiseStaticEvent(x => Action, type, data, new EndpointId(), new Vector3D?());
             }
         }
 
         [Event(null, 214)]
         [Reliable]
         [Server]
-        public static void Action(string action, [Nullable] string data, [Nullable] string amount)
+        public static void Action(string action, [Nullable] string data)
         {
             if (MySession.Static.GetUserPromoteLevel(MyEventContext.Current.Sender.Value) < MyPromoteLevel.Admin)
             {
@@ -48,7 +47,7 @@ namespace GoryMoon.StreamEngineer
                             new Data.Data
                             {
                                 Type = EventType.TwitchExtension,
-                                Amount = amount != null ? int.Parse(amount) : 100
+                                Amount = 1
                             });
                     }
                     catch (Exception e)
@@ -62,7 +61,7 @@ namespace GoryMoon.StreamEngineer
 
         public string CommandText => "/action";
 
-        public string HelpText => "Runs an action. Usage: '/action <type> <amount> <json data>'";
+        public string HelpText => "Runs an action. Usage: '/action <type> <json data>'";
         public string HelpSimpleText => "Runs an action.";
         
         public MyPromoteLevel VisibleTo => MyPromoteLevel.Admin;

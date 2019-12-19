@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
@@ -44,8 +43,6 @@ namespace GoryMoon.StreamEngineer
             Configuration.PluginConfig.Init(path);
             
             Logger = new Logger();
-            Logger.WriteLine(Assembly.GetExecutingAssembly().Location);
-            Logger.WriteLine(path);
             DataHandler = new DataHandler(path, this);
             _streamlabsData = new StreamlabsData(DataHandler, this);
             _twitchExtensionData = new TwitchExtensionData(DataHandler, this);

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
-using Sandbox.Game.Entities;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
@@ -11,14 +10,8 @@ namespace GoryMoon.StreamEngineer.Actions
             SessionHandler.EnqueueAction(() =>
             {
                 var player = Utils.GetPlayer();
-                if (player != null)
-                {
-                    var isUsing = player.Character.IsUsing;
-                    if (isUsing is MyShipController shipController )
-                    {
-                        shipController.SwitchReactors();
-                    }
-                }
+                if (player == null) return;
+                ActionHelper.SetPower(ActionHelper.ActionEnum.Toggle, player.Id.SteamId);
             });
         }
     }
