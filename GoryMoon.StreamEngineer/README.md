@@ -86,7 +86,7 @@ Only affect when a specific channel point reward is run, get the id from https:/
 ```json
 {
   "type": "twitch_channel_points",
-  "id": "e6149787-6bcc-4bbc-bdd9-c360de68c956"
+  "channel_point_id": "e6149787-6bcc-4bbc-bdd9-c360de68c956"
 }
 ```
 
