@@ -1,4 +1,6 @@
 ﻿# StreamEngineer
+ 
+### [Downloads](https://github.com/GoryMoon/StreamEngineer/releases)
 
 To get started using this plugin you need to add the path to the launch options of Space Engineers.
 
