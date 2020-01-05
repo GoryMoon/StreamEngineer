@@ -4,6 +4,7 @@ using GoryMoon.StreamEngineer.Data;
 using Newtonsoft.Json.Linq;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
+using Sandbox.Engine.Platform;
 using Sandbox.Game.GameSystems.Chat;
 using Sandbox.Game.World;
 using VRage.Game.ModAPI;
@@ -18,12 +19,48 @@ namespace GoryMoon.StreamEngineer
     {
         public void Handle(string[] args)
         {
-            if (args != null)
+            if (args != null && args.Length >= 1)
             {
-                var type = args.Length > 0 ? args[0] : null;
-                var data = args.Length > 1 ? string.Join(" ", args.Skip(1)):null;
-                
-                MyMultiplayer.RaiseStaticEvent(x => Action, type, data, new EndpointId(), new Vector3D?());
+                if (args[0] == "clear")
+                {
+                    if (Game.IsDedicated)
+                    {
+                        MyMultiplayer.RaiseStaticEvent(x => Clear);
+                    }
+                    else
+                    {
+                        Clear();
+                    }
+                }
+                else if (args[0] == "action")
+                {
+                    var type = args.Length > 1 ? args[1] : null;
+                    var data = args.Length > 2 ? string.Join(" ", args.Skip(2)) : null;
+
+                    if (Game.IsDedicated)
+                    {
+                        MyMultiplayer.RaiseStaticEvent(x => Action, type, data, new EndpointId(), new Vector3D?());
+                    }
+                    else
+                    {
+                        Action(type, data);
+                    }
+                }
+            }
+        }
+
+        [Event(null, 213)]
+        [Reliable]
+        [Server]
+        public static void Clear()
+        {
+            if (MySession.Static.GetUserPromoteLevel(MyEventContext.Current.Sender.Value) < MyPromoteLevel.Admin)
+            {
+                MyEventContext.ValidationFailed();
+            }
+            else
+            {
+                ActionNotification.Clear();
             }
         }
 
@@ -38,7 +75,7 @@ namespace GoryMoon.StreamEngineer
             }
             else
             {
-                MySandboxGame.Log.WriteLineAndConsole("Executing /action command");
+                MySandboxGame.Log.WriteLineAndConsole("Executing /se action command: " + action);
                 if (action != null)
                 {
                     try
@@ -59,9 +96,9 @@ namespace GoryMoon.StreamEngineer
             }
         }
 
-        public string CommandText => "/action";
+        public string CommandText => "/se";
 
-        public string HelpText => "Runs an action. Usage: '/action <type> <json data>'";
+        public string HelpText => "Runs an action. Usage: '/se clear' or '/se action <type> <json data>'";
         public string HelpSimpleText => "Runs an action.";
         
         public MyPromoteLevel VisibleTo => MyPromoteLevel.Admin;

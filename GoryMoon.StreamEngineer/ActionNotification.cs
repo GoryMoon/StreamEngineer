@@ -44,7 +44,26 @@ namespace GoryMoon.StreamEngineer
                 {
                     AddActionMessage(message, color, sound);
                 }
-                MyMultiplayer.RaiseStaticEvent(x => AddActionMessage, message, color, sound, new EndpointId(), new Vector3D?());
+                else
+                {
+                    MyMultiplayer.RaiseStaticEvent(x => AddActionMessage, message, color, sound, new EndpointId(),
+                        new Vector3D?());
+                }
+            }
+        }
+
+        public static void Clear()
+        {
+            if (Sync.IsServer)
+            {
+                if (!Game.IsDedicated)
+                {
+                    ClearMessages();
+                }
+                else
+                {
+                    MyMultiplayer.RaiseStaticEvent(x => ClearMessages, new EndpointId(), new Vector3D?());
+                }
             }
         }
 
@@ -88,6 +107,11 @@ namespace GoryMoon.StreamEngineer
         {
             MessageQueue.Enqueue(new Message()
                 {Text = new StringBuilder(message), Color = color ?? Color.PaleGoldenrod, Sound = sound});
+        }
+
+        private static void ClearMessages()
+        {
+            MessageQueue.Clear();
         }
         
         private struct Message
