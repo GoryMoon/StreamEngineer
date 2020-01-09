@@ -85,7 +85,7 @@ Only affect tier 3 twitch subscriptions
 }
 ```
 
-Only affect when a specific channel point reward is run, get the id from https://seapi.gorymoon.se/dashboard/chat
+Only affect when a specific channel point reward is run, get the id from https://smapi.gorymoon.se/dashboard/chat
 ```json
 {
   "type": "twitch_channel_points",
