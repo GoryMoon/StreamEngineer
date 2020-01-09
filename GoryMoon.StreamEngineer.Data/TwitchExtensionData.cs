@@ -13,7 +13,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         protected override string[] Event => new []{"action", "cp_action"};
         protected override string Name => "Twitch Extension";
-        protected override string Url => "wss://giapi.gorymoon.se/v2";
+        protected override string Url => "wss://smapi.gorymoon.se/v2";
 
         public void Init(string token, string game = "spaceengineers")
         {

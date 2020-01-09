@@ -44,6 +44,7 @@ To edit the events open the `events.json`, can be done while game is running.
 |    `"disable_helmet"`    | Turns closes the helmet                                                                        |                                                           |
 | `"fulfill_buildplanner"` | Gives the player all items that fit from the current build planner                             |                                                           |
 |        `"random"`        | Runs a random provided action                                                                  | `"actions": []"`, example down below                      |
+|        `"multi"`         | Runs multiple actions                                                                          | `"actions": []"`, same as random ignoring the weight param |
 |       `"warhead"`        | Spawns a warhead above the player at a given range, speed and countdown                        | `"speed, distance, countdown": "number" or "event", "space_speed, space_distance, space_countdown": "number" or "event",  "hostile": true or false, ` |
 |      `"give_item"`       | Gives the defined item/items to the player, IDs are below                                      | `"items": [{"id": "ID", "amount": "number" or " event"}]` |
 |   `"inventory_bomb"`     | Drops all item in the players inventory                                                        |                                                           |

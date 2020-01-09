@@ -140,6 +140,7 @@
     <Compile Include="Actions\GiveItemAction.cs" />
     <Compile Include="Actions\InventoryBombAction.cs" />
     <Compile Include="Actions\MeteorAction.cs" />
+    <Compile Include="Actions\MultiActions.cs" />
     <Compile Include="Actions\PowerDownAction.cs" />
     <Compile Include="Actions\DisablePowerAction.cs" />
     <Compile Include="Actions\EnablePowerAction.cs" />

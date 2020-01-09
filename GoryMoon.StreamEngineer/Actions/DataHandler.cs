@@ -43,6 +43,7 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler.AddAction("give_item", typeof(GiveItemAction));
             _actionHandler.AddAction("inventory_bomb", typeof(InventoryBombAction));
             
+            _actionHandler.AddAction("multi", typeof(MultiActions));
             _actionHandler.AddAction("random", typeof(RandomAction));
             _actionHandler.AddAction("warhead", typeof(WarheadAction));
             _actionHandler.AddAction("spawn_drone", typeof(SpawnDroneAction));
