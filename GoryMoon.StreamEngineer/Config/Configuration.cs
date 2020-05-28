@@ -31,7 +31,6 @@ namespace GoryMoon.StreamEngineer.Config
         public class PluginConfig
         {
             [TomlComment("Shows a popup when the game start to inform about this file, auto sets to false")]
-            [TomlIgnore]
             public bool ShowMenuPopup { get; set; } = true;
 
             [TomlComment("Display name of your steam account so actions know what player to target")]

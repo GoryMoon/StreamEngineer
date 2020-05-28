@@ -38,7 +38,9 @@
       <HintPath>..\packages\Antlr4.Runtime.4.6.6\lib\net45\Antlr4.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NCalc2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\NCalc2.2.1.0\lib\net46\NCalc2.dll</HintPath>
       <Private>True</Private>

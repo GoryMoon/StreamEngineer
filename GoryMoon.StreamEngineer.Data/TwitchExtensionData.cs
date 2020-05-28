@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.WebSockets;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using SocketIOClient;
 
 namespace GoryMoon.StreamEngineer.Data
 {

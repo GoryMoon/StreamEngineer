@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
-using Harmony;
+using HarmonyLib;
 using Sandbox.Common.ObjectBuilders;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
@@ -41,8 +41,8 @@ namespace GoryMoon.StreamEngineer.Actions
                     up.Normalize();
                     var definitionBase = (MyRadioAntennaDefinition) MyDefinitionManager.Static.GetCubeBlockDefinition(id);
                     var pos = player.GetPosition() + up * 50;
-                    MatrixD world = MatrixD.CreateWorld(pos, Vector3.Forward, Vector3.Up);
-                    Vector3 color = Color.Red.ColorToHSV();
+                    var world = MatrixD.CreateWorld(pos, Vector3.Forward, Vector3.Up);
+                    var color = Color.Red.ColorToHSV();
                     var pirateFaction = MySession.Static.Factions.TryGetFactionByTag("SPRT");
                     MyCubeBuilder.SpawnDynamicGrid(definitionBase, player.Character, world, color,
                         MyStringHash.NullOrEmpty,

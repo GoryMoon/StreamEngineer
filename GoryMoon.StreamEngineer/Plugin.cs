@@ -7,7 +7,7 @@ using System.Text;
 using GoryMoon.StreamEngineer.Actions;
 using GoryMoon.StreamEngineer.Config;
 using GoryMoon.StreamEngineer.Data;
-using Harmony;
+using HarmonyLib;
 using Sandbox.Game;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Graphics.GUI;
@@ -47,7 +47,7 @@ namespace GoryMoon.StreamEngineer
             _streamlabsData = new StreamlabsData(DataHandler, this);
             _twitchExtensionData = new TwitchExtensionData(DataHandler, this);
             
-            var harmony = HarmonyInstance.Create("se.gorymoon.streamengineer");
+            var harmony = new Harmony("se.gorymoon.streamengineer");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             Started = true;
@@ -89,10 +89,10 @@ namespace GoryMoon.StreamEngineer
         
         public void ScreenAdded(MyGuiScreenBase screenBase)
         {
-            if (false && screenBase.GetType() == MyPerGameSettings.GUI.MainMenu &&
+            if (screenBase.GetType() == MyPerGameSettings.GUI.MainMenu &&
                 Configuration.Plugin.Get(c => c.ShowMenuPopup))
             {
-                //Configuration.Config.Set(c => c.ShowMenuPopup, false);
+                Configuration.Plugin.Set(c => c.ShowMenuPopup, false);
                 MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(MyMessageBoxStyleEnum.Info,
                     MyMessageBoxButtonsType.OK,
                     new StringBuilder(
