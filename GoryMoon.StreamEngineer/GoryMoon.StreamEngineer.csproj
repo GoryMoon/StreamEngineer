@@ -35,23 +35,6 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.0.1.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Lib.Harmony.2.0.1\lib\net45\0Harmony.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="Nett, Version=0.15.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b">
-      <HintPath>..\packages\Nett.0.15.0\lib\net40\Nett.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Nett.Coma, Version=0.15.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b">
-      <HintPath>..\packages\Nett.Coma.0.15.0\lib\net40\Nett.Coma.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Sandbox.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>D:\SteamLibrary\SteamApps\common\SpaceEngineers\Bin64\Sandbox.Common.dll</HintPath>
       <Private>False</Private>
@@ -87,7 +70,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp">
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -190,9 +173,6 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Ideas.txt" />
     <Content Include="README.md" />
   </ItemGroup>
@@ -201,6 +181,12 @@
       <Project>{5efd72ad-909c-4e58-a0a5-b21bb670c04d}</Project>
       <Name>GoryMoon.StreamEngineer.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.0.2" />
+    <PackageReference Include="Nett" Version="0.15.0" />
+    <PackageReference Include="Nett.Coma" Version="0.15.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.  

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyCompany("GoryMoon")]
 [assembly: AssemblyProduct("StreamEngineer")]
-[assembly: AssemblyCopyright("Copyright © 2019 GoryMoon")]
+[assembly: AssemblyCopyright("Copyright © 2020 GoryMoon")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,4 +19,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("408CDB34-4005-41FB-841E-55F2DF726740")]
 
 
-[assembly: AssemblyVersion("1.18.*")]
+[assembly: AssemblyVersion("1.20.*")]
