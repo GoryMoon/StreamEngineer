@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -38,7 +39,8 @@ namespace GoryMoon.StreamEngineer.Data
         {
             _socketIo = new SocketIO(Url, new SocketIOOptions
             {
-                Query = parameters
+                Query = parameters,
+                EnabledSslProtocols = SslProtocols.Tls12
             });
             _socketIo.OnConnected += (sender, e) => _plugin.Logger.WriteLine($"Connected to {Name}");
             _socketIo.OnDisconnected += OnSocketClosed;
