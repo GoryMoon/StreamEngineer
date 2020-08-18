@@ -19,14 +19,13 @@ namespace GoryMoon.StreamEngineer.Data
             });
         }
 
-        protected override void OnSocketMessage(string s, string args)
+        protected override void OnSocketMessage(string s, JObject obj)
         {
-            var o = JObject.Parse(args);
-            var type = (string) o["type"];
-            var account = (string) o["for"];
+            var type = (string) obj["type"];
+            var account = (string) obj["for"];
 
-            if (!o.ContainsKey("message") || o["message"].Type != JTokenType.Array) return;
-            foreach (var message in o["message"])
+            if (!obj.ContainsKey("message") || obj["message"].Type != JTokenType.Array) return;
+            foreach (var message in obj["message"])
             {
                 var name = (string) message["name"];
                 switch (type)

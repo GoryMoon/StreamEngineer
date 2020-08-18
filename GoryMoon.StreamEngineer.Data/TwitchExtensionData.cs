@@ -20,16 +20,15 @@ namespace GoryMoon.StreamEngineer.Data
             });
         }
 
-        protected override void OnSocketMessage(string s, string args)
+        protected override void OnSocketMessage(string s, JObject obj)
         {
-            var data = JObject.Parse(args);
             switch (s)
             {
                 case "action":
-                    BaseDataHandler.OnTwitchExtension((string) data["user"], (int) data["bits"], (string) data["action"], data["settings"]);
+                    BaseDataHandler.OnTwitchExtension((string) obj["user"], (int) obj["bits"], (string) obj["action"], obj["settings"]);
                     break;
                 case "cp_action":
-                    BaseDataHandler.OnTwitchChannelPoints((string) data["user"], (string) data["id"]);
+                    BaseDataHandler.OnTwitchChannelPoints((string) obj["user"], (string) obj["id"]);
                     break;
             }
         }

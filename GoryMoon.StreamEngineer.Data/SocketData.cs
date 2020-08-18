@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SocketIOClient;
 
 namespace GoryMoon.StreamEngineer.Data
@@ -27,24 +29,24 @@ namespace GoryMoon.StreamEngineer.Data
         {
             if (_running)
             {
-                _socketIo?.CloseAsync();
+                _socketIo?.DisconnectAsync();
                 _running = false;
             }
         }
 
         protected void Init(Dictionary<string, string> parameters)
         {
-            _socketIo = new SocketIO(Url)
+            _socketIo = new SocketIO(Url, new SocketIOOptions
             {
-                Parameters = parameters
-            };
-            _socketIo.OnConnected += () => _plugin.Logger.WriteLine($"Connected to {Name}");
-            _socketIo.OnClosed += OnSocketClosed;
-            _socketIo.OnError += (args) =>
+                Query = parameters
+            });
+            _socketIo.OnConnected += (sender, e) => _plugin.Logger.WriteLine($"Connected to {Name}");
+            _socketIo.OnDisconnected += OnSocketClosed;
+            _socketIo.OnError += (sender, args) =>
             {
-                _plugin.ConnectionError(Name, args.Text);
-                _plugin.Logger.WriteLine(args.Text);
-                _socketIo.CloseAsync();
+                _plugin.ConnectionError(Name, args);
+                _plugin.Logger.WriteLine(args);
+                _socketIo.DisconnectAsync();
             };
             foreach (var s in Event)
             {
@@ -52,8 +54,9 @@ namespace GoryMoon.StreamEngineer.Data
                 {
                     try
                     {
-                        _plugin.Logger.WriteLine("Event: " + s + ", Message: " + args.Text);
-                        OnSocketMessage(s, args.Text);
+                        var jObject = args.GetValue<JObject>();
+                        _plugin.Logger.WriteLine("Event: " + s + ", Message: " + jObject.ToString(Formatting.None));
+                        OnSocketMessage(s, jObject);
                     }
                     catch (Exception e)
                     {
@@ -65,12 +68,12 @@ namespace GoryMoon.StreamEngineer.Data
             Connect();
         }
 
-        protected abstract void OnSocketMessage(string s, string text);
+        protected abstract void OnSocketMessage(string s, JObject obj);
 
-        private async void OnSocketClosed(ServerCloseReason reason)
+        private async void OnSocketClosed(object sender, string s)
         {
-            _plugin.Logger.WriteLine($"Closed {Name}: {reason}");
-            if (reason != ServerCloseReason.ClosedByClient)
+            _plugin.Logger.WriteLine($"Closed {Name}: {s}");
+            if (s != null)
             {
                 await Connect();
             }
@@ -90,6 +93,13 @@ namespace GoryMoon.StreamEngineer.Data
                     {
                         await _socketIo.ConnectAsync();
                         return;
+                    }
+                    catch (AggregateException err){
+                        foreach (var errInner in err.InnerExceptions) {
+                            _plugin.Logger.WriteLine(errInner.Message);
+                            _plugin.Logger.WriteLine(errInner.StackTrace);
+                        }
+                        await Task.Delay(2000); 
                     }
                     catch (Exception ex)
                     {
