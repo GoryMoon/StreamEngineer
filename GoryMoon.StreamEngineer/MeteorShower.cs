@@ -94,8 +94,7 @@ namespace GoryMoon.StreamEngineer
 
                     _mCurrentTarget = TargetList.ElementAt(MyUtils.GetRandomInt(TargetList.Count - 1));
                     MyMultiplayer.RaiseStaticEvent(
-                        x => UpdateShowerTarget, _mCurrentTarget, new EndpointId(),
-                        new Vector3D?());
+                        x => UpdateShowerTarget, _mCurrentTarget);
                     TargetList.Remove(_mCurrentTarget.Value);
                     _meteoroidCount = (int) (Math.Pow(_mCurrentTarget.Value.Radius, 2.0) * Math.PI / 6000.0);
                     _meteoroidCount /= MySession.Static.EnvironmentHostility == MyEnvironmentHostilityEnum.CATACLYSM ||
@@ -232,8 +231,7 @@ namespace GoryMoon.StreamEngineer
             {
                 _mWaveCounter = -1;
                 _mCurrentTarget = new BoundingSphereD?();
-                MyMultiplayer.RaiseStaticEvent(x => UpdateShowerTarget, _mCurrentTarget, new EndpointId(),
-                    new Vector3D?());
+                MyMultiplayer.RaiseStaticEvent(x => UpdateShowerTarget, _mCurrentTarget);
                 HudNotification.Static.UpdateAfterSimulation();
                 MySandboxGame.Log.WriteLine("Cleared current target");
             }
@@ -256,7 +254,7 @@ namespace GoryMoon.StreamEngineer
                 }
 
             var closestDistance = double.MaxValue;
-            BoundingSphereD closestTarget = BoundingSphereD.CreateInvalid();
+            var closestTarget = BoundingSphereD.CreateInvalid();
             while (list.Count > 0)
             {
                 var myCubeGrid1 = list[MyUtils.GetRandomInt(list.Count - 1)];
@@ -314,7 +312,7 @@ namespace GoryMoon.StreamEngineer
             _mDownVector = MyUtils.Normalize(Vector3.Cross(direction, _mRightVector));
         }
 
-        [Event(null, 567)]
+        [Event]
         [Reliable]
         [Broadcast]
         private static void UpdateShowerTarget([Serialize(MyObjectFlags.DefaultZero)] BoundingSphereD? target)

@@ -105,8 +105,7 @@ namespace GoryMoon.StreamEngineer
         [Broadcast]
         private static void AddActionMessage(string message, [Nullable] Color? color, string sound)
         {
-            MessageQueue.Enqueue(new Message()
-                {Text = new StringBuilder(message), Color = color ?? Color.PaleGoldenrod, Sound = sound});
+            MessageQueue.Enqueue(new Message {Text = message, Color = color ?? Color.PaleGoldenrod, Sound = sound});
         }
 
         private static void ClearMessages()
@@ -116,7 +115,7 @@ namespace GoryMoon.StreamEngineer
         
         private struct Message
         {
-            public StringBuilder Text;
+            public string Text;
             public Color Color;
             public string Sound;
         }

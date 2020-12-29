@@ -40,7 +40,7 @@ namespace GoryMoon.StreamEngineer.Data
             _socketIo = new SocketIO(Url, new SocketIOOptions
             {
                 Query = parameters,
-                EnabledSslProtocols = SslProtocols.Tls12
+                EnabledSslProtocols = (SslProtocols)12288 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls
             });
             _socketIo.OnConnected += (sender, e) => _plugin.Logger.WriteLine($"Connected to {Name}");
             _socketIo.OnDisconnected += OnSocketClosed;

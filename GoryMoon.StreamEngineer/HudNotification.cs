@@ -16,7 +16,7 @@ namespace GoryMoon.StreamEngineer
     public class HudNotification : MySessionComponentBase
     {
         private static readonly int FRAMES_BETWEEN_UPDATE = 30;
-        private static readonly List<MyGuiSounds> M_SOUND_QUEUE = new List<MyGuiSounds>();
+        private static readonly List<MyGuiSounds> MSoundQueue = new List<MyGuiSounds>();
         private static int _mLastSoundPlayed;
         private static IMySourceVoice _mSound;
 
@@ -51,7 +51,7 @@ namespace GoryMoon.StreamEngineer
             }
             else
             {
-                M_SOUND_QUEUE.Add(sound);
+                MSoundQueue.Add(sound);
             }
         }
 
@@ -66,7 +66,7 @@ namespace GoryMoon.StreamEngineer
 
             if (!MeteorShower.CurrentTarget.HasValue || MySession.Static.ControlledEntity == null)
             {
-                M_SOUND_QUEUE.Clear();
+                MSoundQueue.Clear();
                 MyHud.Notifications.Remove(_notification);
                 _mWarningState = WarningState.NotStarted;
                 return;
@@ -98,17 +98,17 @@ namespace GoryMoon.StreamEngineer
             }
             else
             {
-                M_SOUND_QUEUE.Clear();
+                MSoundQueue.Clear();
                 MyHud.Notifications.Remove(_notification);
                 _mWarningState = WarningState.NotStarted;
             }
 
 
-            if (M_SOUND_QUEUE.Count <= 0 || MySandboxGame.TotalGamePlayTimeInMilliseconds - _mLastSoundPlayed <= 5000)
+            if (MSoundQueue.Count <= 0 || MySandboxGame.TotalGamePlayTimeInMilliseconds - _mLastSoundPlayed <= 5000)
                 return;
             _mLastSoundPlayed = MySandboxGame.TotalGamePlayTimeInMilliseconds;
-            _mSound = MyGuiAudio.PlaySound(M_SOUND_QUEUE[0]);
-            M_SOUND_QUEUE.RemoveAt(0);
+            _mSound = MyGuiAudio.PlaySound(MSoundQueue[0]);
+            MSoundQueue.RemoveAt(0);
         }
 
         private enum WarningState
