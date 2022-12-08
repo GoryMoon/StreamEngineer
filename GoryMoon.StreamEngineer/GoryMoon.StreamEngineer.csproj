@@ -186,7 +186,7 @@
     <PackageReference Include="Lib.Harmony" Version="2.0.4" />
     <PackageReference Include="Nett" Version="0.15.0" />
     <PackageReference Include="Nett.Coma" Version="0.15.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.  
