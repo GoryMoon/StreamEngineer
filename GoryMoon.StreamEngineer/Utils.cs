@@ -12,6 +12,7 @@ using VRage;
 using VRage.Game;
 using VRage.ObjectBuilders;
 using VRageMath;
+using Game = Sandbox.Engine.Platform.Game;
 
 namespace GoryMoon.StreamEngineer
 {
@@ -20,7 +21,10 @@ namespace GoryMoon.StreamEngineer
 
         public static MyPlayer GetPlayer()
         {
-            return MySession.Static.Players.GetPlayerByName(Configuration.Plugin.Get(c => c.SteamName));
+            if (Game.IsDedicated)
+                return MySession.Static.Players.GetPlayerByName(Configuration.Plugin.Get(c => c.SteamName));
+
+            return MySession.Static.LocalHumanPlayer;
         }
 
         public static bool IsInSpace(Vector3D pos)
@@ -84,10 +88,14 @@ namespace GoryMoon.StreamEngineer
             return remaining;
         }
 
-        public static void SendChat(string msg)
+        public static void SendChat(string msg, bool fromQueue = false)
         {
             if (!MySandboxGame.IsGameReady)
+            {
+                if (!fromQueue)
+                    Plugin.EnqueueMessage(msg, true);
                 return;
+            }
             if (MyMultiplayer.Static != null)
                 MyMultiplayer.Static.SendChatMessage(msg, ChatChannel.GlobalScripted, 0,
                 "[StreamEngineer]");
@@ -99,11 +107,13 @@ namespace GoryMoon.StreamEngineer
         {
             return inputString.Aggregate(string.Empty, (result, next) =>
             {
-                if (char.IsUpper(next) && result.Length > 0)
-                {
+                if ((char.IsUpper(next) || next == '_') && result.Length > 0) 
                     result += ' ';
-                }
-                return result + (next == '_' ? ' ': next);
+
+                if (next != '_')
+                    result += next;
+
+                return result;
             });
         }
     }

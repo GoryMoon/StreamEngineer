@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json;
 using Sandbox.Game.Entities;
 using Sandbox.Game.EntityComponents;
 
@@ -8,6 +9,9 @@ namespace GoryMoon.StreamEngineer.Actions
 {
     public class PowerDownAction: BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "power_down";
+        
         public string Amount { get; set; }
         public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {

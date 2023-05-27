@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoryMoon.StreamEngineer.Config;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Engine.Physics;

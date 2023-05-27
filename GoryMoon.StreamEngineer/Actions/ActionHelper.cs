@@ -1,5 +1,6 @@
 ﻿using System;
 using Sandbox.Engine.Multiplayer;
+using Sandbox.Engine.Platform;
 using Sandbox.ModAPI;
 using VRage.Network;
 
@@ -18,7 +19,7 @@ namespace GoryMoon.StreamEngineer.Actions
 
         private static void Call(Action<ActionEnum> action, ActionEnum actionEnum, ulong id)
         {
-            if (!Sandbox.Engine.Platform.Game.IsDedicated)
+            if (!Game.IsDedicated)
             {
                 action.Invoke(actionEnum);
             }

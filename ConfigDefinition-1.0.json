@@ -1,0 +1,242 @@
+﻿{
+    "definitions": {
+        "meteors": {
+            "params": {
+                "radius": {
+                    "type": "decimal",
+                    "display": "Radius",
+                    "default": 1,
+                    "step": 0.1,
+                    "min": 0,
+                    "description": "The distance around the player to spawn a meteor storm, 1.0 is vanilla",
+                    "required": true
+                },
+                "amount": {
+                    "type": "number",
+                    "display": "Amount",
+                    "default": 1,
+                    "min": 1,
+                    "description": "The amount of metor storms that will spawn",
+                    "required": true
+                }
+            },
+            "display": "Meteors",
+            "description": "Spawn meteor storms around the player"
+        },
+        "enable_power": {
+            "display": "Enable vehicle power",
+            "description": "Turns the power on in the current vehicle"
+        },
+        "disable_power": {
+            "display": "Disable vehicle power",
+            "description": "Toggles the power off in the current vehicle"
+        },
+        "toggle_power": {
+            "display": "Toggle vehicle power",
+            "description": "Toggles the power of the current vehicle"
+        },
+        "refill": {
+            "display": "Refill player",
+            "description": "Refills health, O2, H2 and energy on the player"
+        },
+        "power_up": {
+            "display": "Power up",
+            "description": "Refills the batteries in the current vehicle"
+        },
+        "power_down": {
+            "params": {
+                "amount": {
+                    "type": "number",
+                    "display": "Amount",
+                    "default": -1,
+                    "min": -1,
+                    "description": "The amount to remove from the vehicle in MWh, -1 removes all",
+                    "required": true
+                }
+            },
+            "display": "Power down",
+            "description": "Empties the batteries in the current vehicle"
+        },
+        "enable_dampeners": {
+            "display": "Enable dampeners",
+            "description": "Enables the dampeners of either vehicle or player"
+        },
+        "disable_dampeners": {
+            "display": "Disable dampeners",
+            "description": "Disables the dampeners of either vehicle or player"
+        },
+        "toggle_dampeners": {
+            "display": "Toggle dampeners",
+            "description": "Toggles the dampeners of either vehicle or player"
+        },
+        "enable_thrusters": {
+            "display": "Enable thrusters",
+            "description": "Enables the thrusters of either vehicle or player"
+        },
+        "disable_thrusters": {
+            "display": "Disable thrusters",
+            "description": "Disables the thrusters of either vehicle or player"
+        },
+        "toggle_thrusters": {
+            "display": "Toggle thrusters",
+            "description": "Toggles the thrusters of either vehicle or player"
+        },
+        "enable_helmet": {
+            "display": "Open helmet",
+            "description": "Opens the helmet of the player"
+        },
+        "disable_helmet": {
+            "display": "Close helmet",
+            "description": "Closes the helmet of the player"
+        },
+        "toggle_helmet": {
+            "display": "Toggle helmet",
+            "description": "Toggles the helmet of the player"
+        },
+        "fulfill_buildplanner": {
+            "display": "Fulfill buildplanner",
+            "description": "Gives the player all items that fit from the current build planner"
+        },
+        "warhead": {
+            "params": {
+                "hostile": {
+                    "display": "Hostile",
+                    "description": "If warhead should be owned by a hostile faction",
+                    "type": "boolean",
+                    "default": true,
+                    "required": true
+                },
+                "speed": {
+                    "display": "Speed (Planet)",
+                    "description": "The speed the warhead should move towards the player",
+                    "type": "decimal",
+                    "default": 5,
+                    "step": 0.1,
+                    "min": 0,
+                    "required": true
+                },
+                "distance": {
+                    "display": "Distance (Planet)",
+                    "description": "The distance above the player to spawn the warhead",
+                    "type": "decimal",
+                    "default": 100,
+                    "step": 0.1,
+                    "min": 0,
+                    "measurement": "m",
+                    "required": true
+                },
+                "countdown": {
+                    "display": "Countdown (Planet)",
+                    "description": "The time set on the warhead to explode",
+                    "type": "decimal",
+                    "default": 10,
+                    "step": 0.1,
+                    "min": 0,
+                    "measurement": "s",
+                    "required": true
+                },
+                "space_speed": {
+                    "display": "Speed (Space)",
+                    "description": "The speed the warhead should move towards the player (In Space)",
+                    "type": "decimal",
+                    "default": 5,
+                    "step": 0.1,
+                    "min": 0,
+                    "required": true
+                },
+                "space_distance": {
+                    "display": "Distance (Space)",
+                    "description": "The distance above the player to spawn the warhead (In Space)",
+                    "type": "decimal",
+                    "default": 100,
+                    "step": 0.1,
+                    "min": 0,
+                    "measurement": "m",
+                    "required": true
+                },
+                "space_countdown": {
+                    "display": "Countdown (Space)",
+                    "description": "The time set on the warhead to explode (In Space)",
+                    "type": "decimal",
+                    "default": 10,
+                    "step": 0.1,
+                    "min": 0,
+                    "measurement": "s",
+                    "required": true
+                }
+            },
+            "display": "Warhead",
+            "description": "Drop a warhead on the player"
+        },
+        "give_item": {
+            "params": {
+                "items": {
+                    "display": "Items",
+                    "description": "The items to spawn, check syntax on github",
+                    "type": "string_array",
+                    "default": [
+                        "{\"id\":\"Ore/Iron\", \"amount\":\"0.5\"}"
+                    ],
+                    "required": true
+                }
+            },
+            "display": "Give Item",
+            "description": "Give the player an item"
+        },
+        "spawn_drone": {
+            "params": {
+                "drone": {
+                    "display": "Drone Id",
+                    "description": "(Optional) Id of specific drone to spawn, see github",
+                    "type": "string",
+                    "default": ""
+                }
+            },
+            "display": "Spawn Drone",
+            "description": "Randomly spawns a drone near the player"
+        },
+        "snap": {
+            "params": {
+                "vehicle": {
+                    "display": "Destroy vehicle cubes",
+                    "description": "50/50 chance to destroy each cube, !WARNING! DESTRUCTIVE",
+                    "type": "boolean",
+                    "default": false,
+                    "required": true
+                },
+                "player_percentage": {
+                    "display": "Player Percentage Check",
+                    "description": "The check amount to kill player, 0.0 - 1.0",
+                    "type": "decimal",
+                    "min": 0,
+                    "max": 1,
+                    "step": 0.1,
+                    "default": 0.5,
+                    "measurement": "%",
+                    "required": true
+                },
+                "vehicle_percentage": {
+                    "display": "Vehicle Percentage Check",
+                    "description": "The check amount for each cube in vehicle, 0.0 - 1.0",
+                    "type": "decimal",
+                    "min": 0,
+                    "max": 1,
+                    "step": 0.1,
+                    "default": 0.5,
+                    "measurement": "%",
+                    "required": true
+                }
+            },
+            "display": "Snap!",
+            "description": "50/50 chance to do a snap on player"
+        },
+        "inventory_bomb": {
+            "display": "Inventory Bomb",
+            "description": "Drops all the players items"
+        },
+        "charge_jump_drive": {
+            "display": "Charge Jump Drive",
+            "description": "Fully charges the jump drive of the current vehicle"
+        }
+    }
+}

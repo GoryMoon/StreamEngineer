@@ -14,6 +14,12 @@ namespace GoryMoon.StreamEngineer.Config
             [TomlComment("Login to Streamlabs and go to this link: https://streamlabs.com/dashboard#/settings/api-settings")]
             [TomlComment("Click on 'API Tokens' and copy the 'Your Socket API Token' here")]
             public string StreamlabsToken { get; set; } = "";
+/*
+            [TomlComment("Login to StreamElements and go to this link: https://streamelements.com/dashboard/account/channels")]
+            [TomlComment("Click on 'Show secrets' and copy the 'JWT Token' here")]
+            public string StreamElementsToken { get; set; } = "";*/
+
+            public bool IntegrationAppEnabled { get; set; } = false;
             
             [TomlComment("Add the Stream Engineer extension to your channel and copy the token from the configuration page")]
             public string TwitchExtensionToken { get; set; } = "";
@@ -41,7 +47,7 @@ namespace GoryMoon.StreamEngineer.Config
             {
                 "Blue Drone MK1", "Blue Drone MK2", "Red Drone MK1", "Light patrol drone", "Escord Drone", "Vulture Drone",
                 "ProtectoBot", "Raider Drone", "Salvage Drone", "Seeker Mine", "Snub Fighter", "Stash-satellite",
-                "V2-Gunboat", "Hostile Miner", "Tusk", "DroneS 1GG_1", "DroneS 1GG_2", "DroneS 1GG_3",
+                "V2-Gunboat", "Hostile Miner", "Old Mining Drone", "Tusk", "DroneS 1GG_1", "DroneS 1GG_2", "DroneS 1GG_3",
                 "DroneS Drill.Warhead", "DroneS 2GG.1GT", "DroneS 1MT.2GG", "DroneS 2GG.1GT.1RL", "DroneS 2GG.2GT",
                 "DroneL 1RL.1GG.2IT", "BossDroneL 1RL.2GT.1MT.2IT"
             };
@@ -80,6 +86,9 @@ namespace GoryMoon.StreamEngineer.Config
 
                 [TomlComment("0:Name of sender, 1:Amount bits sent")]
                 public TwitchExtensionEvent TwitchExtension { get; set; } = new TwitchExtensionEvent();
+
+                [TomlComment("0:Name of sender, 1:The name of the action type")]
+                public SingleMessageEvent IntegrationAppAction { get; set; } = new SingleMessageEvent("{0} ran action: {1}", true);
                 
                 [TomlComment("0:Name of user")]
                 public SingleMessageEvent TwitchChannelPoints { get; set; } = new SingleMessageEvent("{0} ran action with channel points!", true);
@@ -91,18 +100,11 @@ namespace GoryMoon.StreamEngineer.Config
 
                 [TomlComment("0:Name of superchatter, 1:Formatted amount superchatted")]
                 public SingleMessageEvent YoutubeSuperchat { get; set; } = new SingleMessageEvent("{0} superchatted with {1}!");
-
-                public MixerSponsorEvent MixerSubscription { get; set; } = new MixerSponsorEvent();
-
-                [TomlComment("0:Name of follower")]
-                public SingleMessageEvent MixerFollowMessage { get; set; } = new SingleMessageEvent("{0} followed!");
-
-                [TomlComment("0:Name of user hosting, 1:Amount of viewers")]
-                public SingleMessageEvent MixerHostMessage { get; set; } = new SingleMessageEvent("{0} hosted with {1} viewers!");
             }
 
             public class SingleMessageEvent
             {
+                // ReSharper disable once UnusedMember.Global
                 public SingleMessageEvent()
                 {
                 }
@@ -138,6 +140,7 @@ namespace GoryMoon.StreamEngineer.Config
 
             public class TwitchExtensionEvent
             {
+                // ReSharper disable once EmptyConstructor
                 public TwitchExtensionEvent()
                 {
                 }
@@ -153,17 +156,6 @@ namespace GoryMoon.StreamEngineer.Config
 
                 [TomlComment("0:Name of sponsor, 1:Amount of months")]
                 public string ResubMessage { get; set; } = "{0} sponsored the channel for {1} months!";
-
-                [TomlComment("If an message should be sent event if no action is executed")]
-                public bool AlwaysSendMessage { get; set; } = false;
-            }
-
-            public class MixerSponsorEvent
-            {
-                [TomlComment("0:Name of subscriber")] public string NewMessage { get; set; } = "{0} subscribed to the channel!";
-
-                [TomlComment("0:Name of subscriber, 1:Amount of months")]
-                public string ResubMessage { get; set; } = "{0} subscribed for {1} months!";
 
                 [TomlComment("If an message should be sent event if no action is executed")]
                 public bool AlwaysSendMessage { get; set; } = false;

@@ -1,27 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NCalc2;
+using NCalc;
 using Newtonsoft.Json;
 
 namespace GoryMoon.StreamEngineer.Data
 {
     public abstract class BaseAction
     {
-        [JsonProperty] public string Message { get; set; } = "";
+        [JsonIgnore]
+        public static string TypeName => "none";
 
-        [JsonProperty] public List<Condition> Conditions { get; set; }
+        [JsonProperty]
+        public string Message { get; set; } = "";
+
+        [JsonProperty]
+        public List<Condition> Conditions { get; set; }
 
         public abstract void Execute(Data data, Dictionary<string, object> parameters);
 
         protected double GetEventValue(string property, double defaultVal, Dictionary<string, object> parameters)
         {
             if (property == null) return defaultVal;
-            var expression = new Expression(property) {Parameters = parameters};
+            var expression = new Expression(property) { Parameters = parameters };
             var result = expression.Evaluate();
             if (expression.HasErrors())
             {
-                ActionHandler.Logger.WriteLine("Expression error: " + expression.Error);
+                ActionHandler.Logger.WriteError("Expression error: " + expression.Error);
                 return defaultVal;
             }
 

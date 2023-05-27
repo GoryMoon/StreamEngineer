@@ -19,7 +19,7 @@ namespace GoryMoon.StreamEngineer.Data
         private readonly ILogger _logger;
 
         private readonly string _path;
-        private byte[] _lastEventsHash = new byte[0];
+        private byte[] _lastEventsHash = Array.Empty<byte>();
 
         private FileSystemWatcher _watcher;
 
@@ -30,7 +30,7 @@ namespace GoryMoon.StreamEngineer.Data
             _fileName = fileName;
             _logger = logger;
             _jsonSerializer = JsonSerializer.CreateDefault(new JsonSerializerSettings
-                {Context = new StreamingContext(StreamingContextStates.File, this)});
+                { Context = new StreamingContext(StreamingContextStates.File, this) });
         }
 
         public static ILogger Logger => _handler._logger;
@@ -64,9 +64,23 @@ namespace GoryMoon.StreamEngineer.Data
             ParseEvents();
         }
 
-        public void AddAction(string type, Type action)
+        public void AddAction(Type action, string type = null)
         {
-            _actionTypes.Add(type, action);
+            if (!typeof(BaseAction).IsAssignableFrom(action)) return;
+            
+            var typeString = type ?? action.GetProperty(nameof(BaseAction.TypeName))?.GetValue(null) as string;
+            if (typeString != null)
+                _actionTypes.Add(typeString, action);
+        }
+
+        public void PrintActionTypes()
+        {
+            _logger.WriteLine("==== Start Action Types ====");
+            foreach (var action in _actionTypes)
+            {
+                _logger.WriteLine($"{action.Key} -> {action.Value.Name}");
+            }
+            _logger.WriteLine("===== End Action Types =====");
         }
 
         private void ParseEvents()
@@ -80,7 +94,7 @@ namespace GoryMoon.StreamEngineer.Data
                 var actions = new List<BaseAction>();
                 foreach (var token in data.Children())
                 {
-                    var type = (string) token["type"];
+                    var type = (string)token["type"];
                     if (type != null && GetAction(type, token["action"], out var action)) actions.Add(action);
                 }
 
@@ -89,7 +103,7 @@ namespace GoryMoon.StreamEngineer.Data
             }
             catch (Exception e)
             {
-                _logger.WriteLine(e);
+                _logger.WriteError(e);
             }
         }
 
@@ -98,7 +112,7 @@ namespace GoryMoon.StreamEngineer.Data
             if (type != null && _actionTypes.TryGetValue(type, out var actionType))
                 if (data != null)
                 {
-                    action = (BaseAction) data.ToObject(actionType, _jsonSerializer);
+                    action = (BaseAction)data.ToObject(actionType, _jsonSerializer);
                     return true;
                 }
 
@@ -119,7 +133,7 @@ namespace GoryMoon.StreamEngineer.Data
 
         // Twitch sub tier
         public int Tier;
-        
+
         // Twitch channel points
         public string Id;
     }

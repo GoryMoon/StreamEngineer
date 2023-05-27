@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Engine.Platform.VideoMode;
 using Sandbox.Game.Entities;

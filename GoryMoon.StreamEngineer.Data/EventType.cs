@@ -12,10 +12,8 @@
         YoutubeSubscription,
         YoutubeSuperchat,
         YoutubeSponsor,
-        MixerFollow,
-        MixerSubscription,
-        MixerHost,
         TwitchExtension,
         TwitchChannelPoints,
+        IntegrationApp
     }
 }

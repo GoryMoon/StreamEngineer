@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json;
 using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.EntityComponents;
-using Sandbox.Game.GameSystems;
 using Sandbox.Game.World;
-using VRage.Game;
-using VRageMath;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
     public class RefillAction: BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "refill";
+        
         public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>

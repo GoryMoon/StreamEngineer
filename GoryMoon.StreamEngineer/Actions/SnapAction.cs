@@ -11,6 +11,9 @@ namespace GoryMoon.StreamEngineer.Actions
 {
     public class SnapAction: BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "snap";
+
         public bool Vehicle { get; set; } = true;
         
         [JsonProperty("vehicle_percentage")]
@@ -34,14 +37,16 @@ namespace GoryMoon.StreamEngineer.Actions
                         {
                             var grid = controller.CubeGrid;
                             grid.CubeBlocks.Where(block => _random.NextDouble() < VehiclePercentage).ToList()
-                                .ForEach(block => grid.RemoveBlock(block));
+                                .ForEach(block =>
+                                {
+                                    block.FatBlock?.OnDestroy();
+                                    grid.RemoveBlock(block, true);
+                                });
                         }
                     }
 
-                    if (_random.NextDouble() < PlayerPercentage)
-                    {
+                    if (_random.NextDouble() < PlayerPercentage) 
                         player.Character.Kill(true, new MyDamageInformation());
-                    }
                     ActionNotification.SendActionMessage("SNAP!", Color.Red, "ArcHudGPSNotification1");
                 }
             });

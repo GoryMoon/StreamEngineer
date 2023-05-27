@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json;
 using Sandbox.Game.Entities;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
     public class ChargeJumpDriveAction: BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "charge_jump_drive";
+
         public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>

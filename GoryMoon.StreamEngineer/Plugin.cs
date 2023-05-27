@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,38 +16,56 @@ using VRage.Plugins;
 
 namespace GoryMoon.StreamEngineer
 {
+    using ConfigGetter = Func<string>;
+
     public class Plugin : IPlugin, IDataPlugin
     {
         public static Plugin Static;
         public ILogger Logger { get; set; }
 
         public DataHandler DataHandler { get; private set; }
-        private StreamlabsData _streamlabsData;
-        private TwitchExtensionData _twitchExtensionData;
+        private List<(DataSource data, ConfigGetter token)> _connections;
 
         private static readonly ConcurrentQueue<Action> DeferredActions = new ConcurrentQueue<Action>();
-        private static readonly ConcurrentQueue<string> Messages = new ConcurrentQueue<string>();
+        private static readonly ConcurrentQueue<(string text, bool chat)> Messages = new ConcurrentQueue<(string text, bool chat)>();
         public static bool Started { get; private set; }
+
+        private void AddConnection(Type connectionType, ConfigGetter configGetter)
+        {
+            if (!typeof(DataSource).IsAssignableFrom(connectionType))
+            {
+                Logger.WriteError($"{connectionType.Name} is not a DataSource");
+                return;
+            }
+
+            var data = Activator.CreateInstance(connectionType, DataHandler, this);
+            if (data is DataSource socketData)
+                _connections.Add((socketData, configGetter));
+        }
 
         public void Dispose()
         {
             DataHandler.Dispose();
-            _streamlabsData.Dispose();
-            _twitchExtensionData.Dispose();
+            _connections.ForEach(tuple => tuple.data.Dispose());
         }
 
         public void Init(object gameInstance)
         {
             Static = this;
-            var path = Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(Assembly.GetExecutingAssembly().Location).Path));
+            Logger = new Logger();
+            
+            var path = Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(Assembly.GetExecutingAssembly().Location).Path)) + Path.DirectorySeparatorChar + "settings";
             Configuration.TokenConfig.Init(path);
             Configuration.PluginConfig.Init(path);
+
             
-            Logger = new Logger();
             DataHandler = new DataHandler(path, this);
-            _streamlabsData = new StreamlabsData(DataHandler, this);
-            _twitchExtensionData = new TwitchExtensionData(DataHandler, this);
-            
+            _connections = new List<(DataSource data, ConfigGetter token)>();
+            AddConnection(typeof(StreamlabsDataSource), () => Configuration.Token.Get(config => config.StreamlabsToken));
+            //AddConnection(typeof(StreamElementsDataSource), () => Configuration.Token.Get(config => config.StreamElementsToken));
+            AddConnection(typeof(TwitchExtensionDataSource), () => Configuration.Token.Get(config => config.TwitchExtensionToken));
+            AddConnection(typeof(IntegrationAppDataSource), () => Configuration.Token.Get(config => config.IntegrationAppEnabled) ? "dummy": "");
+
             var harmony = new Harmony("se.gorymoon.streamengineer");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
@@ -63,30 +82,28 @@ namespace GoryMoon.StreamEngineer
         {
             if (!Sync.IsServer) return;
 
-            var token = Configuration.Token.Get(c => c.StreamlabsToken)?.Trim();
-            if (!string.IsNullOrEmpty(token)) Static._streamlabsData.Init(token);
-            
-            var twitchToken = Configuration.Token.Get(c => c.TwitchExtensionToken)?.Trim();
-            if (!string.IsNullOrEmpty(twitchToken)) Static._twitchExtensionData.Init(twitchToken);
+            Static._connections.ForEach(tuple =>
+            {
+                var token = tuple.token()?.Trim();
+                if (!string.IsNullOrEmpty(token))
+                    tuple.data.Init(token);
+            });
         }
 
         public static void StopService()
         {
             if (Sync.IsServer)
-            {
-                Static._streamlabsData.Dispose();
-                Static._twitchExtensionData.Dispose();
-            }
+                Static._connections.ForEach(tuple => tuple.data.Dispose());
         }
 
         public void ConnectionError(string name, string msg)
         {
             if (!Sync.IsDedicated)
-            {
-                Messages.Enqueue($"Unable to connect to '{name}' with message:\n{msg}.");
-            }
+                EnqueueMessage($"Unable to connect to '{name}' with message:\n{msg}.", false);
         }
-        
+
+        public static void EnqueueMessage(string msg, bool chat) => Messages.Enqueue((msg, chat));
+
         public void ScreenAdded(MyGuiScreenBase screenBase)
         {
             if (screenBase.GetType() == MyPerGameSettings.GUI.MainMenu &&
@@ -98,14 +115,20 @@ namespace GoryMoon.StreamEngineer
                     new StringBuilder(
                         "Welcome to StreamEngineer\nTo get started you need to do some changes to the 'settings.toml' in the plugin folder.\nYou need to restart after changing any service settings,\nyou don't need to restart for settings related to events."),
                     new StringBuilder("StreamEngineer")));
-            } else if (screenBase.GetType() == MyPerGameSettings.GUI.HUDScreen && !Messages.IsEmpty)
+            }
+            else if (screenBase.GetType() == MyPerGameSettings.GUI.HUDScreen && !Messages.IsEmpty)
             {
                 while (Messages.TryDequeue(out var msg))
                 {
-                    MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(MyMessageBoxStyleEnum.Error,
-                                        MyMessageBoxButtonsType.OK,
-                                        new StringBuilder(msg),
-                                        new StringBuilder("StreamEngineer")));
+                    if (msg.chat)
+                        Utils.SendChat(msg.text, true);
+                    else
+                    {
+                        MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(MyMessageBoxStyleEnum.Error,
+                            MyMessageBoxButtonsType.OK,
+                            new StringBuilder(msg.text),
+                            new StringBuilder("StreamEngineer")));
+                    }
                 }
             }
         }
@@ -113,13 +136,9 @@ namespace GoryMoon.StreamEngineer
         public static void RunOrDefer(Action action)
         {
             if (Started)
-            {
                 action.Invoke();
-            }
             else
-            {
                 DeferredActions.Enqueue(action);
-            }
         }
     }
 }

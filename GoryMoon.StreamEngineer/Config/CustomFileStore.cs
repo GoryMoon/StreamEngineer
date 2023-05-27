@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using Nett;
 using Nett.Coma;
@@ -19,25 +22,14 @@ namespace GoryMoon.StreamEngineer.Config
 
         public bool EnsureExists(TomlTable content)
         {
-            if (File.Exists(_filePath))
-            {
-                var table = Load();
-                var newDataTable = TomlTable.Combine(s => s.Overwrite(table).With(content).IncludingAllComments().ForRowsOnlyInSource());
-                var removeOldDataTable = TomlTable.Combine(s => s.Overwrite(content).With(newDataTable).ExcludingComments().ForAllTargetRows());
-                Save(removeOldDataTable);
-            }
-            else
-            {
-                Save(content);
-            }
+            Save(File.Exists(_filePath)
+                ? CombineNested(content, Load(), s => s.IncludingAllComments().ForAllTargetRows())
+                : content);
 
             return true;
         }
 
-        public bool WasChangedExternally()
-        {
-            return !HashEquals(_latestFileHash, ComputeHash(_filePath));
-        }
+        public bool WasChangedExternally() => !HashEquals(_latestFileHash, ComputeHash(_filePath));
 
         public TomlTable Load()
         {
@@ -51,34 +43,35 @@ namespace GoryMoon.StreamEngineer.Config
             _latestFileHash = ComputeHash(_filePath);
         }
 
-        public static CustomFileStore Create(string path)
-        {
-            return new CustomFileStore(TomlSettings.Create(), path);
-        }
+        public static CustomFileStore Create(string path) => new CustomFileStore(TomlSettings.Create(), path);
 
-        public static CustomFileStore Create(string path, TomlSettings settings)
-        {
-            return new CustomFileStore(settings, path);
-        }
+        public static CustomFileStore Create(string path, TomlSettings settings) => new CustomFileStore(settings, path);
 
         private static byte[] ComputeHash(string filePath)
         {
             using (var fileStream = File.OpenRead(filePath))
-            {
                 return SHA1.Create().ComputeHash(fileStream);
-            }
         }
 
-        private static bool HashEquals(byte[] x, byte[] y)
+        private static bool HashEquals(IReadOnlyList<byte> x, IReadOnlyList<byte> y)
         {
-            if (x == y)
+            if (Equals(x, y))
                 return true;
-            if (x == null || y == null || x.Length != y.Length)
+            if (x == null || y == null || x.Count != y.Count)
                 return false;
-            for (var index = 0; index < x.Length; ++index)
-                if (x[index] != y[index])
-                    return false;
-            return true;
+            return !x.Where((t, index) => t != y[index]).Any();
+        }
+
+        private static TomlTable CombineNested(TomlTable target, TomlTable tomlTable, Func<ICommentOperationOrRowSelector, ITableCombiner> operation)
+        {
+            var table = TomlTable.Combine(s => operation(s.Overwrite(target).With(tomlTable)));
+            foreach (var (key, value) in target.Rows)
+            {
+                if (key != null && value?.TomlType == TomlObjectType.Table && tomlTable.ContainsKey(key))
+                    table[key] = CombineNested(value as TomlTable, tomlTable[key] as TomlTable, operation);
+            }
+
+            return table;
         }
     }
 }

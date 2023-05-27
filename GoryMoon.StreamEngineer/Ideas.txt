@@ -1,9 +1,3 @@
-+Meteorites
-+Increase accuracy with more bits
-+Fill power
-+Disable dampeners
-+Warhead above player, 100m+ up
-
 Kick player out of cockpit
 Override gyros?
 Raining Trees?

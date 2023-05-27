@@ -15,6 +15,9 @@ namespace GoryMoon.StreamEngineer.Actions
 {
     public class WarheadAction : BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "warhead";
+
         [JsonProperty("hostile")]
         public bool Hostile { get; set; } = false;
         
@@ -46,8 +49,8 @@ namespace GoryMoon.StreamEngineer.Actions
                     var up = player.Character.PositionComp.GetOrientation().Up;
                     up.Normalize();
                     var pos = player.GetPosition() + up * GetEventValue(inSpace && SpaceDistance != null ? SpaceDistance: Distance, 100, parameters);
-                    MatrixD world = MatrixD.CreateWorld(pos, Vector3.Forward, Vector3.Up);
-                    Vector3 color = Color.Red.ColorToHSV();
+                    var world = MatrixD.CreateWorld(pos, Vector3.Forward, Vector3.Up);
+                    var color = Color.Red.ColorToHSV();
                     var pirateFaction = MySession.Static.Factions.TryGetFactionByTag("SPRT");
                     MyCubeBuilder.SpawnDynamicGrid(definitionBase, player.Character, world, color,
                         MyStringHash.NullOrEmpty,

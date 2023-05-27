@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
     public class FulfillBuildPlannerAction: BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "fulfill_buildplanner";
+
         public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>

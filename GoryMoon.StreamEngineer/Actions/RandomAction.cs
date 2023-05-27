@@ -9,10 +9,16 @@ namespace GoryMoon.StreamEngineer.Actions
     [JsonObject(MemberSerialization.OptIn)]
     public class RandomAction : BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "random";
+
         private DynamicRandomSelector<BaseAction> _actions;
 
-        [JsonExtensionData] private IDictionary<string, JToken> _additionalData;
-
+#pragma warning disable 0649
+        [JsonExtensionData]
+        private IDictionary<string, JToken> _additionalData;
+#pragma warning restore
+        
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {

@@ -1,8 +1,7 @@
 ﻿using System;
 using GoryMoon.StreamEngineer.Data;
 using Sandbox;
-using Sandbox.Engine.Multiplayer;
-using Sandbox.Game.Gui;
+using VRage.Utils;
 
 namespace GoryMoon.StreamEngineer
 {
@@ -13,15 +12,20 @@ namespace GoryMoon.StreamEngineer
             MySandboxGame.Log.WriteLineAndConsole($"[StreamEngineer]: {msg}");
         }
 
+        public void WriteError(string msg)
+        {
+            MySandboxGame.Log.Error(msg);
+        }
+
         public void WriteAndChat(string msg)
         {
             WriteLine(msg);
             Utils.SendChat(msg);
         }
 
-        public void WriteLine(Exception e)
+        public void WriteError(Exception e, string msg = "")
         {
-            WriteLine("Exception: ");
+            WriteError(msg);
             MySandboxGame.Log.WriteLine(e);
         }
     }

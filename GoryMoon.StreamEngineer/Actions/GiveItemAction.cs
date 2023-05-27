@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json;
 using Sandbox.Definitions;
 using VRage.Game;
 
@@ -7,7 +8,11 @@ namespace GoryMoon.StreamEngineer.Actions
 {
     public class GiveItemAction: BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "give_item";
+
         public Item[] Items { get; set; }
+        
         public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>

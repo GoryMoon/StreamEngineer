@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
     public class DisableDampenersAction: BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "disable_dampeners";
+        
         public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {
             SessionHandler.EnqueueAction(() =>

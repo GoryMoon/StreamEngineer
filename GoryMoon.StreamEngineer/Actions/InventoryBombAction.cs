@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
+using Newtonsoft.Json;
 using Sandbox.Game.Entities;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
     public class InventoryBombAction: BaseAction
     {
+        [JsonIgnore]
+        public new static string TypeName => "inventory_bomb";
 
         public override void Execute(Data.Data data, Dictionary<string, object> parameters)
         {

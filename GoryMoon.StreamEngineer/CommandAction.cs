@@ -90,7 +90,7 @@ namespace GoryMoon.StreamEngineer
                     catch (Exception e)
                     {
                         Utils.SendChat(e.Message);
-                        Plugin.Static.Logger.WriteLine(e);
+                        Plugin.Static.Logger.WriteError(e);
                     }
                 }
             }
