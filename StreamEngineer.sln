@@ -4,7 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoryMoon.StreamEngineer", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoryMoon.StreamEngineer.Data", "GoryMoon.StreamEngineer.Data\GoryMoon.StreamEngineer.Data.csproj", "{5EFD72AD-909C-4E58-A0A5-B21BB670C04D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{98BE08E5-2583-44E4-896D-9E0991C611D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{98BE08E5-2583-44E4-896D-9E0991C611D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamElementsLogger", "StreamElementsLogger\StreamElementsLogger.csproj", "{25F57B2B-D4CC-410C-9DBD-3F6F9731EC68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigTest", "ConfigTest\ConfigTest.csproj", "{2D441DB1-8203-4E0A-B411-09E8A9425621}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +28,13 @@ Global
 		{98BE08E5-2583-44E4-896D-9E0991C611D5}.Release|x64.Build.0 = Release|Any CPU
 		{98BE08E5-2583-44E4-896D-9E0991C611D5}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{98BE08E5-2583-44E4-896D-9E0991C611D5}.Debug|x64.Build.0 = Debug|Any CPU
+		{25F57B2B-D4CC-410C-9DBD-3F6F9731EC68}.Release|x64.ActiveCfg = Release|Any CPU
+		{25F57B2B-D4CC-410C-9DBD-3F6F9731EC68}.Release|x64.Build.0 = Release|Any CPU
+		{25F57B2B-D4CC-410C-9DBD-3F6F9731EC68}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{25F57B2B-D4CC-410C-9DBD-3F6F9731EC68}.Debug|x64.Build.0 = Debug|Any CPU
+		{2D441DB1-8203-4E0A-B411-09E8A9425621}.Release|x64.ActiveCfg = Release|Any CPU
+		{2D441DB1-8203-4E0A-B411-09E8A9425621}.Release|x64.Build.0 = Release|Any CPU
+		{2D441DB1-8203-4E0A-B411-09E8A9425621}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2D441DB1-8203-4E0A-B411-09E8A9425621}.Debug|x64.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

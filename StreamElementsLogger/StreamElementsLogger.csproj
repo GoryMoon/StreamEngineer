@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>StreamElementsLogger</AssemblyName>
+        <RootNamespace>StreamElementsLogger</RootNamespace>
+        <PackageId>StreamElementsLogger</PackageId>
+        <Authors>StreamElementsLogger</Authors>
+        <Version>1.0.1</Version>
+        <Copyright>GoryMoon 2023</Copyright>
+        <AssemblyVersion>1.0.1</AssemblyVersion>
+        <FileVersion>1.0.1</FileVersion>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GoryMoon.StreamEngineer.Data\GoryMoon.StreamEngineer.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NLog" Version="5.1.4" />
+    </ItemGroup>
+
+</Project>
