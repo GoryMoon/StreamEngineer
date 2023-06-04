@@ -104,47 +104,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionNotification.cs" />
-    <Compile Include="Actions\ActionHelper.cs" />
-    <Compile Include="Actions\ChargeJumpDriveAction.cs" />
-    <Compile Include="Actions\DataHandler.cs" />
-    <Compile Include="Actions\DisableDampenersAction.cs" />
-    <Compile Include="Actions\DisableHelmetAction.cs" />
-    <Compile Include="Actions\DisableThrustersAction.cs" />
-    <Compile Include="Actions\EnableDampenersAction.cs" />
-    <Compile Include="Actions\EnableHelmetAction.cs" />
-    <Compile Include="Actions\EnableThrustersAction.cs" />
-    <Compile Include="Actions\FulfillBuildPlannerAction.cs" />
-    <Compile Include="Actions\GiveItemAction.cs" />
-    <Compile Include="Actions\InventoryBombAction.cs" />
-    <Compile Include="Actions\MeteorAction.cs" />
-    <Compile Include="Actions\MultiActions.cs" />
-    <Compile Include="Actions\PowerDownAction.cs" />
-    <Compile Include="Actions\DisablePowerAction.cs" />
-    <Compile Include="Actions\EnablePowerAction.cs" />
-    <Compile Include="Actions\SnapAction.cs" />
-    <Compile Include="Actions\SpawnDroneAction.cs" />
-    <Compile Include="Actions\StartJumpDriveAction.cs" />
-    <Compile Include="Actions\ToggleHelmetAction.cs" />
-    <Compile Include="Actions\TogglePowerAction.cs" />
-    <Compile Include="Actions\PowerUpAction.cs" />
-    <Compile Include="Actions\RandomAction.cs" />
-    <Compile Include="Actions\RefillAction.cs" />
-    <Compile Include="Actions\ToggleDampenersAction.cs" />
-    <Compile Include="Actions\ToggleThrustersAction.cs" />
-    <Compile Include="Actions\WarheadAction.cs" />
-    <Compile Include="CommandAction.cs" />
-    <Compile Include="Config\Configuration.cs" />
-    <Compile Include="Config\CustomFileStore.cs" />
-    <Compile Include="HudNotification.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="MeteorShower.cs" />
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionHandler.cs" />
-    <Compile Include="Utils.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Ideas.txt" />
     <Content Include="README.md" />
   </ItemGroup>

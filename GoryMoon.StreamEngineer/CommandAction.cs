@@ -39,7 +39,7 @@ namespace GoryMoon.StreamEngineer
 
                     if (Game.IsDedicated)
                     {
-                        MyMultiplayer.RaiseStaticEvent(x => Action, type, data, new EndpointId(), new Vector3D?());
+                        MyMultiplayer.RaiseStaticEvent(x => Action, type, data);
                     }
                     else
                     {
@@ -92,6 +92,10 @@ namespace GoryMoon.StreamEngineer
                         Utils.SendChat(e.Message);
                         Plugin.Static.Logger.WriteError(e);
                     }
+                }
+                else
+                {
+                    Utils.SendChat("Actions: " + string.Join(", ", Plugin.Static.DataHandler.GetActionNames()));
                 }
             }
         }

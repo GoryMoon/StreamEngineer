@@ -51,6 +51,9 @@ namespace GoryMoon.StreamEngineer.Actions
             
             _actionHandler.AddAction(typeof(ChargeJumpDriveAction));
             //_actionHandler.AddAction(typeof(StartJumpDriveAction));
+            
+            _actionHandler.AddAction(typeof(ChangeWeatherAction));
+            _actionHandler.AddAction(typeof(SmiteAction));
 
             _actionHandler.PrintActionTypes();
             _actionHandler.StartWatching();
@@ -95,6 +98,8 @@ namespace GoryMoon.StreamEngineer.Actions
             _actionHandler.GetAction(type, token, out var action);
             action.Execute(data, GetParams(data));
         }
+
+        public List<string> GetActionNames() => _actionHandler.GetActionNames();
 
         public override void OnDonation(string name, int amount, string formattedAmount)
         {

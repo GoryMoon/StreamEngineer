@@ -124,6 +124,8 @@ namespace GoryMoon.StreamEngineer.Data
         {
             return _actions.Where(action => action.Test(eventData)).ToList();
         }
+
+        public List<string> GetActionNames() => _actionTypes.Select(action => action.Key).ToList();
     }
 
     public struct Data
