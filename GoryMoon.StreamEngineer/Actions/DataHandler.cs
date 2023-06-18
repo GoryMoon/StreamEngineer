@@ -54,6 +54,7 @@ namespace GoryMoon.StreamEngineer.Actions
             
             _actionHandler.AddAction(typeof(ChangeWeatherAction));
             _actionHandler.AddAction(typeof(SmiteAction));
+            _actionHandler.AddAction(typeof(CommandAction));
 
             _actionHandler.PrintActionTypes();
             _actionHandler.StartWatching();
