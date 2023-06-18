@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GoryMoon.StreamEngineer.Data;
 using Newtonsoft.Json;
 using Sandbox.Game.World;
+using Sandbox.ModAPI;
 
 namespace GoryMoon.StreamEngineer.Actions
 {
@@ -20,7 +21,13 @@ namespace GoryMoon.StreamEngineer.Actions
                 if (MySession.Static.ChatSystem.CommandSystem.CanHandle(Command))
                     MySession.Static.ChatSystem.CommandSystem.Handle(Command);
                 else
-                    Utils.SendChat("No able to run command: " + Command);
+                {
+                    var sendToOthers = true;
+                    var userId = Utils.GetPlayer()?.Id.SteamId ?? 0UL;
+                    MyAPIUtilities.Static.EnterMessage(userId, Command, ref sendToOthers);
+                    if (sendToOthers)
+                        Utils.SendChat("No able to run command: " + Command);
+                }
             });
         }
     }
