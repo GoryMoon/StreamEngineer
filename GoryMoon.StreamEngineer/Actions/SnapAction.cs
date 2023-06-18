@@ -47,7 +47,7 @@ namespace GoryMoon.StreamEngineer.Actions
 
                     if (_random.NextDouble() < PlayerPercentage) 
                         player.Character.Kill(true, new MyDamageInformation());
-                    ActionNotification.SendActionMessage("SNAP!", Color.Red, "ArcHudGPSNotification1");
+                    ActionNotification.SendActionMessage("SNAP!", Color.Red, Sounds.Snap);
                 }
             });
         }

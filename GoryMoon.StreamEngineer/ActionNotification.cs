@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using GoryMoon.StreamEngineer.Config;
+using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Engine.Platform.VideoMode;
 using Sandbox.Game.Entities;
@@ -35,7 +36,7 @@ namespace GoryMoon.StreamEngineer
 
         public override bool IsRequiredByGame => true;
 
-        public static void SendActionMessage(string message, Color? color, string sound = "ArcNewItemImpact")
+        public static void SendActionMessage(string message, Color? color, string sound = Sounds.Action)
         {
             if (Sync.IsServer)
             {
@@ -45,8 +46,7 @@ namespace GoryMoon.StreamEngineer
                 }
                 else
                 {
-                    MyMultiplayer.RaiseStaticEvent(x => AddActionMessage, message, color, sound, new EndpointId(),
-                        new Vector3D?());
+                    MyMultiplayer.RaiseStaticEvent(x => AddActionMessage, message, color, sound);
                 }
             }
         }
@@ -77,7 +77,9 @@ namespace GoryMoon.StreamEngineer
             {
                 _currentDisplayTime = 200;
                 _currentMessage = MessageQueue.Dequeue();
-                MyAudio.Static.PlaySound(MySoundPair.GetCueId(_currentMessage.Value.Sound));
+                if ((Sounds.IsSpecial(_currentMessage.Value.Sound) && Configuration.Plugin.Get(config => config.PlaySpecialActionSound)) ||
+                    (Sounds.IsRegular(_currentMessage.Value.Sound) && Configuration.Plugin.Get(config => config.PlayRegularActionSound)))
+                    MyAudio.Static.PlaySound(MySoundPair.GetCueId(_currentMessage.Value.Sound));
             }
             else if (_currentDisplayTime > 0)
             {

@@ -55,6 +55,11 @@ namespace GoryMoon.StreamEngineer.Config
             [TomlComment("The 'SpawnGroupDefinition' drones to be able to spawn when on a planet")]
             public string[] PlanetDrones { get; set; } = { "Vulture Drone" };
             
+            [TomlComment("Enables the regular sound when an action is run")]
+            public bool PlayRegularActionSound { get; set; } = true;
+            [TomlComment("Enables special sounds like, SNAP/Meteors/Drones")]
+            public bool PlaySpecialActionSound { get; set; } = true;
+            
             public EventMessages Events { get; set; } = new EventMessages();
 
             public static void Init(string path)
