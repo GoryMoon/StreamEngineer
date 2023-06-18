@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GoryMoon.StreamEngineer.Data;
 using Newtonsoft.Json;
 using Sandbox.Definitions;
-using Sandbox.Game.Entities;
 using Sandbox.Game.SessionComponents;
 using Sandbox.Game.World;
-using VRage.Game.ModAPI;
 using VRage.Utils;
 using VRageMath;
 
@@ -33,12 +30,13 @@ namespace GoryMoon.StreamEngineer.Actions
                     var weatherDefinitions = MyDefinitionManager.Static.GetWeatherDefinitions();
 
                     if (Weather == null || Weather.Length <= 0)
-                        Weather = weatherDefinitions.Select(def => def.Id.SubtypeName).ToArray();
+                        Weather = weatherDefinitions.Select(def => def.Id.SubtypeName).Append("Clear").ToArray();
 
-                    var validList = weatherDefinitions
+                    var filterList = weatherDefinitions
                         .Where(def => def.Public)
                         .Select(def => def.Id.SubtypeName)
-                        .Intersect(Weather).ToArray();
+                        .Append("Clear").Append("clear");
+                    var validList = Weather.Where(s => filterList.Contains(s)).ToArray();
 
                     if (validList.Length > 0)
                     {
@@ -46,7 +44,7 @@ namespace GoryMoon.StreamEngineer.Actions
                         var weatherComponent = MySession.Static.GetComponent<MySectorWeatherComponent>();
                         weatherComponent.SetWeather(weather, Radius, player.GetPosition(), false, Vector3D.Zero, Length);
 
-                        var displayName = weatherDefinitions.First(def => def.Id.SubtypeName == weather).DisplayNameText;
+                        var displayName = weatherDefinitions.FirstOrDefault(def => def.Id.SubtypeName == weather)?.DisplayNameText ?? weather;
                         Utils.SendChat("Changed weather to: " + displayName);
                     }
                 }
