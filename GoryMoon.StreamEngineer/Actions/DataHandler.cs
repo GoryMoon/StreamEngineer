@@ -72,7 +72,8 @@ namespace GoryMoon.StreamEngineer.Actions
                 msg += actionMessage;
                 Plugin.Logger.WriteLine(msg);
                 if (actions.Count <= 0 && !alwaysSendMessage) return;
-                ActionNotification.SendActionMessage(msg, null);
+                var actionType = actions.First().GetType().GetProperty(nameof(BaseAction.TypeName))?.GetValue(null) as string;
+                ActionNotification.SendActionMessage(actionType, msg, null);
                 Utils.SendChat(msg);
             });
         }

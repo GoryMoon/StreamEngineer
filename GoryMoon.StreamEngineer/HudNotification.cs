@@ -47,7 +47,7 @@ namespace GoryMoon.StreamEngineer
             if ((_mSound == null || !_mSound.IsPlaying) &&
                 MySandboxGame.TotalGamePlayTimeInMilliseconds - _mLastSoundPlayed > 5000)
             {
-                if (Configuration.Plugin.Get(config => config.PlaySpecialActionSound))
+                if (Configuration.Plugin.Get(config => config.MeteorActionSound))
                     _mSound = MyGuiAudio.PlaySound(sound);
                 _mLastSoundPlayed = MySandboxGame.TotalGamePlayTimeInMilliseconds;
             }
@@ -109,7 +109,7 @@ namespace GoryMoon.StreamEngineer
             if (MSoundQueue.Count <= 0 || MySandboxGame.TotalGamePlayTimeInMilliseconds - _mLastSoundPlayed <= 5000)
                 return;
             _mLastSoundPlayed = MySandboxGame.TotalGamePlayTimeInMilliseconds;
-            if (Configuration.Plugin.Get(config => config.PlaySpecialActionSound))
+            if (Configuration.Plugin.Get(config => config.MeteorActionSound))
                 _mSound = MyGuiAudio.PlaySound(MSoundQueue[0]);
             MSoundQueue.RemoveAt(0);
         }

@@ -1,4 +1,7 @@
-﻿using Nett;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GoryMoon.StreamEngineer.Actions;
+using Nett;
 using Nett.Coma;
 
 namespace GoryMoon.StreamEngineer.Config
@@ -54,11 +57,32 @@ namespace GoryMoon.StreamEngineer.Config
             
             [TomlComment("The 'SpawnGroupDefinition' drones to be able to spawn when on a planet")]
             public string[] PlanetDrones { get; set; } = { "Vulture Drone" };
+
+            [TomlComment("Enables Meteors incoming sound")]
+            public bool MeteorActionSound { get; set; } = true;
             
-            [TomlComment("Enables the regular sound when an action is run")]
-            public bool PlayRegularActionSound { get; set; } = true;
-            [TomlComment("Enables special sounds like, SNAP/Meteors/Drones")]
-            public bool PlaySpecialActionSound { get; set; } = true;
+            [TomlComment("The sound that the action should play when running, set to empty string to disable.")]
+            public Dictionary<string, string> ActionSound { get; set; } = Create();
+
+            private static Dictionary<string, string> Create()
+            {
+                var actions = new[]
+                {
+                    RefillAction.TypeName, PowerUpAction.TypeName, PowerDownAction.TypeName,
+                    TogglePowerAction.TypeName, EnablePowerAction.TypeName, DisablePowerAction.TypeName,
+                    ToggleDampenersAction.TypeName, EnableDampenersAction.TypeName, DisableDampenersAction.TypeName,
+                    ToggleThrustersAction.TypeName, EnableThrustersAction.TypeName, DisableThrustersAction.TypeName,
+                    ToggleHelmetAction.TypeName, EnableHelmetAction.TypeName, DisableHelmetAction.TypeName,
+                    FulfillBuildPlannerAction.TypeName, GiveItemAction.TypeName, InventoryBombAction.TypeName,
+                    MultiActions.TypeName, RandomAction.TypeName, WarheadAction.TypeName, MeteorAction.TypeName,
+                    ChargeJumpDriveAction.TypeName, SmiteAction.TypeName, Actions.CommandAction.TypeName
+                };
+
+                var sounds = actions.ToDictionary(s => s, s => Sounds.Action);
+                sounds[SnapAction.TypeName] = Sounds.Snap;
+                sounds[SpawnDroneAction.TypeName] = Sounds.Drone;
+                return sounds;
+            }
             
             public EventMessages Events { get; set; } = new EventMessages();
 

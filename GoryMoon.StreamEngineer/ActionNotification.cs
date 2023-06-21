@@ -36,17 +36,17 @@ namespace GoryMoon.StreamEngineer
 
         public override bool IsRequiredByGame => true;
 
-        public static void SendActionMessage(string message, Color? color, string sound = Sounds.Action)
+        public static void SendActionMessage(string action, string message, Color? color)
         {
             if (Sync.IsServer)
             {
                 if (!Game.IsDedicated)
                 {
-                    AddActionMessage(message, color, sound);
+                    AddActionMessage(action, message, color);
                 }
                 else
                 {
-                    MyMultiplayer.RaiseStaticEvent(x => AddActionMessage, message, color, sound);
+                    MyMultiplayer.RaiseStaticEvent(x => AddActionMessage, action, message, color);
                 }
             }
         }
@@ -77,9 +77,8 @@ namespace GoryMoon.StreamEngineer
             {
                 _currentDisplayTime = 200;
                 _currentMessage = MessageQueue.Dequeue();
-                if ((Sounds.IsSpecial(_currentMessage.Value.Sound) && Configuration.Plugin.Get(config => config.PlaySpecialActionSound)) ||
-                    (Sounds.IsRegular(_currentMessage.Value.Sound) && Configuration.Plugin.Get(config => config.PlayRegularActionSound)))
-                    MyAudio.Static.PlaySound(MySoundPair.GetCueId(_currentMessage.Value.Sound));
+                if (Sounds.GetSound(_currentMessage.Value.Action, out var sound))
+                    MyAudio.Static.PlaySound(MySoundPair.GetCueId(sound));
             }
             else if (_currentDisplayTime > 0)
             {
@@ -104,9 +103,9 @@ namespace GoryMoon.StreamEngineer
         [Event(null, 53)]
         [Reliable]
         [Broadcast]
-        private static void AddActionMessage(string message, [Nullable] Color? color, string sound)
+        private static void AddActionMessage(string action, string message, [Nullable] Color? color)
         {
-            MessageQueue.Enqueue(new Message {Text = message, Color = color ?? Color.PaleGoldenrod, Sound = sound});
+            MessageQueue.Enqueue(new Message {Action = action, Text = message, Color = color ?? Color.PaleGoldenrod});
         }
 
         private static void ClearMessages()
@@ -116,9 +115,9 @@ namespace GoryMoon.StreamEngineer
         
         private struct Message
         {
+            public string Action;
             public string Text;
             public Color Color;
-            public string Sound;
         }
     }
 }

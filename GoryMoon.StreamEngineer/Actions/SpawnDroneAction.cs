@@ -120,7 +120,7 @@ namespace GoryMoon.StreamEngineer.Actions
                                     .Join();
                                 var msg = "Spawned " + spawns;
                                 Utils.SendChat(msg);
-                                ActionNotification.SendActionMessage(msg, Color.Red, Sounds.Drone);
+                                ActionNotification.SendActionMessage(TypeName, msg, Color.Red);
                             }
                         }
 

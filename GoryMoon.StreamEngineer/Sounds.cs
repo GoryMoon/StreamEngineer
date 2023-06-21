@@ -1,3 +1,5 @@
+using GoryMoon.StreamEngineer.Config;
+
 namespace GoryMoon.StreamEngineer
 {
     public static class Sounds
@@ -6,14 +8,10 @@ namespace GoryMoon.StreamEngineer
         public const string Snap = "ArcHudGPSNotification1";
         public const string Drone = "ArcHudGPSNotification1";
 
-        public static bool IsSpecial(string sound)
+        public static bool GetSound(string action, out string sound)
         {
-            return sound == Snap || sound == Drone;
-        }
-
-        public static bool IsRegular(string sound)
-        {
-            return sound == Action;
+            var sounds = Configuration.Plugin.Get(config => config.ActionSound);
+            return sounds.TryGetValue(action, out sound) && sound != "";
         }
         
     }
